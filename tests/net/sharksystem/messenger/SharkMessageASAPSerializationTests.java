@@ -11,14 +11,14 @@ import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
+import static net.sharksystem.messenger.TestConstants.*;
+
 public class SharkMessageASAPSerializationTests {
-    public static final String WORKING_SUB_DIRECTORY = "sharkNetTests/";
-    public static final String ALICE_ID = "Alice";
-    public static final String BOB_ID = "Bob";
-    public static final String CLARA_ID = "Clara";
+    public static final String WORKING_SUB_DIRECTORY = TestConstants.ROOT_DIRECTORY
+            + SharkMessageASAPSerializationTests.class.getSimpleName() + "/";
     public static final String MESSAGE = "Hi";
     public static final String URI = "sn2://all";
-    public static final String ALICE_FOLDER = WORKING_SUB_DIRECTORY + "/" + ALICE_ID;
+    public static final String ALICE_FOLDER = WORKING_SUB_DIRECTORY + ALICE_ID;
 
     @Test
     public void serializationTestPlain() throws ASAPException, IOException {
@@ -143,7 +143,8 @@ public class SharkMessageASAPSerializationTests {
         // check timestamp
         Timestamp creationTime = receivedMessage.getCreationTime();
         long diff = now - creationTime.getTime();
+        System.out.println("diff == " + diff);
         // should not be that long
-        Assert.assertTrue(diff < 10);
+        Assert.assertTrue(diff < 100);
     }
 }

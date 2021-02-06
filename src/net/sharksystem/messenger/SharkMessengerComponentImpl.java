@@ -1,10 +1,10 @@
 package net.sharksystem.messenger;
 
-import net.sharksystem.SharkCertificateComponent;
 import net.sharksystem.SharkException;
 import net.sharksystem.SharkUnknownBehaviourException;
 import net.sharksystem.asap.*;
 import net.sharksystem.asap.crypto.ASAPKeyStore;
+import net.sharksystem.pki.SharkCertificateComponent;
 import net.sharksystem.utils.Log;
 
 import java.io.IOException;
