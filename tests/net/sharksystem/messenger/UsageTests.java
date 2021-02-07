@@ -1,8 +1,8 @@
 package net.sharksystem.messenger;
 
 import net.sharksystem.*;
-import net.sharksystem.pki.SharkCertificateComponent;
-import net.sharksystem.pki.SharkCertificateComponentFactory;
+import net.sharksystem.pki.SharkPKIComponent;
+import net.sharksystem.pki.SharkPKIComponentFactory;
 import org.junit.Test;
 
 import static net.sharksystem.messenger.TestConstants.*;
@@ -21,13 +21,13 @@ public class UsageTests {
         SharkTestPeerFS alicePeer = new SharkTestPeerFS(ALICE_ID, ALICE_FOLDER);
 
         // certificate
-        SharkCertificateComponentFactory certFactory = new SharkCertificateComponentFactory();
-        alicePeer.addComponent(certFactory, SharkCertificateComponent.class);
+        SharkPKIComponentFactory certFactory = new SharkPKIComponentFactory();
+        alicePeer.addComponent(certFactory, SharkPKIComponent.class);
 
         // this component
         SharkMessengerComponentFactory messengerFactory =
                 new SharkMessengerComponentFactory(
-                        (SharkCertificateComponent) alicePeer.getComponent(SharkCertificateComponent.class)
+                        (SharkPKIComponent) alicePeer.getComponent(SharkPKIComponent.class)
                 );
 
         alicePeer.addComponent(messengerFactory, SharkMessengerComponent.class);

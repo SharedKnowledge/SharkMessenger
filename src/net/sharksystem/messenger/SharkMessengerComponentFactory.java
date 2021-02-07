@@ -2,17 +2,17 @@ package net.sharksystem.messenger;
 
 import net.sharksystem.SharkComponent;
 import net.sharksystem.SharkComponentFactory;
-import net.sharksystem.pki.SharkCertificateComponent;
+import net.sharksystem.pki.SharkPKIComponent;
 
 public class SharkMessengerComponentFactory implements SharkComponentFactory {
-    private final SharkCertificateComponent certificateComponent;
+    private final SharkPKIComponent pkiComponent;
 
-    public SharkMessengerComponentFactory(SharkCertificateComponent certificateComponent) {
-        this.certificateComponent = certificateComponent;
+    public SharkMessengerComponentFactory(SharkPKIComponent pkiComponent) {
+        this.pkiComponent = pkiComponent;
     }
 
     @Override
     public SharkComponent getComponent() {
-        return new SharkMessengerComponentImpl(certificateComponent);
+        return new SharkMessengerComponentImpl(pkiComponent);
     }
 }

@@ -62,6 +62,10 @@ public interface SharkMessengerComponent extends SharkComponent {
      */
     void createChannel(CharSequence uri, CharSequence name) throws IOException,  SharkMessengerException;
 
+    void removeChannel(CharSequence uri) throws IOException,  SharkMessengerException;
+
+    void removeAllChannels() throws IOException,  SharkMessengerException;
+
     /**
      * Produce information of a channel at given position - support for channel list views.
      *

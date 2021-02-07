@@ -1,8 +1,8 @@
 package net.sharksystem.messenger;
 
-class SharkMessengerChannelInformation {
-    final CharSequence uri;
-    final CharSequence name;
+public class SharkMessengerChannelInformation {
+    public final CharSequence uri;
+    public final CharSequence name;
 
     SharkMessengerChannelInformation(CharSequence uri, CharSequence name) {
         this.uri = uri;

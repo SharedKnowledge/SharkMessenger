@@ -4,7 +4,7 @@ import net.sharksystem.SharkException;
 import net.sharksystem.SharkUnknownBehaviourException;
 import net.sharksystem.asap.*;
 import net.sharksystem.asap.crypto.ASAPKeyStore;
-import net.sharksystem.pki.SharkCertificateComponent;
+import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.utils.Log;
 
 import java.io.IOException;
@@ -13,10 +13,10 @@ import java.util.*;
 class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
         implements SharkMessengerComponent, ASAPMessageReceivedListener {
     private static final String KEY_NAME_SHARK_MESSENGER_CHANNEL_NAME = "sharkMessengerChannelName";
-    private final SharkCertificateComponent certificateComponent;
+    private final SharkPKIComponent certificateComponent;
     private ASAPPeer asapPeer;
 
-    public SharkMessengerComponentImpl(SharkCertificateComponent certificateComponent) {
+    public SharkMessengerComponentImpl(SharkPKIComponent certificateComponent) {
         this.certificateComponent = certificateComponent;
     }
 
@@ -89,6 +89,16 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
         catch(ASAPException asapException) {
             throw new SharkMessengerException(asapException);
         }
+    }
+
+    @Override
+    public void removeChannel(CharSequence uri) throws IOException, SharkMessengerException {
+        Log.writeLog(this, "removeChannel", "not yet implemented");
+    }
+
+    @Override
+    public void removeAllChannels() throws IOException, SharkMessengerException {
+        Log.writeLog(this, "removeAllChannels", "not yet implemented");
     }
 
     public SharkMessengerChannelInformation getSharkMessengerChannelInformation(int position)
