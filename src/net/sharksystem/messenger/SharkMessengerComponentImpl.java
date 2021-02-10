@@ -44,19 +44,49 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
 
     @Override
     public void sendSharkMessage(byte[] content, CharSequence uri,
-                                 CharSequence recipient, boolean sign,
+                                 CharSequence receiver, boolean sign,
                                  boolean encrypt) throws IOException, SharkMessengerException {
         HashSet<CharSequence> set = new HashSet();
-        set.add(recipient);
+        set.add(receiver);
 
         this.sendSharkMessage(content, uri, set, sign, encrypt);
     }
 
     @Override
     public void sendSharkMessage(byte[] content, CharSequence uri,
-                                 Set<CharSequence> snRecipients, boolean sign,
+                                 Set<CharSequence> selectedRecipients, boolean sign,
                                  boolean encrypt)
             throws SharkMessengerException, IOException {
+
+        // lets serialize and send asap messages. TODO!!!
+
+        // 1) no recipients
+        if(selectedRecipients == null || selectedRecipients.isEmpty()) {
+            // no receivers - anybody
+            sendSharkMessage(content, uri, sign, encrypt);
+        } else {
+            // 2) recipients
+
+            // 2.1 one recipient
+            if(selectedRecipients.size() == 1) {
+                sendSharkMessage(
+                        content, uri, selectedRecipients, sign, encrypt);
+            } else {
+                // 2.2. more than one recipient
+                if(encrypt) {
+                    // 2.2.1 encrypt with more than one recipient - create message for each
+                    for(CharSequence receiver : selectedRecipients) {
+                        sendSharkMessage(
+                                content, receiver, uri,sign,true);
+                    }
+                } else {
+                    // 2.2.2 no encryption with more than one receiver
+                    sendSharkMessage(
+                            content, uri, selectedRecipients, sign, false);
+                }
+            }
+        }
+
 
         byte[] message = new byte[0];
         CharSequence sender = null;
@@ -65,7 +95,7 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
         try {
             byte[] serializedMessage = InMemoSharkMessage.serializeMessage(
                     content, this.asapPeer.getPeerID(),
-                    snRecipients, sign, encrypt, this.certificateComponent);
+                    selectedRecipients, sign, encrypt, this.certificateComponent);
 
             this.asapPeer.sendASAPMessage(
                     SharkMessengerComponent.SHARK_MESSENGER_FORMAT,

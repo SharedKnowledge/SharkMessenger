@@ -42,7 +42,7 @@ public interface SharkMessengerComponent extends SharkComponent {
      * Variant. Just a single receiver
      * @see #sendSharkMessage(byte[], CharSequence, CharSequence, boolean, boolean)
      */
-    void sendSharkMessage(byte[] content, CharSequence uri, CharSequence recipient,
+    void sendSharkMessage(byte[] content, CharSequence uri, CharSequence receiver,
                           boolean sign, boolean encrypt) throws SharkMessengerException, IOException;
 
     /**
