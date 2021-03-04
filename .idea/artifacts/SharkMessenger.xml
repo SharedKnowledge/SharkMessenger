@@ -4,7 +4,6 @@
     <root id="archive" name="SharkMessenger.jar">
       <element id="module-output" name="SharkMessenger" />
       <element id="extracted-dir" path="$PROJECT_DIR$/libs/ASAPJava.jar" path-in-jar="/" />
-      <element id="artifact" artifact-name="SkarPKI_jar_" />
     </root>
   </artifact>
 </component>

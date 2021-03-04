@@ -3,7 +3,6 @@ package net.sharksystem.messenger;
 import net.sharksystem.SharkException;
 import net.sharksystem.SharkUnknownBehaviourException;
 import net.sharksystem.asap.*;
-import net.sharksystem.asap.crypto.ASAPKeyStore;
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.utils.Log;
 
@@ -48,7 +47,6 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
                                  boolean encrypt) throws IOException, SharkMessengerException {
         HashSet<CharSequence> set = new HashSet();
         set.add(receiver);
-
         this.sendSharkMessage(content, uri, set, sign, encrypt);
     }
 
@@ -58,51 +56,32 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
                                  boolean encrypt)
             throws SharkMessengerException, IOException {
 
-        // lets serialize and send asap messages. TODO!!!
-
-        // 1) no recipients
-        if(selectedRecipients == null || selectedRecipients.isEmpty()) {
-            // no receivers - anybody
-            sendSharkMessage(content, uri, sign, encrypt);
-        } else {
-            // 2) recipients
-
-            // 2.1 one recipient
-            if(selectedRecipients.size() == 1) {
-                sendSharkMessage(
-                        content, uri, selectedRecipients, sign, encrypt);
-            } else {
-                // 2.2. more than one recipient
-                if(encrypt) {
-                    // 2.2.1 encrypt with more than one recipient - create message for each
-                    for(CharSequence receiver : selectedRecipients) {
-                        sendSharkMessage(
-                                content, receiver, uri,sign,true);
-                    }
-                } else {
-                    // 2.2.2 no encryption with more than one receiver
-                    sendSharkMessage(
-                            content, uri, selectedRecipients, sign, false);
-                }
-            }
-        }
-
-
-        byte[] message = new byte[0];
-        CharSequence sender = null;
-        ASAPKeyStore ks = this.certificateComponent;
-
+        // lets serialize and send asap messages.
         try {
-            byte[] serializedMessage = InMemoSharkMessage.serializeMessage(
-                    content, this.asapPeer.getPeerID(),
-                    selectedRecipients, sign, encrypt, this.certificateComponent);
-
-            this.asapPeer.sendASAPMessage(
-                    SharkMessengerComponent.SHARK_MESSENGER_FORMAT,
-                    uri, serializedMessage);
-        }
-        catch(ASAPException asapException) {
-            throw new SharkMessengerException(asapException);
+            if(encrypt && selectedRecipients != null && selectedRecipients.size() > 1) {
+                // more that one receiver and encrypted. Send one message for each.
+                for(CharSequence receiver : selectedRecipients) {
+                    this.asapPeer.sendASAPMessage(SHARK_MESSENGER_FORMAT, uri,
+                            // we have at most one receiver - this method can handle all combinations
+                            InMemoSharkMessage.serializeMessage(
+                                    content,
+                                    this.asapPeer.getPeerID(),
+                                    receiver,
+                                    sign, encrypt,
+                                    this.certificateComponent));
+                }
+            } else {
+                this.asapPeer.sendASAPMessage(SHARK_MESSENGER_FORMAT, uri,
+                    // we have at most one receiver - this method can handle all combinations
+                    InMemoSharkMessage.serializeMessage(
+                            content,
+                            this.asapPeer.getPeerID(),
+                            selectedRecipients,
+                            sign, encrypt,
+                            this.certificateComponent));
+            }
+        } catch (ASAPException e) {
+            throw new SharkMessengerException("when serialising and sending message", e);
         }
     }
 
