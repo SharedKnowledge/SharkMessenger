@@ -2,6 +2,7 @@ package net.sharksystem.messenger;
 
 import net.sharksystem.ASAPFormats;
 import net.sharksystem.SharkComponent;
+import net.sharksystem.SharkUnknownBehaviourException;
 
 import java.io.IOException;
 import java.util.Set;
@@ -102,6 +103,7 @@ public interface SharkMessengerComponent extends SharkComponent {
     String SHARK_MESSENGER_STONE_AGE_MODE = "net.sharksystem.messenger_stone_age";
     String SHARK_MESSENGER_BRONZE_AGE_MODE = "net.sharksystem.messenger_bronze_age";
     String SHARK_MESSENGER_INTERNET_AGE_MODE = "net.sharksystem.messenger_internet_age";
+    String DEFAULT_AGE = SHARK_MESSENGER_BRONZE_AGE_MODE;
 
     /**
      * Send a shark message. Recipients can be empty (null). This message is sent to anybody.
@@ -145,12 +147,34 @@ public interface SharkMessengerComponent extends SharkComponent {
      * @param uri  Channel identifier
      * @param name Channel (human readable) name
      * @throws IOException
+     * @throws SharkMessengerException channel already exists
      */
     void createChannel(CharSequence uri, CharSequence name) throws IOException,  SharkMessengerException;
 
-    void removeChannel(CharSequence uri) throws IOException,  SharkMessengerException;
+    /**
+     * Remove a new channel.
+     *
+     * @param uri  Channel identifier
+     * @throws IOException
+     * @throws SharkMessengerException unknown channel uri
+     */
+    void removeChannel(CharSequence uri) throws IOException, SharkMessengerException;
 
-    void removeAllChannels() throws IOException,  SharkMessengerException;
+    /**
+     * Remove all channels - be careful.
+     * @throws IOException
+     */
+    void removeAllChannels() throws IOException;
+
+    /**
+     * Set communication behaviour (stone, bronze, internet age) for a channel.
+     * @param uri channel uri
+     * @param behaviour behaviour
+     * @throws SharkUnknownBehaviourException unknown communication behaviour
+     * @throws SharkMessengerException unknown channel uri
+     */
+    void setChannelBehaviour(CharSequence uri, String behaviour)
+            throws SharkUnknownBehaviourException, SharkMessengerException;
 
     /**
      * Produce information of a channel at given position - support for channel list views.

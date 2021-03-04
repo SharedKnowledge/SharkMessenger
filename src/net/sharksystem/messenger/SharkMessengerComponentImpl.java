@@ -106,8 +106,13 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
     }
 
     @Override
-    public void removeAllChannels() throws IOException, SharkMessengerException {
+    public void removeAllChannels() throws IOException {
         Log.writeLog(this, "removeAllChannels", "not yet implemented");
+    }
+
+    @Override
+    public void setChannelBehaviour(CharSequence uri, String behaviour) throws SharkUnknownBehaviourException, SharkMessengerException {
+        Log.writeLog(this, "setChannelBehaviour", "not yet implemented");
     }
 
     public SharkMessengerChannelInformation getSharkMessengerChannelInformation(int position)
