@@ -7,6 +7,16 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Set;
 
+/**
+ * A SharkMessage is an end-to-end message. It is a message created by a sender and send to one or more recipients.
+ * Receiver and sender information are to be read as End-to-End (E2E) information.
+ * <br/><br/>
+ * Please do not be confused with definition it the SharkMessageChannel. It allows defining a set of trusted
+ * messenger peer which are allowed to
+ * transfer, to route message. That is a direct point-to-point communication.
+ *
+ * @see SharkMessengerChannel
+ */
 public interface SharkMessage {
     String ANY_RECIPIENT = "SHARK_ANY_PEER";
     String ANONYMOUS = "SHARK_ANONYMOUS";

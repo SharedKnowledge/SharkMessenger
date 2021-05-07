@@ -8,9 +8,9 @@ import org.junit.Test;
 import static net.sharksystem.messenger.TestConstants.*;
 
 
-public class UsageTests {
+public class UsageTestsVersion1_0 {
     public static final String SUB_ROOT_DIRECTORY = TestConstants.ROOT_DIRECTORY
-            + UsageTests.class.getSimpleName() + "/";
+            + UsageTestsVersion1_0.class.getSimpleName() + "/";
     public static final String MESSAGE = "Hi";
     public static final String URI = "sn2://all";
 

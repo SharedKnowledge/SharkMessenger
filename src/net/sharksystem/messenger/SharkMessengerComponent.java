@@ -60,7 +60,7 @@ import java.util.Set;
  * information exchange in the late 19th century.)
  * <br/><br/>
  *
- * <b>Internet age</b> communication mode has no restrictions. Any protocol will do as basis for an ASAP encounter,
+ * <b>Network age</b> communication mode has no restrictions. Any protocol will do as basis for an ASAP encounter,
  * including ASAP Hubs, TCP - everything that is supported.
  * <br/><i>Example</i>: Alice issued a message to Bob. This message is sent over any communication channel available,
  * including E-Mail, TCP - whatever works. A message that is send into a channel would only be delivered to channel
@@ -97,6 +97,12 @@ import java.util.Set;
  */
 @ASAPFormats(formats = {SharkMessengerComponent.SHARK_MESSENGER_FORMAT})
 public interface SharkMessengerComponent extends SharkComponent {
+
+    /*
+        TODO: that is the Shark - Shared Knowledge. Find a way to allow projects to set its own application format
+        and make this the end of all thinking. What we have here is Shark. Finally it is.
+     */
+
     String SHARK_MESSENGER_FORMAT = "shark/messenger";
 
     // behaviour flags
@@ -122,6 +128,7 @@ public interface SharkMessengerComponent extends SharkComponent {
      *                  recipients is sent a multiple copies, each encrypted with recipients' public key.
      * @throws SharkMessengerException no all certificates available to encrypt. Empty receiver list but
      *                                 encrypted flag set
+     * @since 1.0
      */
     void sendSharkMessage(byte[] content, CharSequence uri, Set<CharSequence> recipients,
                           boolean sign, boolean encrypt) throws SharkMessengerException, IOException;
@@ -129,6 +136,7 @@ public interface SharkMessengerComponent extends SharkComponent {
     /**
      * Variant. Just a single receiver
      * @see #sendSharkMessage(byte[], CharSequence, CharSequence, boolean, boolean)
+     * @since 1.0
      */
     void sendSharkMessage(byte[] content, CharSequence uri, CharSequence receiver,
                           boolean sign, boolean encrypt) throws SharkMessengerException, IOException;
@@ -136,6 +144,7 @@ public interface SharkMessengerComponent extends SharkComponent {
     /**
      * Variant. No receiver specified - send to anybody
      * @see #sendSharkMessage(byte[], CharSequence, CharSequence, boolean, boolean)
+     * @since 1.0
      */
     void sendSharkMessage(byte[] content, CharSequence uri, boolean sign, boolean encrypt)
             throws SharkMessengerException, IOException;
@@ -148,8 +157,9 @@ public interface SharkMessengerComponent extends SharkComponent {
      * @param name Channel (human readable) name
      * @throws IOException
      * @throws SharkMessengerException channel already exists
+     * @since 1.1
      */
-    void createChannel(CharSequence uri, CharSequence name) throws IOException,  SharkMessengerException;
+    SharkMessengerChannel createChannel(CharSequence uri, CharSequence name) throws IOException,  SharkMessengerException;
 
     /**
      * Remove a new channel.
@@ -157,12 +167,14 @@ public interface SharkMessengerComponent extends SharkComponent {
      * @param uri  Channel identifier
      * @throws IOException
      * @throws SharkMessengerException unknown channel uri
+     * @since 1.1
      */
     void removeChannel(CharSequence uri) throws IOException, SharkMessengerException;
 
     /**
      * Remove all channels - be careful.
      * @throws IOException
+     * @since 1.1
      */
     void removeAllChannels() throws IOException;
 
@@ -172,6 +184,7 @@ public interface SharkMessengerComponent extends SharkComponent {
      * @param behaviour behaviour
      * @throws SharkUnknownBehaviourException unknown communication behaviour
      * @throws SharkMessengerException unknown channel uri
+     * @since 1.1
      */
     void setChannelBehaviour(CharSequence uri, String behaviour)
             throws SharkUnknownBehaviourException, SharkMessengerException;
@@ -181,6 +194,7 @@ public interface SharkMessengerComponent extends SharkComponent {
      *
      * @param position
      * @return
+     * @since 1.1
      */
     public SharkMessengerChannelInformation getSharkMessengerChannelInformation(int position) throws SharkMessengerException, IOException;
 
@@ -189,6 +203,7 @@ public interface SharkMessengerComponent extends SharkComponent {
      *
      * @return
      * @throws IOException
+     * @since 1.1
      */
     int size() throws IOException, SharkMessengerException;
 
@@ -202,18 +217,29 @@ public interface SharkMessengerComponent extends SharkComponent {
 //    Collection<SharkMessage> getSharkMessages(CharSequence uri) throws SharkMessengerException, IOException;
 
     /**
-     * Recyler view support: return a message in a channel at a position.
+     * Recycler view support: return a message in a channel at a position.
      * @param uri channel uri
      * @param position message position
      * @param chronologically true - oldest message comes first; false - newest comes first
      * @return
      * @throws SharkMessengerException
      * @throws IOException
+     * @since 1.0
      */
     SharkMessage getSharkMessage(CharSequence uri, int position,  boolean chronologically)
             throws SharkMessengerException, IOException;
 
+    /**
+     *
+     * @param listener
+     * @since 1.0
+     */
     void addSharkMessagesReceivedListener(SharkMessagesReceivedListener listener);
 
+    /**
+     *
+     * @param listener
+     * @since 1.0
+     */
     void removeSharkMessagesReceivedListener(SharkMessagesReceivedListener listener);
 }

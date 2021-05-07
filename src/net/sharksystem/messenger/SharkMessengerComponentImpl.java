@@ -85,7 +85,7 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
         }
     }
 
-    public void createChannel(CharSequence uri, CharSequence name)
+    public SharkMessengerChannel createChannel(CharSequence uri, CharSequence name)
             throws IOException, SharkMessengerException {
 
         try {
@@ -98,6 +98,7 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
         catch(ASAPException asapException) {
             throw new SharkMessengerException(asapException);
         }
+        return null;
     }
 
     @Override
