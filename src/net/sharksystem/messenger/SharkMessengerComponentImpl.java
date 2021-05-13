@@ -1,6 +1,7 @@
 package net.sharksystem.messenger;
 
 import net.sharksystem.SharkException;
+import net.sharksystem.SharkNotSupportedException;
 import net.sharksystem.SharkUnknownBehaviourException;
 import net.sharksystem.asap.*;
 import net.sharksystem.pki.SharkPKIComponent;
@@ -104,11 +105,13 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
     @Override
     public void removeChannel(CharSequence uri) throws IOException, SharkMessengerException {
         Log.writeLog(this, "removeChannel", "not yet implemented");
+        throw new SharkNotSupportedException("not yet implemented");
     }
 
     @Override
     public void removeAllChannels() throws IOException {
         Log.writeLog(this, "removeAllChannels", "not yet implemented");
+        throw new SharkNotSupportedException("not yet implemented");
     }
 
     @Override
@@ -173,4 +176,14 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
 
         this.notifySharkMessageReceivedListener(uri);
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    //                       backdoor - remove it when finished implementing                   //
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+    public ASAPStorage getASAPStorage() throws IOException, ASAPException {
+        return this.asapPeer.getASAPStorage(SHARK_MESSENGER_FORMAT);
+    }
+
+
 }

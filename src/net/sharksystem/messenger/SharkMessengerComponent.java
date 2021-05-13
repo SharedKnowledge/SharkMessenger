@@ -122,15 +122,15 @@ public interface SharkMessengerComponent extends SharkComponent {
      *
      * @param content   Arbitrary content
      * @param uri channel uri
-     * @param recipients recipient list - can be null
+     * @param receiver recipient list - can be null
      * @param sign      message will be signed yes / no
      * @param encrypt   message will be encrypted for recipient(s) yes / no. A message with multiple
-     *                  recipients is sent a multiple copies, each encrypted with recipients' public key.
+     *                  receiver is sent a multiple copies, each encrypted with receiver' public key.
      * @throws SharkMessengerException no all certificates available to encrypt. Empty receiver list but
      *                                 encrypted flag set
      * @since 1.0
      */
-    void sendSharkMessage(byte[] content, CharSequence uri, Set<CharSequence> recipients,
+    void sendSharkMessage(byte[] content, CharSequence uri, Set<CharSequence> receiver,
                           boolean sign, boolean encrypt) throws SharkMessengerException, IOException;
 
     /**
