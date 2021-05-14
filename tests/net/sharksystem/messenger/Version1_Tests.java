@@ -158,6 +158,7 @@ public class Version1_Tests {
             System.out.println(">>>>>>>>>>>>>>>>>  stop encounter: "
                     + leftPeer.getASAPPeer().getPeerID() + " <--> " + rightPeer.getASAPPeer().getPeerID());
             leftPeer.getASAPTestPeerFS().stopEncounter(this.claraPeer.getASAPTestPeerFS());
+            Thread.sleep(100);
         }
     }
 

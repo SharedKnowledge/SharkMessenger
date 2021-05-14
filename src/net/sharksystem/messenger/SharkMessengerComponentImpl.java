@@ -155,7 +155,7 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
                     this.asapPeer.getASAPStorage(SharkMessengerComponent.SHARK_MESSENGER_FORMAT);
 
             byte[] asapMessage =
-                    asapStorage.getChannel(uri).getMessages().getMessage(position, chronologically);
+                    asapStorage.getChannel(uri).getMessages(false).getMessage(position, chronologically);
 
             return InMemoSharkMessage.parseMessage(asapMessage, this.certificateComponent);
 
