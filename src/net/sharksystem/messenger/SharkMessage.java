@@ -18,7 +18,7 @@ import java.util.Set;
  * @see SharkMessengerChannel
  */
 public interface SharkMessage {
-    String ANY_RECIPIENT = "SHARK_ANY_PEER";
+    String ANY_RECEIVER = "SHARK_ANY_PEER";
     String ANONYMOUS = "SHARK_ANONYMOUS";
     int SIGNED_MASK = 0x1;
     int ENCRYPTED_MASK = 0x2;

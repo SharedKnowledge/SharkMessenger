@@ -87,17 +87,19 @@ public class InMemoSharkMessage implements SharkMessage {
 
     }
 
-    public static byte[] serializeMessage(byte[] content, CharSequence sender, Set<CharSequence> recipients,
+    public static byte[] serializeMessage(byte[] content, CharSequence sender, Set<CharSequence> receiver,
         boolean sign, boolean encrypt, ASAPKeyStore ASAPKeyStore)
             throws IOException, ASAPException {
 
-        if( (recipients != null && recipients.size() > 1) && encrypt) {
+        if( (receiver != null && receiver.size() > 1) && encrypt) {
             throw new ASAPSecurityException("cannot (yet) encrypt one message for more than one recipient - split it into more messages");
         }
 
-        if(recipients == null) {
-            recipients = new HashSet<>();
-            recipients.add(SharkMessage.ANY_RECIPIENT);
+        if(receiver == null || receiver.isEmpty()) {
+            if(encrypt) throw new ASAPSecurityException("impossible to encrypt a message without a receiver");
+            // else
+            receiver = new HashSet<>();
+            receiver.add(SharkMessage.ANY_RECEIVER);
         }
 
         if(sender == null) {
@@ -112,8 +114,8 @@ public class InMemoSharkMessage implements SharkMessage {
         ASAPSerialization.writeByteArray(content, baos);
         ///// sender
         ASAPSerialization.writeCharSequenceParameter(sender, baos);
-        ///// recipients
-        ASAPSerialization.writeCharSequenceSetParameter(recipients, baos);
+        ///// receiver
+        ASAPSerialization.writeCharSequenceSetParameter(receiver, baos);
         ///// timestamp
         Timestamp creationTime = new Timestamp(System.currentTimeMillis());
         String timestampString = creationTime.toString();
@@ -136,7 +138,7 @@ public class InMemoSharkMessage implements SharkMessage {
         if(encrypt) {
             content = ASAPCryptoAlgorithms.produceEncryptedMessagePackage(
                     content,
-                    recipients.iterator().next(), // already checked if one and only one is recipient
+                    receiver.iterator().next(), // already checked if one and only one is recipient
                     ASAPKeyStore);
             flags += ENCRYPTED_MASK;
         }
@@ -290,6 +292,6 @@ public class InMemoSharkMessage implements SharkMessage {
     }
 
     public boolean isAnyRecipient(CharSequence peerID) {
-        return peerID.toString().equalsIgnoreCase(SharkMessage.ANY_RECIPIENT);
+        return peerID.toString().equalsIgnoreCase(SharkMessage.ANY_RECEIVER);
     }
 }

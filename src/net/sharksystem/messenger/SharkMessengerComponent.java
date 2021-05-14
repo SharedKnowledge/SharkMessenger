@@ -3,6 +3,7 @@ package net.sharksystem.messenger;
 import net.sharksystem.ASAPFormats;
 import net.sharksystem.SharkComponent;
 import net.sharksystem.SharkUnknownBehaviourException;
+import net.sharksystem.pki.SharkPKIComponent;
 
 import java.io.IOException;
 import java.util.Set;
@@ -242,4 +243,6 @@ public interface SharkMessengerComponent extends SharkComponent {
      * @since 1.0
      */
     void removeSharkMessagesReceivedListener(SharkMessagesReceivedListener listener);
+
+    SharkPKIComponent getSharkPKI();
 }

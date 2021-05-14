@@ -13,11 +13,11 @@ import java.util.*;
 class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
         implements SharkMessengerComponent, ASAPMessageReceivedListener {
     private static final String KEY_NAME_SHARK_MESSENGER_CHANNEL_NAME = "sharkMessengerChannelName";
-    private final SharkPKIComponent certificateComponent;
+    private final SharkPKIComponent sharkPKIComponent;
     private ASAPPeer asapPeer;
 
-    public SharkMessengerComponentImpl(SharkPKIComponent certificateComponent) {
-        this.certificateComponent = certificateComponent;
+    public SharkMessengerComponentImpl(SharkPKIComponent sharkPKIComponent) {
+        this.sharkPKIComponent = sharkPKIComponent;
     }
 
     @Override
@@ -69,7 +69,7 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
                                     this.asapPeer.getPeerID(),
                                     receiver,
                                     sign, encrypt,
-                                    this.certificateComponent));
+                                    this.sharkPKIComponent));
                 }
             } else {
                 this.asapPeer.sendASAPMessage(SHARK_MESSENGER_FORMAT, uri,
@@ -79,10 +79,10 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
                             this.asapPeer.getPeerID(),
                             selectedRecipients,
                             sign, encrypt,
-                            this.certificateComponent));
+                            this.sharkPKIComponent));
             }
         } catch (ASAPException e) {
-            throw new SharkMessengerException("when serialising and sending message", e);
+            throw new SharkMessengerException("when serialising and sending message: " + e.getLocalizedMessage(), e);
         }
     }
 
@@ -157,12 +157,17 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
             byte[] asapMessage =
                     asapStorage.getChannel(uri).getMessages(false).getMessage(position, chronologically);
 
-            return InMemoSharkMessage.parseMessage(asapMessage, this.certificateComponent);
+            return InMemoSharkMessage.parseMessage(asapMessage, this.sharkPKIComponent);
 
         }
         catch(ASAPException asapException) {
             throw new SharkMessengerException(asapException);
         }
+    }
+
+    @Override
+    public SharkPKIComponent getSharkPKI() {
+        return this.sharkPKIComponent;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////
