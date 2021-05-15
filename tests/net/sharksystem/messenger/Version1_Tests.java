@@ -7,6 +7,7 @@ import net.sharksystem.asap.ASAPSecurityException;
 import net.sharksystem.asap.ASAPStorage;
 import net.sharksystem.asap.pki.ASAPCertificate;
 import net.sharksystem.asap.pki.CredentialMessageInMemo;
+import net.sharksystem.pki.CredentialMessage;
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.pki.SharkPKIComponentFactory;
 import net.sharksystem.utils.Utils;
@@ -22,8 +23,9 @@ import static net.sharksystem.messenger.TestConstants.*;
  * Version 1 - Scenarios (open channel communication (open routing) only)  selective routing is Version 2
  *
  * Scenario 1:
- * a) Alice and Bob exchanged keys
- * b) Bob met Clara - both exchanged keys - Clara has a Certificate of Alice issued by Bob
+ * a) Alice and Bob exchanged credential messages and provided certificates for each other
+ * b) Bob and Clara exchanged credential messages and provided certificates for each other
+ * b) Clara received certificate issued by Bob for subject Alice.
  * c) Alice has no information about Clara
  *
  * Tests:
@@ -32,7 +34,7 @@ import static net.sharksystem.messenger.TestConstants.*;
  * likelihood authentic senders
  * iii) Clara sends signed / unencrypted messages to B and A. B can verify, A can not. A and B show
  * likelihood authentic senders - which is unknown on A side
- * iv) Alice sends unsigned / encrypted messages to B and C. B and C can decrypt.
+ * iv) Alice sends unsigned / with Bob public key encrypted messages to B and C. B can encrypt. C cannot.
  * v) Clara sends unsigned / encrypted messages to B and A. B can decrypt. A cannot.
  * vi) Alice sends signed and encrypted messages to C and B with success.
  * vii) Alice sends signed B. B encounters C. B can verify, C can not. Like ii) but routed over B.
@@ -87,18 +89,25 @@ public class Version1_Tests {
         return (SharkMessengerComponent) sharkPeer.getComponent(SharkMessengerComponent.class);
     }
 
+    private static int testNumber = 0;
     public void setUpScenario_1() throws SharkException, ASAPSecurityException, IOException {
-        SharkTestPeerFS.removeFolder(ALICE_FOLDER);
-        this.alicePeer = new SharkTestPeerFS(ALICE_ID, ALICE_FOLDER);
+        System.out.println("test number == " + testNumber);
+        String aliceFolderName = ALICE_FOLDER + "_" + testNumber;
+        SharkTestPeerFS.removeFolder(aliceFolderName);
+        this.alicePeer = new SharkTestPeerFS(ALICE_ID, aliceFolderName);
         this.setupComponent(this.alicePeer);
 
-        SharkTestPeerFS.removeFolder(BOB_FOLDER);
-        this.bobPeer = new SharkTestPeerFS(BOB_ID, BOB_FOLDER);
+        String bobFolderName = BOB_FOLDER + "_" + testNumber;
+        SharkTestPeerFS.removeFolder(bobFolderName);
+        this.bobPeer = new SharkTestPeerFS(BOB_ID, bobFolderName);
         this.setupComponent(this.bobPeer);
 
-        SharkTestPeerFS.removeFolder(CLARA_FOLDER);
-        this.claraPeer = new SharkTestPeerFS(CLARA_ID, CLARA_FOLDER);
+        String claraFolderName = CLARA_FOLDER + "_" + testNumber;
+        SharkTestPeerFS.removeFolder(claraFolderName);
+        this.claraPeer = new SharkTestPeerFS(CLARA_ID, claraFolderName);
         this.setupComponent(this.claraPeer);
+
+        testNumber++;
 
         // start peers
         this.alicePeer.start();
@@ -110,27 +119,50 @@ public class Version1_Tests {
         SharkPKIComponent bobPKI = (SharkPKIComponent) this.bobPeer.getComponent(SharkPKIComponent.class);
         SharkPKIComponent claraPKI = (SharkPKIComponent) this.claraPeer.getComponent(SharkPKIComponent.class);
 
-        // let Bob accept ALice credentials and create a certificate
-        CredentialMessageInMemo aliceCredentialMessage =
-                new CredentialMessageInMemo(ALICE_ID, ALICE_NAME, System.currentTimeMillis(), alicePKI.getPublicKey());
+        // create credential messages
+        CredentialMessage aliceCredentialMessage = alicePKI.createCredentialMessage();
+        CredentialMessage bobCredentialMessage = bobPKI.createCredentialMessage();
+        CredentialMessage claraCredentialMessage = claraPKI.createCredentialMessage();
 
-        ASAPCertificate bobIssuedAliceCertificate = bobPKI.acceptAndSignCredential(aliceCredentialMessage);
+        // a) Alice and Bob exchange and accept credential messages and issue certificates
+        ASAPCertificate aliceIssuedBobCert = alicePKI.acceptAndSignCredential(bobCredentialMessage);
+        ASAPCertificate bobIssuedAliceCert = bobPKI.acceptAndSignCredential(aliceCredentialMessage);
 
-        // Alice accepts Bob Public Key
-        CredentialMessageInMemo bobCredentialMessage =
-                new CredentialMessageInMemo(BOB_ID, BOB_NAME, System.currentTimeMillis(), bobPKI.getPublicKey());
-        alicePKI.acceptAndSignCredential(bobCredentialMessage);
+        // b) Bob and Clara meet, accept credential messages and issue certificates
+        ASAPCertificate claraIssuedBobCert = claraPKI.acceptAndSignCredential(bobCredentialMessage);
+        ASAPCertificate bobIssuedClaraCert = bobPKI.acceptAndSignCredential(claraCredentialMessage);
 
-        CredentialMessageInMemo claraCredentialMessage =
-                new CredentialMessageInMemo(CLARA_ID, CLARA_NAME, System.currentTimeMillis(), claraPKI.getPublicKey());
+        // c) Clara gets certificate issued by Bob issued for Alice
+        claraPKI.addCertificate(bobIssuedAliceCert);
 
-        // Bob knows Clara
-        bobPKI.acceptAndSignCredential(claraCredentialMessage);
-        // Clara knowns Bob
-        claraPKI.acceptAndSignCredential(bobCredentialMessage);
+        ///////////// check stability of SharkPKI - just in case - it is a copy of a test in this project:
+        // check identity assurance
+        int iaAliceSideBob = alicePKI.getIdentityAssurance(BOB_ID);
+        int iaAliceSideClara = alicePKI.getIdentityAssurance(CLARA_ID);
 
-        // Clara knows Alice certificate issued by Bob
-        claraPKI.addCertificate(bobIssuedAliceCertificate);
+        int iaBobSideAlice = bobPKI.getIdentityAssurance(ALICE_ID);
+        int iaBobSideClara = bobPKI.getIdentityAssurance(CLARA_ID);
+
+        int iaClaraSideAlice = claraPKI.getIdentityAssurance(ALICE_ID);
+        int iaClaraSideBob = claraPKI.getIdentityAssurance(BOB_ID);
+
+        Assert.assertEquals(10, iaAliceSideBob); // met
+        System.out.println("10 - okay, Alice met Bob");
+        Assert.assertEquals(0, iaAliceSideClara); // never seen, no certificate on Alice side
+        System.out.println("0 - okay, Alice knows nothing about Clara");
+        Assert.assertEquals(10, iaBobSideAlice); // met
+        System.out.println("10 - okay, Bob met Alice");
+        Assert.assertEquals(10, iaBobSideClara); // met
+        System.out.println("10 - okay, Bob met Clara");
+        Assert.assertEquals(5, iaClaraSideAlice); // got certificate from Bob, with default failure rate == 5
+        System.out.println("5 - okay, Clara has got a certificate issued by Bob (with failure rate 5)");
+        Assert.assertEquals(10, iaClaraSideBob); // met
+        System.out.println("10 - okay, Clara met Bob");
+
+        System.out.println("********************************************************************");
+        System.out.println("**                          PKI works                             **");
+        System.out.println("********************************************************************");
+        /////////////////////// PKI works
 
         this.aliceMessenger = (SharkMessengerComponent) this.alicePeer.getComponent(SharkMessengerComponent.class);
         this.bobMessenger = (SharkMessengerComponent) this.bobPeer.getComponent(SharkMessengerComponent.class);
@@ -164,12 +196,12 @@ public class Version1_Tests {
     }
 
     @Test
-    public void test1_i() throws SharkException, ASAPException, IOException, InterruptedException {
+    public void test1_1() throws SharkException, ASAPException, IOException, InterruptedException {
         this.setUpScenario_1();
-        this.runTest_i();
+        this.runTest_1();
     }
 
-    public void runTest_i() throws SharkException, IOException, InterruptedException, ASAPException {
+    public void runTest_1() throws SharkException, IOException, InterruptedException, ASAPException {
         // Alice broadcast message in channel URI - not signed, not encrypted
         aliceMessenger.sendSharkMessage(MESSAGE_BYTE, URI, false, false);
 
@@ -207,12 +239,12 @@ public class Version1_Tests {
     }
 
     @Test
-    public void test1_ii() throws SharkException, ASAPSecurityException, IOException, InterruptedException {
+    public void test1_2() throws SharkException, ASAPSecurityException, IOException, InterruptedException {
         this.setUpScenario_1();
-        this.runTest_ii();
+        this.runTest_2();
     }
 
-    public void runTest_ii() throws SharkException, IOException, InterruptedException, ASAPSecurityException {
+    public void runTest_2() throws SharkException, IOException, InterruptedException, ASAPSecurityException {
         // Alice broadcast message in channel URI - signed, not encrypted
         aliceMessenger.sendSharkMessage(MESSAGE_BYTE, URI, true, false);
 
@@ -242,15 +274,15 @@ public class Version1_Tests {
         Assert.assertFalse(sharkMessage.encrypted());
         Assert.assertTrue(sharkMessage.verified());
 
-        SharkPKIComponent claraPKI = bobMessenger.getSharkPKI();
-        int claraIdentityAssuranceOfIfAlice = claraPKI.getIdentityAssurance(alicePeer.getPeerID());
+        SharkPKIComponent claraPKI = claraMessenger.getSharkPKI();
+        CharSequence alicePeerID = alicePeer.getPeerID();
+        int claraIdentityAssuranceOfIfAlice = claraPKI.getIdentityAssurance(alicePeerID);
         // got certificate from Bob - signing failure rate of Bob not changed - default is 50%.
-        // TODO... activate this failure again!
-        //Assert.assertEquals(5, claraIdentityAssuranceOfIfAlice);
+        Assert.assertEquals(5, claraIdentityAssuranceOfIfAlice);
     }
 
     @Test
-    public void test1_iii() throws SharkException, ASAPSecurityException, IOException, InterruptedException {
+    public void test1_3() throws SharkException, ASAPSecurityException, IOException, InterruptedException {
         this.setUpScenario_1();
         // Alice broadcast message in channel URI - signed, not encrypted
         claraMessenger.sendSharkMessage(MESSAGE_BYTE, URI, true, false);
@@ -281,15 +313,20 @@ public class Version1_Tests {
         Assert.assertFalse(sharkMessage.encrypted());
         Assert.assertFalse(sharkMessage.verified());
 
-        SharkPKIComponent claraPKI = aliceMessenger.getSharkPKI();
+        SharkPKIComponent claraPKI = claraMessenger.getSharkPKI();
         int claraIdentityAssuranceOfIfAlice = claraPKI.getIdentityAssurance(alicePeer.getPeerID());
         // Alice never met Clara nor has she got a certificate
-        // TODO... activate this failure again!
-        //Assert.assertEquals(0, claraIdentityAssuranceOfIfAlice);
+        Assert.assertEquals(5, claraIdentityAssuranceOfIfAlice);
+
+        SharkPKIComponent alicePKI = aliceMessenger.getSharkPKI();
+        int aliceIdentityAssuranceOfIfClara = alicePKI.getIdentityAssurance(claraPeer.getPeerID());
+        // Alice never met Clara nor has she got a certificate
+        Assert.assertEquals(0, aliceIdentityAssuranceOfIfClara);
+
     }
 
     @Test
-    public void test1_iv() throws SharkException, ASAPSecurityException, IOException, InterruptedException {
+    public void test1_4() throws SharkException, ASAPSecurityException, IOException, InterruptedException {
         this.setUpScenario_1();
 
         // Alice broadcast message in channel URI - signed, not encrypted
@@ -300,6 +337,7 @@ public class Version1_Tests {
 
         // test results
         SharkMessage sharkMessage = bobMessenger.getSharkMessage(URI, 0, true);
+        Assert.assertTrue(sharkMessage.couldBeDecrypted());
         // message received by Bob from Alice?
         Assert.assertTrue(alicePeer.samePeer(sharkMessage.getSender()));
         Assert.assertTrue(Utils.compareArrays(sharkMessage.getContent(), MESSAGE_BYTE));
@@ -312,9 +350,6 @@ public class Version1_Tests {
         // test results
         sharkMessage = claraMessenger.getSharkMessage(URI, 0, true);
         // message received by Bob from Alice?
-        Assert.assertTrue(alicePeer.samePeer(sharkMessage.getSender()));
-        Assert.assertTrue(Utils.compareArrays(sharkMessage.getContent(), MESSAGE_BYTE));
-        Assert.assertTrue(sharkMessage.encrypted());
-        Assert.assertFalse(sharkMessage.verified());
+        Assert.assertFalse(sharkMessage.couldBeDecrypted());
     }
 }
