@@ -39,7 +39,6 @@ import static net.sharksystem.messenger.TestConstants.*;
  * Clara identity, Alice has no clue.
  * vi) Alice sends two signed and encrypted messages to C and B with success.
  * vii) Alice sends signed B. B encounters C. B can verify, C can not. Like ii) but routed over B.
- * viii) A peer sets filter to get messages from channel: Filter [signed/verified only y|n], [decryptable y|n]
  */
 
 public class Version1_Tests {
@@ -220,7 +219,7 @@ public class Version1_Tests {
         Assert.assertNotNull(message);
 
         SharkMessengerChannel bobChannel = bobMessenger.getChannel(URI);
-        SharkMessage sharkMessage = bobChannel.getSharkMessage(0, true);
+        SharkMessage sharkMessage = bobChannel.getMessages().getSharkMessage(0, true);
         // message received by Bob from Alice?
         Assert.assertTrue(alicePeer.samePeer(sharkMessage.getSender()));
         Assert.assertTrue(Utils.compareArrays(sharkMessage.getContent(), MESSAGE_BYTE));
@@ -253,7 +252,7 @@ public class Version1_Tests {
 
         // test results
         SharkMessengerChannel bobChannel = bobMessenger.getChannel(URI);
-        SharkMessage sharkMessage = bobChannel.getSharkMessage(0, true);
+        SharkMessage sharkMessage = bobChannel.getMessages().getSharkMessage(0, true);
         // message received by Bob from Alice?
         Assert.assertTrue(alicePeer.samePeer(sharkMessage.getSender()));
         Assert.assertTrue(Utils.compareArrays(sharkMessage.getContent(), MESSAGE_BYTE));
@@ -269,7 +268,7 @@ public class Version1_Tests {
 
         // test results
         SharkMessengerChannel claraChannel = claraMessenger.getChannel(URI);
-        sharkMessage = claraChannel.getSharkMessage(0, true);
+        sharkMessage = claraChannel.getMessages().getSharkMessage(0, true);
         // message received by Bob from Alice?
         Assert.assertTrue(alicePeer.samePeer(sharkMessage.getSender()));
         Assert.assertTrue(Utils.compareArrays(sharkMessage.getContent(), MESSAGE_BYTE));
@@ -294,7 +293,7 @@ public class Version1_Tests {
 
         // test results
         SharkMessengerChannel bobChannel = bobMessenger.getChannel(URI);
-        SharkMessage sharkMessage = bobChannel.getSharkMessage(0, true);
+        SharkMessage sharkMessage = bobChannel.getMessages().getSharkMessage(0, true);
         // message received by Bob from Alice?
         Assert.assertTrue(claraPeer.samePeer(sharkMessage.getSender()));
         Assert.assertTrue(Utils.compareArrays(sharkMessage.getContent(), MESSAGE_BYTE));
@@ -310,7 +309,7 @@ public class Version1_Tests {
 
         // test results
         SharkMessengerChannel aliceChannel = aliceMessenger.getChannel(URI);
-        sharkMessage = aliceChannel.getSharkMessage(0, true);
+        sharkMessage = aliceChannel.getMessages().getSharkMessage(0, true);
         // message received by Bob from Alice?
         Assert.assertTrue(claraPeer.samePeer(sharkMessage.getSender()));
         Assert.assertTrue(Utils.compareArrays(sharkMessage.getContent(), MESSAGE_BYTE));
@@ -340,7 +339,7 @@ public class Version1_Tests {
 
         // test results
         SharkMessengerChannel bobChannel = bobMessenger.getChannel(URI);
-        SharkMessage sharkMessage = bobChannel.getSharkMessage(0, true);
+        SharkMessage sharkMessage = bobChannel.getMessages().getSharkMessage(0, true);
         Assert.assertTrue(sharkMessage.couldBeDecrypted());
         // message received by Bob from Alice?
         Assert.assertTrue(alicePeer.samePeer(sharkMessage.getSender()));
@@ -353,63 +352,56 @@ public class Version1_Tests {
 
         // test results
         SharkMessengerChannel claraChannel = claraMessenger.getChannel(URI);
-        sharkMessage = claraChannel.getSharkMessage(0, true);
+        sharkMessage = claraChannel.getMessages().getSharkMessage(0, true);
         // message received by Bob from Alice?
         Assert.assertFalse(sharkMessage.couldBeDecrypted());
     }
 
     /*
-            * v) Clara sends two messages (unsigned and encrypted) to B and than A. Both can decrypt. B is assure of
- * Clara identity, Alice has no clue.
- * vi) Alice sends two signed and encrypted messages to C and B with success.
- * vii) Alice sends signed B. B encounters C. B can verify, C can not. Like ii) but routed over B.
-            * viii) A peer sets filter to get messages from channel: Filter [signed/verified only y|n], [decryptable y|n]
+    * v) Clara sends two messages (unsigned and encrypted) to B and than A. Both can decrypt.
+    * Bob is sure of Clara's identity. Alice is not.
      */
+
+    private void oneEncryptableOneIsNot(SharkMessageList msgList) throws SharkMessengerException {
+        SharkMessage sharkMessage0 = msgList.getSharkMessage(0, true);
+        SharkMessage sharkMessage1 = msgList.getSharkMessage(1, true);
+
+        SharkMessage decryptedMsg = sharkMessage0.couldBeDecrypted() ? sharkMessage0 : sharkMessage1;
+        SharkMessage undecryptedMsg = sharkMessage0.couldBeDecrypted() ? sharkMessage1 :  sharkMessage0;
+
+        // the other cannot be decrypted - it was not meant for this receiver
+        Assert.assertFalse(undecryptedMsg.couldBeDecrypted());
+    }
 
     @Test
     public void test1_5() throws SharkException, ASAPSecurityException, IOException, InterruptedException {
         this.setUpScenario_1();
 
-        // work with channel implementation from now on
-        SharkMessengerChannel claraChannel = claraMessenger.getChannel(URI);
+        // send two encrypted message - one for Alice, another for Bob.
+        claraMessenger.sendSharkMessage(MESSAGE_BYTE, URI, alicePeer.getPeerID(), false, true);
+        claraMessenger.sendSharkMessage(MESSAGE_BYTE, URI, bobPeer.getPeerID(), false, true);
 
         ///////////////////////////////// Encounter Clara - Bob ////////////////////////////////////////////////////
         this.runEncounter(this.claraPeer, this.bobPeer, true);
 
         // test results
         SharkMessengerChannel bobChannel = bobMessenger.getChannel(URI);
-        SharkMessage sharkMessage = bobChannel.getSharkMessage(0, true);
-        // message received by Bob from Alice?
-        Assert.assertTrue(claraPeer.samePeer(sharkMessage.getSender()));
-        Assert.assertTrue(Utils.compareArrays(sharkMessage.getContent(), MESSAGE_BYTE));
-        Assert.assertFalse(sharkMessage.encrypted());
-        Assert.assertTrue(sharkMessage.verified());
-
-        SharkPKIComponent bobPKI = bobMessenger.getSharkPKI();
-        int bobIdentityAssuranceOfIfAlice = bobPKI.getIdentityAssurance(claraPeer.getPeerID());
-        Assert.assertEquals(10, bobIdentityAssuranceOfIfAlice); // both met
+        SharkMessageList bobChannelMessages = bobChannel.getMessages();
+        Assert.assertEquals(2, bobChannelMessages.size());
+        this.oneEncryptableOneIsNot(bobChannelMessages);
 
         ///////////////////////////////// Encounter Alice - Clara ////////////////////////////////////////////////////
         this.runEncounter(this.alicePeer, this.claraPeer, true);
 
         // test results
         SharkMessengerChannel aliceChannel = aliceMessenger.getChannel(URI);
-        sharkMessage = aliceChannel.getSharkMessage(0, true);
-        // message received by Bob from Alice?
-        Assert.assertTrue(claraPeer.samePeer(sharkMessage.getSender()));
-        Assert.assertTrue(Utils.compareArrays(sharkMessage.getContent(), MESSAGE_BYTE));
-        Assert.assertFalse(sharkMessage.encrypted());
-        Assert.assertFalse(sharkMessage.verified());
-
-        SharkPKIComponent claraPKI = claraMessenger.getSharkPKI();
-        int claraIdentityAssuranceOfIfAlice = claraPKI.getIdentityAssurance(alicePeer.getPeerID());
-        // Alice never met Clara nor has she got a certificate
-        Assert.assertEquals(5, claraIdentityAssuranceOfIfAlice);
-
-        SharkPKIComponent alicePKI = aliceMessenger.getSharkPKI();
-        int aliceIdentityAssuranceOfIfClara = alicePKI.getIdentityAssurance(claraPeer.getPeerID());
-        // Alice never met Clara nor has she got a certificate
-        Assert.assertEquals(0, aliceIdentityAssuranceOfIfClara);
+        SharkMessageList aliceChannelMessages = aliceChannel.getMessages();
+        Assert.assertEquals(2, aliceChannelMessages.size());
+        this.oneEncryptableOneIsNot(aliceChannelMessages);
     }
 
+    /*
+     * vi) Alice sends two signed and encrypted messages to C and B with success.
+     * vii) Alice sends signed B. B encounters C. B can verify, C can not. Like ii) but routed over B.
+     */
 }

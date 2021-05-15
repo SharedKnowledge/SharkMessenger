@@ -1,5 +1,7 @@
 package net.sharksystem.messenger;
 
+import net.sharksystem.asap.ASAPMessageCompare;
+
 import java.io.IOException;
 import java.util.Set;
 
@@ -45,13 +47,21 @@ public interface SharkMessengerChannel {
     boolean isBronzeAge();
     boolean isInternetAge();
 
-    int size(boolean sentMessagesOnly, boolean verifiedMessagesOnly, boolean encryptedMessagesOnly);
+    /**
+     * Produce a list of messages in this channel.
+     * @param sentMessagesOnly true: only messages sent by this peer; false: also received messages
+     * @param ordered true: messages are sorted by a timestamp (note1: sorting is useless when using
+     *                sentMessagesOnly == true. They are already ordered. note2: timestamps are produced from
+     *                distributed  and not synchronized clocks. It is not safe)
+     * @return
+     */
+    SharkMessageList getMessages(boolean sentMessagesOnly, boolean ordered) throws SharkMessengerException, IOException;
 
-    SharkMessageList getMessages();
-    SharkMessage getSharkMessage(int position, boolean chronologically) throws SharkMessengerException;
-
-
-    SharkMessageList getMessagesBySender(CharSequence senderID);
-    SharkMessageList getMessagesByReceiver(CharSequence receiverID);
-
+    /**
+     * Return a list of all messages (sent and received) ordered by timestamp. For comments of time stamp
+     * accuracy, see comment in order parameter in the full variant of this method
+     * @see #getMessages(boolean, boolean)
+     * @return
+     */
+    SharkMessageList getMessages() throws SharkMessengerException, IOException;
 }

@@ -1,14 +1,10 @@
 package net.sharksystem.messenger;
 
 import net.sharksystem.SharkNotSupportedException;
-import net.sharksystem.asap.ASAPChannel;
-import net.sharksystem.asap.ASAPException;
-import net.sharksystem.asap.ASAPPeer;
-import net.sharksystem.asap.ASAPStorage;
+import net.sharksystem.asap.*;
 import net.sharksystem.pki.SharkPKIComponent;
 
 import java.io.IOException;
-import java.util.Set;
 
 public class SharkMessengerChannelImpl implements SharkMessengerChannel {
     private final ASAPChannel asapChannel;
@@ -55,44 +51,20 @@ public class SharkMessengerChannelImpl implements SharkMessengerChannel {
         throw new SharkNotSupportedException("not yet implemented - sorry");
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                       message handling                                        //
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-
     @Override
-    public SharkMessageList getMessages() {
-        return null;
-    }
+    public SharkMessageList getMessages(boolean sentMessagesOnly, boolean ordered)
+            throws SharkMessengerException, IOException {
 
-    @Override
-    public SharkMessage getSharkMessage(int position, boolean chronologically) throws SharkMessengerException {
         try {
-            ASAPStorage asapStorage =
-                    this.asapPeer.getASAPStorage(SharkMessengerComponent.SHARK_MESSENGER_FORMAT);
-
-            byte[] asapMessage =
-                    asapStorage.getChannel(this.getURI()).getMessages(false).getMessage(position, chronologically);
-
-            return InMemoSharkMessage.parseMessage(asapMessage, this.pkiComponent);
-
+            return new SharkMessageListImpl(this.pkiComponent, this.asapChannel, sentMessagesOnly, ordered);
         }
-        catch(ASAPException | IOException asapException) {
-            throw new SharkMessengerException(asapException);
+        catch(ASAPException e) {
+            throw new SharkMessengerException(e.getLocalizedMessage(), e);
         }
     }
 
     @Override
-    public SharkMessageList getMessagesBySender(CharSequence senderID) {
-        return null;
-    }
-
-    @Override
-    public SharkMessageList getMessagesByReceiver(CharSequence receiverID) {
-        return null;
-    }
-
-    @Override
-    public int size(boolean sentMessagesOnly, boolean verifiedMessagesOnly, boolean encryptedMessagesOnly) {
-        throw new SharkNotSupportedException("not yet implemented - sorry");
+    public SharkMessageList getMessages() throws SharkMessengerException, IOException {
+        return this.getMessages(false, true);
     }
 }
