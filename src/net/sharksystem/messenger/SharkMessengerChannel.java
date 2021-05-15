@@ -36,21 +36,22 @@ public interface SharkMessengerChannel {
     SharkCommunicationAge getAge();
 
     /**
-     * @param peerID
-     * @throws SharkMessengerException messengers would not be allowed on Stone age.
+     * Return the URI of this channel.
+     * @return
      */
-    void addTrustedMessenger(CharSequence peerID) throws SharkMessengerException;
+    CharSequence getURI() throws IOException;
 
-    void removeTrustedMessenger(CharSequence peerID) throws SharkMessengerException;
+    boolean isStoneAge();
+    boolean isBronzeAge();
+    boolean isInternetAge();
 
-    Set<CharSequence> getTrustedMessengers(CharSequence peerID) throws SharkMessengerException;
-
-    void sendSharkMessage(byte[] content, boolean sign, boolean encrypt) throws SharkMessengerException, IOException;
-
-    void sendSharkMessage(byte[] content) throws SharkMessengerException, IOException;
+    int size(boolean sentMessagesOnly, boolean verifiedMessagesOnly, boolean encryptedMessagesOnly);
 
     SharkMessageList getMessages();
+    SharkMessage getSharkMessage(int position, boolean chronologically) throws SharkMessengerException;
+
 
     SharkMessageList getMessagesBySender(CharSequence senderID);
     SharkMessageList getMessagesByReceiver(CharSequence receiverID);
+
 }

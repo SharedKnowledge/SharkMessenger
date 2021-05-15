@@ -6,6 +6,7 @@ import net.sharksystem.SharkUnknownBehaviourException;
 import net.sharksystem.pki.SharkPKIComponent;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -160,7 +161,8 @@ public interface SharkMessengerComponent extends SharkComponent {
      * @throws SharkMessengerException channel already exists
      * @since 1.1
      */
-    SharkMessengerChannel createChannel(CharSequence uri, CharSequence name) throws IOException,  SharkMessengerException;
+    SharkMessengerClosedChannel createClosedChannel(CharSequence uri, CharSequence name)
+            throws IOException, SharkMessengerException;
 
     /**
      * Remove a new channel.
@@ -191,22 +193,23 @@ public interface SharkMessengerComponent extends SharkComponent {
             throws SharkUnknownBehaviourException, SharkMessengerException;
 
     /**
-     * Produce information of a channel at given position - support for channel list views.
+     * Produces an object reference to a messenger channel with specified uri - throws an exception otherwise
      *
-     * @param position
+     * @param uri
      * @return
-     * @since 1.1
+     * @throws SharkMessengerException
      */
-    public SharkMessengerChannelInformation getSharkMessengerChannelInformation(int position) throws SharkMessengerException, IOException;
+    SharkMessengerChannel getChannel(CharSequence uri) throws SharkMessengerException, IOException;
+
 
     /**
-     * Size of this component is the number of channels.
+     * Produces a list of active channel uris
      *
      * @return
      * @throws IOException
      * @since 1.1
      */
-    int size() throws IOException, SharkMessengerException;
+    List<CharSequence> getChannelUris() throws IOException, SharkMessengerException;
 
     /**
      * Get a collection of messages of a channel.
@@ -216,19 +219,6 @@ public interface SharkMessengerComponent extends SharkComponent {
      * @throws IOException problems when reading
      */
 //    Collection<SharkMessage> getSharkMessages(CharSequence uri) throws SharkMessengerException, IOException;
-
-    /**
-     * Recycler view support: return a message in a channel at a position.
-     * @param uri channel uri
-     * @param position message position
-     * @param chronologically true - oldest message comes first; false - newest comes first
-     * @return
-     * @throws SharkMessengerException
-     * @throws IOException
-     * @since 1.0
-     */
-    SharkMessage getSharkMessage(CharSequence uri, int position,  boolean chronologically)
-            throws SharkMessengerException, IOException;
 
     /**
      *

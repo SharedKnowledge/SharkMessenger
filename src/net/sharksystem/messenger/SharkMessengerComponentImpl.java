@@ -30,6 +30,12 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
 
     }
 
+
+    private void checkComponentRunning() throws SharkMessengerException {
+        if(this.asapPeer == null || this.sharkPKIComponent == null)
+            throw new SharkMessengerException("peer not started an/or pki not initialized");
+    }
+
     @Override
     public void setBehaviour(String behaviour, boolean on) throws SharkUnknownBehaviourException {
         throw new SharkUnknownBehaviourException(behaviour);
@@ -56,6 +62,8 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
                                  Set<CharSequence> selectedRecipients, boolean sign,
                                  boolean encrypt)
             throws SharkMessengerException, IOException {
+
+        this.checkComponentRunning();
 
         // lets serialize and send asap messages.
         try {
@@ -86,8 +94,10 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
         }
     }
 
-    public SharkMessengerChannel createChannel(CharSequence uri, CharSequence name)
+    public SharkMessengerClosedChannel createClosedChannel(CharSequence uri, CharSequence name)
             throws IOException, SharkMessengerException {
+
+        this.checkComponentRunning();
 
         try {
             ASAPStorage asapStorage =
@@ -99,7 +109,31 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
         catch(ASAPException asapException) {
             throw new SharkMessengerException(asapException);
         }
+
         return null;
+    }
+
+    public SharkMessengerChannel getChannel(CharSequence uri) throws SharkMessengerException, IOException {
+        try {
+            ASAPStorage asapStorage =
+                    this.asapPeer.getASAPStorage(SharkMessengerComponent.SHARK_MESSENGER_FORMAT);
+
+            ASAPChannel channel = asapStorage.getChannel(uri);
+
+            return new SharkMessengerChannelImpl(this.asapPeer, this.sharkPKIComponent, channel);
+        }
+        catch(ASAPException asapException) {
+            throw new SharkMessengerException(asapException);
+        }
+    }
+
+    @Override
+    public List<CharSequence> getChannelUris() throws IOException, SharkMessengerException {
+        try {
+            return this.asapPeer.getASAPStorage(SharkMessengerComponent.SHARK_MESSENGER_FORMAT).getChannelURIs();
+        } catch(ASAPException asapException) {
+                throw new SharkMessengerException(asapException);
+        }
     }
 
     @Override
@@ -119,21 +153,6 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
         Log.writeLog(this, "setChannelBehaviour", "not yet implemented");
     }
 
-    public SharkMessengerChannelInformation getSharkMessengerChannelInformation(int position)
-            throws SharkMessengerException, IOException {
-        try {
-            ASAPStorage asapStorage =
-                    this.asapPeer.getASAPStorage(SharkMessengerComponent.SHARK_MESSENGER_FORMAT);
-
-            CharSequence uri = asapStorage.getChannelURIs().get(position);
-            return new SharkMessengerChannelInformation(uri,
-                    asapStorage.getExtra(uri, KEY_NAME_SHARK_MESSENGER_CHANNEL_NAME));
-        }
-        catch(ASAPException asapException) {
-            throw new SharkMessengerException(asapException);
-        }
-    }
-
     public int size() throws IOException, SharkMessengerException {
         try {
             ASAPStorage asapStorage =
@@ -146,6 +165,7 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
         }
     }
 
+    /*
     @Override
     public SharkMessage getSharkMessage(CharSequence uri, int position, boolean chronologically)
             throws SharkMessengerException, IOException {
@@ -164,6 +184,7 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
             throw new SharkMessengerException(asapException);
         }
     }
+     */
 
     @Override
     public SharkPKIComponent getSharkPKI() {
