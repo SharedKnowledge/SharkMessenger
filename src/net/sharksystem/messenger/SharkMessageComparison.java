@@ -5,7 +5,6 @@ import net.sharksystem.asap.ASAPMessageCompare;
 import net.sharksystem.pki.SharkPKIComponent;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 
 class SharkMessageComparison implements ASAPMessageCompare {
     private final SharkPKIComponent pki;

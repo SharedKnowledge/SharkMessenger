@@ -98,19 +98,7 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
             throws IOException, SharkMessengerException {
 
         this.checkComponentRunning();
-
-        try {
-            ASAPStorage asapStorage =
-                    this.asapPeer.getASAPStorage(SharkMessengerComponent.SHARK_MESSENGER_FORMAT);
-
-            asapStorage.createChannel(uri);
-            asapStorage.putExtra(uri, KEY_NAME_SHARK_MESSENGER_CHANNEL_NAME, name.toString());
-        }
-        catch(ASAPException asapException) {
-            throw new SharkMessengerException(asapException);
-        }
-
-        return null;
+        throw new SharkNotSupportedException("not yet implemented");
     }
 
     public SharkMessengerChannel getChannel(CharSequence uri) throws SharkMessengerException, IOException {
@@ -126,6 +114,39 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
             throw new SharkMessengerException(asapException);
         }
     }
+
+    public SharkMessengerChannel createChannel(CharSequence uri, CharSequence name)
+            throws SharkMessengerException, IOException {
+
+        this.checkComponentRunning();
+
+        try {
+            return this.getChannel(uri); // already exists ?
+        }
+        catch(SharkMessengerException asapException) {
+            // does not exist yet
+        }
+
+        // create
+        try {
+            ASAPStorage asapStorage =
+                    this.asapPeer.getASAPStorage(SharkMessengerComponent.SHARK_MESSENGER_FORMAT);
+
+            asapStorage.createChannel(uri);
+            ASAPChannel channel = asapStorage.getChannel(uri);
+            if(name != null) {
+                channel.putExtraData(KEY_NAME_SHARK_MESSENGER_CHANNEL_NAME, name.toString());
+            } else {
+                channel.putExtraData(KEY_NAME_SHARK_MESSENGER_CHANNEL_NAME, CHANNEL_DEFAULT_NAME);
+            }
+
+            return new SharkMessengerChannelImpl(this.asapPeer, this.sharkPKIComponent, channel);
+        }
+        catch(ASAPException asapException) {
+            throw new SharkMessengerException(asapException);
+        }
+    }
+
 
     @Override
     public List<CharSequence> getChannelUris() throws IOException, SharkMessengerException {

@@ -395,13 +395,9 @@ public class Version1_Tests {
 
         // test results
         SharkMessengerChannel aliceChannel = aliceMessenger.getChannel(URI);
-        SharkMessageList aliceChannelMessages = aliceChannel.getMessages();
+        // variant has a better performance - if order is not of any concern
+        SharkMessageList aliceChannelMessages = aliceChannel.getMessages(false, false);
         Assert.assertEquals(2, aliceChannelMessages.size());
         this.oneEncryptableOneIsNot(aliceChannelMessages);
     }
-
-    /*
-     * vi) Alice sends two signed and encrypted messages to C and B with success.
-     * vii) Alice sends signed B. B encounters C. B can verify, C can not. Like ii) but routed over B.
-     */
 }

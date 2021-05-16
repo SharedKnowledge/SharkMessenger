@@ -99,6 +99,7 @@ import java.util.Set;
  */
 @ASAPFormats(formats = {SharkMessengerComponent.SHARK_MESSENGER_FORMAT})
 public interface SharkMessengerComponent extends SharkComponent {
+    String CHANNEL_DEFAULT_NAME = "channel has no name";
 
     /*
         TODO: that is the Shark - Shared Knowledge. Find a way to allow projects to set its own application format
@@ -197,10 +198,11 @@ public interface SharkMessengerComponent extends SharkComponent {
      *
      * @param uri
      * @return
-     * @throws SharkMessengerException
+     * @throws SharkMessengerException channel does not exist
      */
     SharkMessengerChannel getChannel(CharSequence uri) throws SharkMessengerException, IOException;
 
+    SharkMessengerChannel createChannel(CharSequence uri, CharSequence name) throws SharkMessengerException, IOException;
 
     /**
      * Produces a list of active channel uris
