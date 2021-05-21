@@ -1,10 +1,12 @@
 package net.sharksystem.messenger;
 
 import net.sharksystem.asap.ASAPException;
+import net.sharksystem.asap.ASAPHop;
 import net.sharksystem.asap.ASAPSecurityException;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -90,4 +92,16 @@ public interface SharkMessage {
      * @throws ASAPSecurityException if message could not be encrypted
      */
     boolean isLaterThan(SharkMessage message) throws ASAPException, ASAPSecurityException, IOException;
+
+    /**
+     * A message can be received directly from a sender or it was routed. This method provides the route. The first
+     * entry will always be the sender. A route of length 1 describes a direct message exchange.
+     * <br/><br/>
+     * A peer that works in stone age mode will only work with <i>direct</i> messages.
+     * <br/><br/>
+     * No information about quality and safety of intermediary routing steps are provided. That is simply due to a
+     * principle lack of reliability of such information.
+     * @return
+     */
+    List<ASAPHop> getRoute();
 }

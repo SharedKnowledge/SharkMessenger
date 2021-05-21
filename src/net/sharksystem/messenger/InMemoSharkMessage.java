@@ -1,6 +1,8 @@
 package net.sharksystem.messenger;
 
+import net.sharksystem.SharkNotSupportedException;
 import net.sharksystem.asap.ASAPException;
+import net.sharksystem.asap.ASAPHop;
 import net.sharksystem.asap.ASAPSecurityException;
 import net.sharksystem.asap.crypto.ASAPCryptoAlgorithms;
 import net.sharksystem.asap.crypto.ASAPKeyStore;
@@ -11,6 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -209,6 +212,11 @@ public class InMemoSharkMessage implements SharkMessage {
 
         Timestamp messageCreationTime = message.getCreationTime();
         return messageCreationTime.after(this.getCreationTime());
+    }
+
+    @Override
+    public List<ASAPHop> getRoute() {
+        throw new SharkNotSupportedException("not yet implemented");
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////
