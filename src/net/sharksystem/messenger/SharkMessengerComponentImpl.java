@@ -1,6 +1,5 @@
 package net.sharksystem.messenger;
 
-import net.sharksystem.EncounterConnectionType;
 import net.sharksystem.SharkException;
 import net.sharksystem.SharkNotSupportedException;
 import net.sharksystem.SharkUnknownBehaviourException;
@@ -220,8 +219,7 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
     @Override
     public void asapMessagesReceived(ASAPMessages asapMessages,
                                      String senderE2E, // E2E part
-                                     String senderPoint2Point, boolean verified, boolean encrypted, // Point2Point part
-                                     EncounterConnectionType connectionType) {
+                                     List<ASAPHop> asapHops) {
         CharSequence uri = asapMessages.getURI();
         Log.writeLog(this, "MAKE URI LISTENER PUBLIC AGAIN. Thank you :)");
 
