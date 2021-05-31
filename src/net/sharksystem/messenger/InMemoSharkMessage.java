@@ -29,6 +29,7 @@ public class InMemoSharkMessage implements SharkMessage {
     private boolean encrypted;
     private Set<CharSequence> snRecipients;
     private Timestamp creationTime;
+    private final List<ASAPHop> hopsList;
 
     /**
      * Received
@@ -39,19 +40,22 @@ public class InMemoSharkMessage implements SharkMessage {
      */
     private InMemoSharkMessage(byte[] message, CharSequence sender,
                                Set<CharSequence> snRecipients, Timestamp creationTime,
-                               boolean verified, boolean encrypted) {
+                               boolean verified, boolean encrypted, List<ASAPHop> hopsList) {
         this.snContent = message;
         this.snSender = sender;
         this.verified = verified;
         this.encrypted = encrypted;
         this.snRecipients = snRecipients;
         this.creationTime = creationTime;
+        this.hopsList = hopsList;
     }
 
-    private InMemoSharkMessage(ASAPCryptoAlgorithms.EncryptedMessagePackage encryptedMessagePackage) {
+    private InMemoSharkMessage(ASAPCryptoAlgorithms.EncryptedMessagePackage encryptedMessagePackage,
+                               List<ASAPHop> hopsList) {
         this.encryptedMessagePackage = encryptedMessagePackage;
         this.snRecipients = new HashSet<>();
         this.snRecipients.add(encryptedMessagePackage.getRecipient());
+        this.hopsList = hopsList;
     }
 
     public static byte[] serializeMessage(byte[] content, CharSequence sender, CharSequence recipient)
@@ -215,22 +219,22 @@ public class InMemoSharkMessage implements SharkMessage {
     }
 
     @Override
-    public List<ASAPHop> getRoute() {
-        throw new SharkNotSupportedException("not yet implemented");
+    public List<ASAPHop> getASAPHopsList() {
+        return this.hopsList;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////
     //                                    factory methods                                   //
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    public static InMemoSharkMessage parseMessage(byte[] message)
+    public static InMemoSharkMessage parseMessage(byte[] message, List<ASAPHop> hopsList)
             throws IOException, ASAPException {
 
-        return InMemoSharkMessage.parseMessage(message, null);
+        return InMemoSharkMessage.parseMessage(message, hopsList);
 
     }
 
-    public static InMemoSharkMessage parseMessage(byte[] message, ASAPKeyStore ASAPKeyStore)
+    public static InMemoSharkMessage parseMessage(byte[] message, List<ASAPHop> hopsList, ASAPKeyStore ASAPKeyStore)
             throws IOException, ASAPException {
 
         ByteArrayInputStream bais = new ByteArrayInputStream(message);
@@ -248,7 +252,7 @@ public class InMemoSharkMessage implements SharkMessage {
 
             // for me?
             if (!ASAPKeyStore.isOwner(encryptedMessagePackage.getRecipient())) {
-                return new InMemoSharkMessage(encryptedMessagePackage);
+                return new InMemoSharkMessage(encryptedMessagePackage, hopsList);
                 //throw new ASAPException("SharkNetMessage: message not for me");
             }
 
@@ -292,7 +296,7 @@ public class InMemoSharkMessage implements SharkMessage {
         }
 
         // replace special sn symbols
-        return new InMemoSharkMessage(snMessage, snSender, snReceivers, creationTime, verified, encrypted);
+        return new InMemoSharkMessage(snMessage, snSender, snReceivers, creationTime, verified, encrypted, hopsList);
     }
 
     public boolean isAnonymousSender(CharSequence peerID) {

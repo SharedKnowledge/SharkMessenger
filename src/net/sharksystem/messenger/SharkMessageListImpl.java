@@ -1,13 +1,11 @@
 package net.sharksystem.messenger;
 
 import net.sharksystem.SharkNotSupportedException;
-import net.sharksystem.asap.ASAPChannel;
-import net.sharksystem.asap.ASAPException;
-import net.sharksystem.asap.ASAPMessageCompare;
-import net.sharksystem.asap.ASAPMessages;
+import net.sharksystem.asap.*;
 import net.sharksystem.pki.SharkPKIComponent;
 
 import java.io.IOException;
+import java.util.List;
 
 public class SharkMessageListImpl implements SharkMessageList {
     private final SharkPKIComponent pkiComponent;
@@ -31,9 +29,9 @@ public class SharkMessageListImpl implements SharkMessageList {
     @Override
     public SharkMessage getSharkMessage(int position, boolean chronologically) throws SharkMessengerException {
         try {
-            return InMemoSharkMessage.parseMessage(
-                    asapMessages.getMessage(position, chronologically),
-                    this.pkiComponent);
+            List<ASAPHop> hopsList = this.asapMessages.getChunk(position, chronologically).getASAPHopList();
+            byte[] content = this.asapMessages.getMessage(position, chronologically);
+            return InMemoSharkMessage.parseMessage(content, hopsList, this.pkiComponent);
         }
         catch(ASAPException | IOException asapException) {
             throw new SharkMessengerException(asapException);

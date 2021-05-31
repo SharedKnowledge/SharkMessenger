@@ -1,6 +1,7 @@
 package net.sharksystem.messenger;
 
 import net.sharksystem.asap.ASAPException;
+import net.sharksystem.asap.ASAPHop;
 import net.sharksystem.asap.crypto.InMemoASAPKeyStore;
 import org.junit.Assert;
 import org.junit.Test;
@@ -8,7 +9,9 @@ import org.junit.Test;
 import java.io.IOException;
 import java.security.KeyPair;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static net.sharksystem.messenger.TestConstants.*;
@@ -26,7 +29,7 @@ public class SharkMessageASAPSerializationTests {
                 MESSAGE.getBytes(), ALICE_ID, BOB_ID);
 
         InMemoSharkMessage sharkNetMessage =
-                InMemoSharkMessage.parseMessage(serializedSNMessage);
+                InMemoSharkMessage.parseMessage(serializedSNMessage, new ArrayList<ASAPHop>());
 
         Assert.assertEquals(MESSAGE, new String(sharkNetMessage.getContent()));
         Assert.assertEquals(ALICE_ID, sharkNetMessage.getSender());
@@ -46,7 +49,7 @@ public class SharkMessageASAPSerializationTests {
                 MESSAGE.getBytes(), ALICE_ID, BOB_ID, true, false, keyStorageAlice);
 
         InMemoSharkMessage sharkNetMessage =
-                InMemoSharkMessage.parseMessage(serializedSNMessage, keyStorageBob);
+                InMemoSharkMessage.parseMessage(serializedSNMessage, new ArrayList<ASAPHop>(), keyStorageBob);
 
         Assert.assertEquals(MESSAGE, new String(sharkNetMessage.getContent()));
         Assert.assertEquals(ALICE_ID, sharkNetMessage.getSender());
@@ -65,7 +68,7 @@ public class SharkMessageASAPSerializationTests {
                 MESSAGE.getBytes(), ALICE_ID, BOB_ID, true, false, keyStorageAlice);
 
         InMemoSharkMessage sharkNetMessage =
-                InMemoSharkMessage.parseMessage(serializedSNMessage, keyStorageBob);
+                InMemoSharkMessage.parseMessage(serializedSNMessage, new ArrayList<ASAPHop>(), keyStorageBob);
 
         Assert.assertEquals(MESSAGE, new String(sharkNetMessage.getContent()));
         Assert.assertEquals(ALICE_ID, sharkNetMessage.getSender());
@@ -85,7 +88,7 @@ public class SharkMessageASAPSerializationTests {
                 MESSAGE.getBytes(), ALICE_ID, BOB_ID, false, true,keyStorageAlice);
 
         InMemoSharkMessage sharkNetMessage =
-                InMemoSharkMessage.parseMessage(serializedSNMessage, keyStorageBob);
+                InMemoSharkMessage.parseMessage(serializedSNMessage, new ArrayList<ASAPHop>(), keyStorageBob);
 
         Assert.assertEquals(MESSAGE, new String(sharkNetMessage.getContent()));
         Assert.assertEquals(ALICE_ID, sharkNetMessage.getSender());
@@ -105,7 +108,7 @@ public class SharkMessageASAPSerializationTests {
                 MESSAGE.getBytes(), ALICE_ID, BOB_ID, true, true, keyStorageAlice);
 
         InMemoSharkMessage sharkNetMessage =
-                InMemoSharkMessage.parseMessage(serializedSNMessage, keyStorageBob);
+                InMemoSharkMessage.parseMessage(serializedSNMessage, new ArrayList<ASAPHop>(), keyStorageBob);
 
         Assert.assertEquals(MESSAGE, new String(sharkNetMessage.getContent()));
         Assert.assertEquals(ALICE_ID, sharkNetMessage.getSender());
@@ -132,7 +135,7 @@ public class SharkMessageASAPSerializationTests {
 
         // parse
         InMemoSharkMessage receivedMessage =
-                InMemoSharkMessage.parseMessage(asapMessage, keyStorageBob);
+                InMemoSharkMessage.parseMessage(asapMessage, new ArrayList<ASAPHop>(), keyStorageBob);
 
         Assert.assertEquals(MESSAGE, new String(receivedMessage.getContent()));
         Assert.assertEquals(2, receivedMessage.getRecipients().size());

@@ -103,5 +103,5 @@ public interface SharkMessage {
      * principle lack of reliability of such information.
      * @return
      */
-    List<ASAPHop> getRoute();
+    List<ASAPHop> getASAPHopsList();
 }

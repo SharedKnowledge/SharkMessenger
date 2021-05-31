@@ -1,10 +1,12 @@
 package net.sharksystem.messenger;
 
 import net.sharksystem.asap.ASAPException;
+import net.sharksystem.asap.ASAPHop;
 import net.sharksystem.asap.ASAPMessageCompare;
 import net.sharksystem.pki.SharkPKIComponent;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 class SharkMessageComparison implements ASAPMessageCompare {
     private final SharkPKIComponent pki;
@@ -16,8 +18,8 @@ class SharkMessageComparison implements ASAPMessageCompare {
     @Override
     public boolean earlier(byte[] msgA, byte[] msgB) {
         try {
-            InMemoSharkMessage sharkMsgA = InMemoSharkMessage.parseMessage(msgA, this.pki);
-            InMemoSharkMessage sharkMsgB = InMemoSharkMessage.parseMessage(msgB, this.pki);
+            InMemoSharkMessage sharkMsgA = InMemoSharkMessage.parseMessage(msgA, new ArrayList<ASAPHop>(), this.pki);
+            InMemoSharkMessage sharkMsgB = InMemoSharkMessage.parseMessage(msgB, new ArrayList<ASAPHop>(), this.pki);
 
             long creationTimeA = -1;
             long creationTimeB = -1;
