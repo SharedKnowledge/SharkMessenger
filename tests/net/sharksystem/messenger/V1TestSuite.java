@@ -1,0 +1,12 @@
+package net.sharksystem.messenger;
+
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+        Version1_MessageExchangeTests.class
+})
+public class V1TestSuite {
+
+}

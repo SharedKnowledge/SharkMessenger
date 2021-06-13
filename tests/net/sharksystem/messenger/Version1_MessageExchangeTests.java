@@ -6,7 +6,6 @@ import net.sharksystem.asap.ASAPException;
 import net.sharksystem.asap.ASAPSecurityException;
 import net.sharksystem.asap.ASAPStorage;
 import net.sharksystem.asap.pki.ASAPCertificate;
-import net.sharksystem.asap.pki.CredentialMessageInMemo;
 import net.sharksystem.pki.CredentialMessage;
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.pki.SharkPKIComponentFactory;
@@ -41,9 +40,9 @@ import static net.sharksystem.messenger.TestConstants.*;
  * vii) Alice sends signed B. B encounters C. B can verify, C can not. Like ii) but routed over B.
  */
 
-public class Version1_Tests {
+public class Version1_MessageExchangeTests {
     public static final String SUB_ROOT_DIRECTORY = TestConstants.ROOT_DIRECTORY
-            + Version1_Tests.class.getSimpleName() + "/";
+            + Version1_MessageExchangeTests.class.getSimpleName() + "/";
     public static final String MESSAGE = "Hi";
     public static final byte[] MESSAGE_BYTE = MESSAGE.getBytes();
     public static final String URI = "sn2://all";
@@ -55,7 +54,6 @@ public class Version1_Tests {
     private SharkTestPeerFS bobPeer;
     private SharkTestPeerFS claraPeer;
 
-    private static int portNumber = 5000;
     private SharkMessengerComponent aliceMessenger;
     private SharkMessengerComponent bobMessenger;
     private SharkMessengerComponent claraMessenger;
@@ -63,10 +61,6 @@ public class Version1_Tests {
     private SharkMessengerComponentImpl aliceMessengerImpl;
     private SharkMessengerComponentImpl bobMessengerImpl;
     private SharkMessengerComponentImpl claraMessengerImpl;
-
-    private int getPortNumber() {
-        return Version1_Tests.portNumber++;
-    }
 
     private SharkMessengerComponent setupComponent(SharkPeer sharkPeer)
             throws SharkException {
@@ -179,7 +173,7 @@ public class Version1_Tests {
                 + leftPeer.getASAPPeer().getPeerID() + " <--> " + rightPeer.getASAPPeer().getPeerID());
         System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 
-        leftPeer.getASAPTestPeerFS().startEncounter(this.getPortNumber(), rightPeer.getASAPTestPeerFS());
+        leftPeer.getASAPTestPeerFS().startEncounter(TestHelper.getPortNumber(), rightPeer.getASAPTestPeerFS());
         // give them moment to exchange data
         Thread.sleep(1000);
         //Thread.sleep(Long.MAX_VALUE);
