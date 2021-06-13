@@ -17,13 +17,17 @@ import static net.sharksystem.messenger.TestConstants.BOB_ID;
 
 public class TestHelper {
     //////////////// statics
+    public static final String MESSAGE = "Hi";
+    public static final byte[] MESSAGE_BYTE = MESSAGE.getBytes();
+    public static final String URI = "sn2://all";
+
     private static int testNumber = 0;
 
+    private static int portNumber = 5000;
     public static int getPortNumber() {
         return TestHelper.portNumber++;
     }
 
-    private static int portNumber = 5000;
 
     //////////////// member
     public final String subRootFolder;

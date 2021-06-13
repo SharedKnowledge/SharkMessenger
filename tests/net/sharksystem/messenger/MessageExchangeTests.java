@@ -5,8 +5,6 @@ import net.sharksystem.asap.ASAPChannel;
 import net.sharksystem.asap.ASAPException;
 import net.sharksystem.asap.ASAPSecurityException;
 import net.sharksystem.asap.ASAPStorage;
-import net.sharksystem.asap.pki.ASAPCertificate;
-import net.sharksystem.pki.CredentialMessage;
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.utils.Utils;
 import org.junit.Assert;
@@ -14,8 +12,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.List;
-
-import static net.sharksystem.messenger.TestConstants.*;
 
 /**
  * Version 1 - Scenarios (open channel communication (open routing) only)  selective routing is Version 2
@@ -34,9 +30,6 @@ import static net.sharksystem.messenger.TestConstants.*;
  */
 
 public class MessageExchangeTests extends TestHelper {
-    public static final String MESSAGE = "Hi";
-    public static final byte[] MESSAGE_BYTE = MESSAGE.getBytes();
-    public static final String URI = "sn2://all";
 
     public MessageExchangeTests() {
         super(MessageExchangeTests.class.getSimpleName());
