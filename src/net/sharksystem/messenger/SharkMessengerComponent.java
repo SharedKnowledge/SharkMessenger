@@ -202,7 +202,37 @@ public interface SharkMessengerComponent extends SharkComponent {
      */
     SharkMessengerChannel getChannel(CharSequence uri) throws SharkMessengerException, IOException;
 
-    SharkMessengerChannel createChannel(CharSequence uri, CharSequence name) throws SharkMessengerException, IOException;
+    /**
+     * Android support - give channels a number starting with 0
+     * @param position
+     * @return
+     * @throws SharkMessengerException
+     * @throws IOException
+     */
+    SharkMessengerChannel getChannel(int position) throws SharkMessengerException, IOException;
+
+    /**
+     * Create a new channel.
+     * @param uri channel uri
+     * @param name user friendly name
+     * @param mustNotExist if true - an exception is thrown if a channel with this uri already exists
+     * @return
+     * @throws SharkMessengerException
+     * @throws IOException
+     */
+    SharkMessengerChannel createChannel(CharSequence uri, CharSequence name, boolean mustNotExist)
+            throws SharkMessengerException, IOException;
+
+    /**
+     * Create a new channel. No other channel with this uri already exists
+     * @param uri
+     * @param name
+     * @return
+     * @throws SharkMessengerException
+     * @throws IOException
+     */
+    SharkMessengerChannel createChannel(CharSequence uri, CharSequence name)
+            throws SharkMessengerException, IOException;
 
     /**
      * Produces a list of active channel uris

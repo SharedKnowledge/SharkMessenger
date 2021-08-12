@@ -23,7 +23,7 @@ import java.util.List;
  * iii) Clara sends signed / unencrypted messages to B and A. B can verify, A can not. A and B show
  * likelihood authentic senders - which is unknown on A side
  * iv) Alice sends one unsigned and (with Bob public key encrypted) message to B and C. B can encrypt. C cannot.
- * v) Clara sends two messages (unsigned and encrypted) to B and than A. Both can decrypt. B is assure of
+ * v) Clara sends two messages (unsigned and encrypted) to B and A afterwards. Both can decrypt. B is assured of
  * Clara identity, Alice has no clue.
  * vi) Alice sends two signed and encrypted messages to C and B with success.
  * vii) Alice sends signed B. B encounters C. B can verify, C can not. Like ii) but routed over B.

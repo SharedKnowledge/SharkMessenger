@@ -12,7 +12,6 @@ import java.util.*;
 
 class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
         implements SharkMessengerComponent, ASAPMessageReceivedListener {
-    private static final String KEY_NAME_SHARK_MESSENGER_CHANNEL_NAME = "sharkMessengerChannelName";
     private final SharkPKIComponent sharkPKIComponent;
     private ASAPPeer asapPeer;
 
@@ -115,16 +114,28 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
         }
     }
 
+    public SharkMessengerChannel getChannel(int position) throws SharkMessengerException, IOException {
+        CharSequence uri = this.getChannelUris().get(position);
+        return this.getChannel(uri);
+    }
+
     public SharkMessengerChannel createChannel(CharSequence uri, CharSequence name)
+            throws SharkMessengerException, IOException {
+        return this.createChannel(uri, name, true);
+    }
+
+    public SharkMessengerChannel createChannel(CharSequence uri, CharSequence name, boolean mustNotExist)
             throws SharkMessengerException, IOException {
 
         this.checkComponentRunning();
 
         try {
-            return this.getChannel(uri); // already exists ?
+            this.getChannel(uri); // already exists ?
+            // yes exists
+            if(mustNotExist) throw new SharkMessengerException("channel already exists");
         }
         catch(SharkMessengerException asapException) {
-            // does not exist yet
+            // does not exist yet - or it is okay
         }
 
         // create
@@ -134,13 +145,8 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
 
             asapStorage.createChannel(uri);
             ASAPChannel channel = asapStorage.getChannel(uri);
-            if(name != null) {
-                channel.putExtraData(KEY_NAME_SHARK_MESSENGER_CHANNEL_NAME, name.toString());
-            } else {
-                channel.putExtraData(KEY_NAME_SHARK_MESSENGER_CHANNEL_NAME, CHANNEL_DEFAULT_NAME);
-            }
 
-            return new SharkMessengerChannelImpl(this.asapPeer, this.sharkPKIComponent, channel);
+            return new SharkMessengerChannelImpl(this.asapPeer, this.sharkPKIComponent, channel, name);
         }
         catch(ASAPException asapException) {
             throw new SharkMessengerException(asapException);

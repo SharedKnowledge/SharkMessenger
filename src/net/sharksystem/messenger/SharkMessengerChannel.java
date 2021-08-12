@@ -43,6 +43,8 @@ public interface SharkMessengerChannel {
      */
     CharSequence getURI() throws IOException;
 
+    CharSequence getName() throws IOException;
+
     boolean isStoneAge();
     boolean isBronzeAge();
     boolean isInternetAge();
