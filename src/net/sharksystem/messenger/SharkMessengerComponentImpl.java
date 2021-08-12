@@ -4,19 +4,26 @@ import net.sharksystem.SharkException;
 import net.sharksystem.SharkNotSupportedException;
 import net.sharksystem.SharkUnknownBehaviourException;
 import net.sharksystem.asap.*;
+import net.sharksystem.asap.utils.ASAPSerialization;
+import net.sharksystem.hub.peerside.HubConnectorDescription;
+import net.sharksystem.hub.peerside.HubConnectorFactory;
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.utils.Log;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.*;
 
 class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
         implements SharkMessengerComponent, ASAPMessageReceivedListener {
+    private static final CharSequence HUB_DESCRIPTIONS = "hubDescriptions";
     private final SharkPKIComponent sharkPKIComponent;
     private ASAPPeer asapPeer;
 
     public SharkMessengerComponentImpl(SharkPKIComponent sharkPKIComponent) {
         this.sharkPKIComponent = sharkPKIComponent;
+        this.restoreHubDescriptions();
     }
 
     @Override
@@ -33,11 +40,6 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
     private void checkComponentRunning() throws SharkMessengerException {
         if(this.asapPeer == null || this.sharkPKIComponent == null)
             throw new SharkMessengerException("peer not started an/or pki not initialized");
-    }
-
-    @Override
-    public void setBehaviour(String behaviour, boolean on) throws SharkUnknownBehaviourException {
-        throw new SharkUnknownBehaviourException(behaviour);
     }
 
     @Override
@@ -240,5 +242,103 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
         return this.asapPeer.getASAPStorage(SHARK_MESSENGER_FORMAT);
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                            hub management                                             //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    private List<HubConnectorDescription> hubConnectorDescriptions = new ArrayList<>();
+
+    private void checkHubDescriptionsRestored() {
+        if(!this.hubDescriptionsRestored) {
+            this.restoreHubDescriptions();
+        }
+    }
+
+    @Override
+    public void addHubDescription(HubConnectorDescription hubConnectorDescription) {
+        this.checkHubDescriptionsRestored();
+        this.hubConnectorDescriptions.add(hubConnectorDescription);
+        this.persistHubDescriptions();
+    }
+
+    @Override
+    public void removeHubDescription(HubConnectorDescription hubConnectorDescription) {
+        this.checkHubDescriptionsRestored();
+        HubConnectorDescription same = null;
+        for(HubConnectorDescription hcd : this.hubConnectorDescriptions) {
+            if(hubConnectorDescription.isSame(hcd)) {
+                same = hcd;
+                break;
+            }
+        }
+
+        if(same != null) this.hubConnectorDescriptions.remove(same);
+        this.persistHubDescriptions();
+    }
+
+    @Override
+    public Collection<HubConnectorDescription> getHubDescriptions(HubConnectorDescription hubConnectorDescription) {
+        this.checkHubDescriptionsRestored();
+        return this.hubConnectorDescriptions;
+    }
+
+    @Override
+    public HubConnectorDescription getHubDescriptions(int index) throws SharkMessengerException {
+        this.checkHubDescriptionsRestored();
+        if(this.hubConnectorDescriptions.size() <= index) throw new SharkMessengerException("index out of range");
+
+        return this.hubConnectorDescriptions.get(index);
+    }
+
+    private void persistHubDescriptions() {
+        // not yet started or nothing to do
+        if(this.hubConnectorDescriptions.isEmpty() || this.asapPeer == null) return;
+
+        byte[][] serializedDescriptions = new byte[this.hubConnectorDescriptions.size()][];
+        int index = 0;
+        try {
+            for(HubConnectorDescription hcd : this.hubConnectorDescriptions) {
+                    serializedDescriptions[index++] = hcd.serialize();
+            }
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ASAPSerialization.writeByteArray(serializedDescriptions, baos);
+            byte[] serial = baos.toByteArray();
+
+            this.asapPeer.putExtra(HUB_DESCRIPTIONS, serial);
+        } catch (IOException | ASAPException e) {
+            Log.writeLogErr(this, "cannot serialized hub description");
+            return;
+        }
+
+    }
+
+    private boolean hubDescriptionsRestored = false;
+    private void restoreHubDescriptions() {
+        if(this.asapPeer == null) return; // not yet started
+        if(this.hubDescriptionsRestored) return; // only once
+
+        this.hubDescriptionsRestored = true;
+
+        byte[] serial = null;
+        try {
+            serial = this.asapPeer.getExtra(HUB_DESCRIPTIONS);
+            if(serial == null) return; // ok - no descriptions stored
+        } catch (ASAPException | IOException e) {
+            Log.writeLog(this, "cannot read hub description - ok, maybe there are non");
+            return;
+        }
+
+        try {
+            ByteArrayInputStream bais = new ByteArrayInputStream(serial);
+            byte[][] serializedDescriptions = ASAPSerialization.readByte2DimArray(bais);
+
+            for(int i = 0; i < serializedDescriptions.length; i++) {
+                this.hubConnectorDescriptions.add(
+                        HubConnectorFactory.createHubConnectorByDescription(serializedDescriptions[i]));
+            }
+        } catch (IOException | ASAPException e) {
+            Log.writeLogErr(this, "cannot deserialize hub description - seems to be a bug");
+        }
+    }
 }

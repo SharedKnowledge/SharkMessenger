@@ -5,7 +5,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        MessageExchangeTests.class
+        MessageExchangeTests.class,
+        HubDescriptionTests.class
 })
 public class V1TestSuite {
 

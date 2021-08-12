@@ -3,9 +3,11 @@ package net.sharksystem.messenger;
 import net.sharksystem.ASAPFormats;
 import net.sharksystem.SharkComponent;
 import net.sharksystem.SharkUnknownBehaviourException;
+import net.sharksystem.hub.peerside.HubConnectorDescription;
 import net.sharksystem.pki.SharkPKIComponent;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -152,6 +154,13 @@ public interface SharkMessengerComponent extends SharkComponent {
     void sendSharkMessage(byte[] content, CharSequence uri, boolean sign, boolean encrypt)
             throws SharkMessengerException, IOException;
 
+    void addHubDescription(HubConnectorDescription hubConnectorDescription);
+
+    void removeHubDescription(HubConnectorDescription hubConnectorDescription);
+
+    Collection<HubConnectorDescription> getHubDescriptions(HubConnectorDescription hubConnectorDescription);
+
+    HubConnectorDescription getHubDescriptions(int index) throws SharkMessengerException;
 
     /**
      * Create a new channel.

@@ -59,6 +59,14 @@ public class TestHelper {
         this.bobFolder = subRootFolder + BOB_ID;
         this.claraFolder = subRootFolder + CLARA_ID;
     }
+
+    public void setupAlicePeerOnly() {
+        System.out.println("test number == " + testNumber);
+        String aliceFolderName = aliceFolder + "_" + testNumber;
+        SharkTestPeerFS.removeFolder(aliceFolderName);
+        this.alicePeer = new SharkTestPeerFS(ALICE_ID, aliceFolderName);
+    }
+
     /*
      * Scenario 1:
      * a) Alice and Bob exchanged credential messages and provided certificates for each other
