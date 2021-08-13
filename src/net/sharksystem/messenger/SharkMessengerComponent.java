@@ -154,14 +154,6 @@ public interface SharkMessengerComponent extends SharkComponent {
     void sendSharkMessage(byte[] content, CharSequence uri, boolean sign, boolean encrypt)
             throws SharkMessengerException, IOException;
 
-    void addHubDescription(HubConnectorDescription hubConnectorDescription);
-
-    void removeHubDescription(HubConnectorDescription hubConnectorDescription);
-
-    Collection<HubConnectorDescription> getHubDescriptions(HubConnectorDescription hubConnectorDescription);
-
-    HubConnectorDescription getHubDescriptions(int index) throws SharkMessengerException;
-
     /**
      * Create a new channel.
      *
