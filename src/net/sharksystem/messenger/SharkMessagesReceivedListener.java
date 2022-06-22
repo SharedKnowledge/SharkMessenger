@@ -1,7 +1,5 @@
 package net.sharksystem.messenger;
 
-import java.util.Collection;
-
 public interface SharkMessagesReceivedListener {
     /**
      * New messages arrived

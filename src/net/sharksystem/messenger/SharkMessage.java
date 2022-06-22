@@ -68,7 +68,8 @@ public interface SharkMessage {
     /**
      * Can this message be decrypted? It is always true if it was not encrypted in the first place.
      * It is also true if this peer was receiver of this message and key pair has not changed.
-     * @return true - message content can be read. False - encrypted content cannot be decrypted.
+     * @return true - message content can be read. False - encrypted content cannot be decrypted. Encrypted for
+     * another receiver.
      */
     boolean couldBeDecrypted();
 

@@ -30,9 +30,9 @@ import java.util.Set;
  * vi) Alice sends two signed and encrypted messages to C and B with success.
  * vii) Alice sends signed B. B encounters C. B can verify, C can not. Like ii) but routed over B.
  * Viii) Sorted message handling between Alice and Bob without timestamp. Alice send message bob receive,
- * and send an other one, and then send a replyTo message
+ * and send another one, and then send a replyTo message
  * iX) Sorted message handling between Alice, Bob, Clara and Tina without timestamp. Alice send message bob receive,
- *  * and send an other one, and then send a replyTo message
+ *  * and send another one, and then send a replyTo message
  */
 
 public class MessageExchangeTests extends TestHelper {

@@ -1,6 +1,5 @@
 package net.sharksystem.messenger;
 
-import net.sharksystem.SharkNotSupportedException;
 import net.sharksystem.asap.*;
 import net.sharksystem.pki.SharkPKIComponent;
 

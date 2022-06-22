@@ -3,8 +3,6 @@ package net.sharksystem.messenger;
 import net.sharksystem.asap.listenermanager.GenericListenerImplementation;
 import net.sharksystem.asap.listenermanager.GenericNotifier;
 
-import java.util.Collection;
-
 public class SharkMessagesReceivedListenerManager extends GenericListenerImplementation<SharkMessagesReceivedListener> {
     public void addSharkMessagesReceivedListener(SharkMessagesReceivedListener listener) {
         this.addListener(listener);

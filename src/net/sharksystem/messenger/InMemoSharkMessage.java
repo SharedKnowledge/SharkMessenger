@@ -53,7 +53,7 @@ public class InMemoSharkMessage implements SharkMessage {
                                List<ASAPHop> hopsList) {
         this.encryptedMessagePackage = encryptedMessagePackage;
         this.snRecipients = new HashSet<>();
-        this.snRecipients.add(encryptedMessagePackage.getRecipient());
+        this.snRecipients.add(encryptedMessagePackage.getReceiver());
         this.hopsList = hopsList;
     }
 
@@ -94,7 +94,7 @@ public class InMemoSharkMessage implements SharkMessage {
     }
 
     public static byte[] serializeMessage(byte[] content, CharSequence sender, Set<CharSequence> receiver,
-        boolean sign, boolean encrypt, ASAPKeyStore ASAPKeyStore)
+        boolean sign, boolean encrypt, ASAPKeyStore asapKeyStore)
             throws IOException, ASAPException {
 
         if( (receiver != null && receiver.size() > 1) && encrypt) {
@@ -131,7 +131,7 @@ public class InMemoSharkMessage implements SharkMessage {
 
         byte flags = 0;
         if(sign) {
-            byte[] signature = ASAPCryptoAlgorithms.sign(content, ASAPKeyStore);
+            byte[] signature = ASAPCryptoAlgorithms.sign(content, asapKeyStore);
             baos = new ByteArrayOutputStream();
             ASAPSerialization.writeByteArray(content, baos); // message has three parts: content, sender, receiver
             // append signature
@@ -145,7 +145,7 @@ public class InMemoSharkMessage implements SharkMessage {
             content = ASAPCryptoAlgorithms.produceEncryptedMessagePackage(
                     content,
                     receiver.iterator().next(), // already checked if one and only one is recipient
-                    ASAPKeyStore);
+                    asapKeyStore);
             flags += ENCRYPTED_MASK;
         }
 
@@ -250,7 +250,7 @@ public class InMemoSharkMessage implements SharkMessage {
                     encryptedMessagePackage = ASAPCryptoAlgorithms.parseEncryptedMessagePackage(bais);
 
             // for me?
-            if (!ASAPKeyStore.isOwner(encryptedMessagePackage.getRecipient())) {
+            if (!ASAPKeyStore.isOwner(encryptedMessagePackage.getReceiver())) {
                 return new InMemoSharkMessage(encryptedMessagePackage, hopsList);
                 //throw new ASAPException("SharkNetMessage: message not for me");
             }

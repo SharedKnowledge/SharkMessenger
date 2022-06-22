@@ -111,15 +111,15 @@ public interface SharkMessengerComponent extends SharkComponent {
     String SHARK_MESSENGER_FORMAT = "shark/messenger";
 
     // behaviour flags
-    String SHARK_MESSENGER_STONE_AGE_MODE = "net.sharksystem.messenger_stone_age";
-    String SHARK_MESSENGER_BRONZE_AGE_MODE = "net.sharksystem.messenger_bronze_age";
-    String SHARK_MESSENGER_INTERNET_AGE_MODE = "net.sharksystem.messenger_internet_age";
+    String SHARK_MESSENGER_STONE_AGE_MODE = "shark/messenger/mode/stone_age";
+    String SHARK_MESSENGER_BRONZE_AGE_MODE = "shark/messenger/mode/bronze_age";
+    String SHARK_MESSENGER_INTERNET_AGE_MODE = "shark/messenger/mode/internet_age";
     String DEFAULT_AGE = SHARK_MESSENGER_BRONZE_AGE_MODE;
 
     /**
-     * Send a shark message. Recipients can be empty (null). This message is sent to anybody.
-     * End-to-end security is supported. This message is encrypted for any recipient in a non-empty
-     * recipient list if flag <i>encrypted</i> is set. Message to with an empty recipient list cannot be
+     * Send a shark message. Receiver set can be empty or even null. In that case, this message is sent to anybody.
+     * End-to-end security is supported. This message is encrypted for any receiver in a non-empty
+     * receiver list if flag <i>encrypted</i> is set. Message to with an empty receiver list cannot be
      * encrypted. This message would throw an exception.
      * <br/>
      * <br/>
@@ -127,9 +127,9 @@ public interface SharkMessengerComponent extends SharkComponent {
      *
      * @param content   Arbitrary content
      * @param uri channel uri
-     * @param receiver recipient list - can be null
+     * @param receiver receiver list - can be null
      * @param sign      message will be signed yes / no
-     * @param encrypt   message will be encrypted for recipient(s) yes / no. A message with multiple
+     * @param encrypt   message will be encrypted for receiver(s) yes / no. A message with multiple
      *                  receiver is sent a multiple copies, each encrypted with receiver' public key.
      * @throws SharkMessengerException no all certificates available to encrypt. Empty receiver list but
      *                                 encrypted flag set
@@ -183,16 +183,18 @@ public interface SharkMessengerComponent extends SharkComponent {
      */
     void removeAllChannels() throws IOException;
 
-    /**
+
+    /*
      * Set communication behaviour (stone, bronze, internet age) for a channel.
      * @param uri channel uri
      * @param behaviour behaviour
      * @throws SharkUnknownBehaviourException unknown communication behaviour
      * @throws SharkMessengerException unknown channel uri
      * @since 1.1
-     */
+     * /
     void setChannelBehaviour(CharSequence uri, String behaviour)
             throws SharkUnknownBehaviourException, SharkMessengerException;
+    */
 
     /**
      * Produces an object reference to a messenger channel with specified uri - throws an exception otherwise

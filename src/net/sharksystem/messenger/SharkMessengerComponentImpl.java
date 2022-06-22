@@ -176,7 +176,6 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
         throw new SharkNotSupportedException("not yet implemented");
     }
 
-    @Override
     public void setChannelBehaviour(CharSequence uri, String behaviour) throws SharkUnknownBehaviourException, SharkMessengerException {
         Log.writeLog(this, "setChannelBehaviour", "not yet implemented");
     }
