@@ -3,11 +3,9 @@ package net.sharksystem.messenger;
 import net.sharksystem.ASAPFormats;
 import net.sharksystem.SharkComponent;
 import net.sharksystem.SharkUnknownBehaviourException;
-import net.sharksystem.hub.peerside.HubConnectorDescription;
 import net.sharksystem.pki.SharkPKIComponent;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -19,7 +17,7 @@ import java.util.Set;
  * It is essential part and first demonstrator of an Android Shark application.
  * <br/><br/>
  * There are three communication modes. This messenger can be used very similar to most well-known server based
- * messengers with all it vulnerabilities. This messenger can also be used in a mode which is close to paranoia - which
+ * messengers with all it's vulnerabilities. This messenger can also be used in a mode which is close to paranoia - which
  * comes in handy if revealed messages could be life-threatening. There are <b>three communication modes</b>:
  * <br/><br/>
  * <b>Stone age</b> communication mode restricts communication only to ad-hoc networks like Bluetooth. This mode even

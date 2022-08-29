@@ -44,7 +44,7 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
     @Override
     public void sendSharkMessage(byte[] content, CharSequence uri, boolean sign,
                                  boolean encrypt) throws IOException, SharkMessengerException {
-        HashSet<CharSequence> set = new HashSet();
+        HashSet<CharSequence> set = new HashSet<>();
         this.sendSharkMessage(content, uri, set, sign, encrypt);
     }
 
@@ -52,7 +52,7 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
     public void sendSharkMessage(byte[] content, CharSequence uri,
                                  CharSequence receiver, boolean sign,
                                  boolean encrypt) throws IOException, SharkMessengerException {
-        HashSet<CharSequence> set = new HashSet();
+        HashSet<CharSequence> set = new HashSet<>();
         set.add(receiver);
         this.sendSharkMessage(content, uri, set, sign, encrypt);
     }
@@ -67,8 +67,8 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
 
         // lets serialize and send asap messages.
         try {
-            if(encrypt && selectedRecipients != null && selectedRecipients.size() > 1) {
-                // more that one receiver and encrypted. Send one message for each.
+            if (encrypt && selectedRecipients != null && selectedRecipients.size() > 1) {
+                // more than one receiver and encrypted. Send one message for each.
                 for(CharSequence receiver : selectedRecipients) {
                     this.asapPeer.sendASAPMessage(SHARK_MESSENGER_FORMAT, uri,
                             // we have at most one receiver - this method can handle all combinations
