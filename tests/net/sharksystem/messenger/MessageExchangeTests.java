@@ -33,7 +33,6 @@ import static net.sharksystem.messenger.TestConstants.*;
  * and send another one, and then send a replyTo message<br/>
  * 9) Sorted message handling between Alice, Bob, Clara and Tina without timestamp. Alice send message Bob receive,
  * and send another one, and then send a replyTo message
->>>>>>> Stashed changes
  */
 public class MessageExchangeTests extends TestHelper {
 
