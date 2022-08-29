@@ -55,6 +55,8 @@ public class InMemoSharkMessage implements SharkMessage {
         this.snRecipients = new HashSet<>();
         this.snRecipients.add(encryptedMessagePackage.getReceiver());
         this.hopsList = hopsList;
+        // TODO is this correct?
+        this.encrypted = true;
     }
 
     public static byte[] serializeMessage(byte[] content, CharSequence sender, CharSequence recipient)
@@ -226,14 +228,7 @@ public class InMemoSharkMessage implements SharkMessage {
     //                                    factory methods                                   //
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    public static InMemoSharkMessage parseMessage(byte[] message, List<ASAPHop> hopsList)
-            throws IOException, ASAPException {
-
-        return InMemoSharkMessage.parseMessage(message, hopsList);
-
-    }
-
-    public static InMemoSharkMessage parseMessage(byte[] message, List<ASAPHop> hopsList, ASAPKeyStore ASAPKeyStore)
+    public static InMemoSharkMessage parseMessage(byte[] message, List<ASAPHop> hopsList, ASAPKeyStore asapKeyStore)
             throws IOException, ASAPException {
 
         ByteArrayInputStream bais = new ByteArrayInputStream(message);
@@ -250,14 +245,14 @@ public class InMemoSharkMessage implements SharkMessage {
                     encryptedMessagePackage = ASAPCryptoAlgorithms.parseEncryptedMessagePackage(bais);
 
             // for me?
-            if (!ASAPKeyStore.isOwner(encryptedMessagePackage.getReceiver())) {
+            if (!asapKeyStore.isOwner(encryptedMessagePackage.getReceiver())) {
                 return new InMemoSharkMessage(encryptedMessagePackage, hopsList);
                 //throw new ASAPException("SharkNetMessage: message not for me");
             }
 
             // replace message with decrypted message
             tmpMessage = ASAPCryptoAlgorithms.decryptPackage(
-                    encryptedMessagePackage, ASAPKeyStore);
+                    encryptedMessagePackage, asapKeyStore);
         }
 
         byte[] signature = null;
@@ -287,7 +282,7 @@ public class InMemoSharkMessage implements SharkMessage {
         if (signature != null) {
             try {
                 verified = ASAPCryptoAlgorithms.verify(
-                        signedMessage, signature, snSender, ASAPKeyStore);
+                        signedMessage, signature, snSender, asapKeyStore);
             } catch (ASAPSecurityException e) {
                 // verified definitely false
                 verified = false;

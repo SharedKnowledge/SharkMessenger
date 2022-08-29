@@ -3,50 +3,29 @@ package net.sharksystem.messenger;
 import net.sharksystem.SharkException;
 import net.sharksystem.SharkPeer;
 import net.sharksystem.SharkTestPeerFS;
-import net.sharksystem.asap.ASAPSecurityException;
 import net.sharksystem.asap.pki.ASAPCertificate;
 import net.sharksystem.pki.CredentialMessage;
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.pki.SharkPKIComponentFactory;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 
 import java.io.IOException;
 
 import static net.sharksystem.messenger.TestConstants.*;
-import static net.sharksystem.messenger.TestConstants.BOB_ID;
 
 public class TestHelper {
-    //////////////// statics
-    public static final String MESSAGE = "Hi";
-    public static final byte[] MESSAGE_BYTE = MESSAGE.getBytes();
-    public static final String MESSAGE_1 = "Hello";
-    public static final byte[] MESSAGE_1_BYTE = MESSAGE_1.getBytes();
-    public static final String MESSAGE_2 = "Hi, Alice";
-    public static final byte[] MESSAGE_2_BYTE = MESSAGE_2.getBytes();
-    public static final String MESSAGE_3 = "How are you?";
-    public static final byte[] MESSAGE_3_BYTE = MESSAGE_3.getBytes();
-    public static final String MESSAGE_4 = "Fine and you?";
-    public static final byte[] MESSAGE_4_BYTE = MESSAGE_4.getBytes();
-
-    public static final String URI = "sn2://all";
-
     private static int testNumber = 0;
-
     private static int portNumber = 5000;
-
-    public static int getPortNumber() {
+    public static int getPortNumberIncremented() {
         return TestHelper.portNumber++;
     }
 
-
-    //////////////// member
     public final String subRootFolder;
     public final String aliceFolder;
     public final String bobFolder;
     public final String claraFolder;
     private final String davidFolder;
 
-    /* apologize. That's 1990er code... no getter but protected member */
     protected SharkTestPeerFS alicePeer;
     protected SharkTestPeerFS bobPeer;
     protected SharkTestPeerFS claraPeer;
@@ -62,52 +41,40 @@ public class TestHelper {
     protected SharkMessengerComponentImpl claraMessengerImpl;
     protected SharkMessengerComponentImpl davidMessengerImpl;
 
-    private final String testName;
-
     public TestHelper(String testName) {
-        this.testName = testName;
-
         this.subRootFolder = TestConstants.ROOT_DIRECTORY + testName + "/";
 
-        this.aliceFolder = subRootFolder + ALICE_ID;
-        this.bobFolder = subRootFolder + BOB_ID;
-        this.claraFolder = subRootFolder + CLARA_ID;
-        this.davidFolder = subRootFolder + DAVID_ID;
+        this.aliceFolder = this.subRootFolder + ALICE_ID;
+        this.bobFolder = this.subRootFolder + BOB_ID;
+        this.claraFolder = this.subRootFolder + CLARA_ID;
+        this.davidFolder = this.subRootFolder + DAVID_ID;
     }
 
-    public void setupAlicePeerOnly() {
-        System.out.println("test number == " + testNumber);
-        String aliceFolderName = aliceFolder + "_" + testNumber;
-        SharkTestPeerFS.removeFolder(aliceFolderName);
-        this.alicePeer = new SharkTestPeerFS(ALICE_ID, aliceFolderName);
-    }
-
-    /*
-     * Scenario 1:
-     * a) Alice and Bob exchanged credential messages and provided certificates for each other
-     * b) Bob and Clara exchanged credential messages and provided certificates for each other
-     * b) Clara received certificate issued by Bob for subject Alice.
+    /**
+     * Scenario 1:<br/>
+     * a) Alice and Bob exchanged credential messages and provided certificates for each other<br/>
+     * b) Bob and Clara exchanged credential messages and provided certificates for each other<br/>
+     * b) Clara received certificate issued by Bob for subject Alice<br/>
      * c) Alice has no information about Clara
-     *
-    */
-    public void setUpScenario_1() throws SharkException, ASAPSecurityException, IOException {
-        System.out.println("test number == " + testNumber);
-        String aliceFolderName = aliceFolder + "_" + testNumber;
+     */
+    public void setUpScenario_1() throws SharkException, IOException {
+        System.out.println("test number == " + TestHelper.testNumber);
+        String aliceFolderName = aliceFolder + "_" + TestHelper.testNumber;
         SharkTestPeerFS.removeFolder(aliceFolderName);
         this.alicePeer = new SharkTestPeerFS(ALICE_ID, aliceFolderName);
-        TestHelper.setupComponent(this.alicePeer);
+        TestHelper.addComponentsToSharkPeer(this.alicePeer);
 
-        String bobFolderName = bobFolder + "_" + testNumber;
+        String bobFolderName = bobFolder + "_" + TestHelper.testNumber;
         SharkTestPeerFS.removeFolder(bobFolderName);
         this.bobPeer = new SharkTestPeerFS(BOB_ID, bobFolderName);
-        TestHelper.setupComponent(this.bobPeer);
+        TestHelper.addComponentsToSharkPeer(this.bobPeer);
 
-        String claraFolderName = claraFolder + "_" + testNumber;
+        String claraFolderName = claraFolder + "_" + TestHelper.testNumber;
         SharkTestPeerFS.removeFolder(claraFolderName);
         this.claraPeer = new SharkTestPeerFS(CLARA_ID, claraFolderName);
-        TestHelper.setupComponent(this.claraPeer);
+        TestHelper.addComponentsToSharkPeer(this.claraPeer);
 
-        testNumber++;
+        TestHelper.testNumber++;
 
         // start peers
         this.alicePeer.start();
@@ -146,23 +113,22 @@ public class TestHelper {
         int iaClaraSideAlice = claraPKI.getIdentityAssurance(ALICE_ID);
         int iaClaraSideBob = claraPKI.getIdentityAssurance(BOB_ID);
 
-        Assert.assertEquals(10, iaAliceSideBob); // met
+        Assertions.assertEquals(10, iaAliceSideBob);
         System.out.println("10 - okay, Alice met Bob");
-        Assert.assertEquals(0, iaAliceSideClara); // never seen, no certificate on Alice side
+        Assertions.assertEquals(0, iaAliceSideClara);
         System.out.println("0 - okay, Alice knows nothing about Clara");
-        Assert.assertEquals(10, iaBobSideAlice); // met
+        Assertions.assertEquals(10, iaBobSideAlice);
         System.out.println("10 - okay, Bob met Alice");
-        Assert.assertEquals(10, iaBobSideClara); // met
+        Assertions.assertEquals(10, iaBobSideClara);
         System.out.println("10 - okay, Bob met Clara");
-        Assert.assertEquals(5, iaClaraSideAlice); // got certificate from Bob, with default failure rate == 5
+        Assertions.assertEquals(5, iaClaraSideAlice);
         System.out.println("5 - okay, Clara has got a certificate issued by Bob (with failure rate 5)");
-        Assert.assertEquals(10, iaClaraSideBob); // met
+        Assertions.assertEquals(10, iaClaraSideBob);
         System.out.println("10 - okay, Clara met Bob");
 
         System.out.println("********************************************************************");
         System.out.println("**                          PKI works                             **");
         System.out.println("********************************************************************");
-        /////////////////////// PKI works
 
         this.aliceMessenger = (SharkMessengerComponent) this.alicePeer.getComponent(SharkMessengerComponent.class);
         this.bobMessenger = (SharkMessengerComponent) this.bobPeer.getComponent(SharkMessengerComponent.class);
@@ -174,38 +140,38 @@ public class TestHelper {
         this.claraMessengerImpl = (SharkMessengerComponentImpl) this.claraMessenger;
     }
 
-    /*
-     * Scenario 2:
-     * a) Alice and Bob exchanged credential messages and provided certificates for each other
-     * b) Bob and Clara exchanged credential messages and provided certificates for each other
-     * c) Alice and Clara exchanged credential messages and provided certificates for each other
-     * d) Alice and David exchanged credential messages and provided certificates for each other
-     * e) Bob and David exchanged credential messages and provided certificates for each other
+    /**
+     * Scenario 2: Everyone meets<br/>
+     * a) Alice and Bob exchanged credential messages and provided certificates for each other<br/>
+     * b) Bob and Clara exchanged credential messages and provided certificates for each other<br/>
+     * c) Alice and Clara exchanged credential messages and provided certificates for each other<br/>
+     * d) Alice and David exchanged credential messages and provided certificates for each other<br/>
+     * e) Bob and David exchanged credential messages and provided certificates for each other<br/>
      * f) Clara and David exchanged credential messages and provided certificates for each other
      */
-    public void setUpScenario_2() throws SharkException, ASAPSecurityException, IOException {
-        System.out.println("test number == " + testNumber);
-        String aliceFolderName = aliceFolder + "_" + testNumber;
+    public void setUpScenario_2() throws SharkException, IOException {
+        System.out.println("test number == " + TestHelper.testNumber);
+        String aliceFolderName = this.aliceFolder + "_" + TestHelper.testNumber;
         SharkTestPeerFS.removeFolder(aliceFolderName);
         this.alicePeer = new SharkTestPeerFS(ALICE_ID, aliceFolderName);
-        TestHelper.setupComponent(this.alicePeer);
+        TestHelper.addComponentsToSharkPeer(this.alicePeer);
 
-        String bobFolderName = bobFolder + "_" + testNumber;
+        String bobFolderName = this.bobFolder + "_" + TestHelper.testNumber;
         SharkTestPeerFS.removeFolder(bobFolderName);
         this.bobPeer = new SharkTestPeerFS(BOB_ID, bobFolderName);
-        TestHelper.setupComponent(this.bobPeer);
+        TestHelper.addComponentsToSharkPeer(this.bobPeer);
 
-        String claraFolderName = claraFolder + "_" + testNumber;
+        String claraFolderName = this.claraFolder + "_" + TestHelper.testNumber;
         SharkTestPeerFS.removeFolder(claraFolderName);
         this.claraPeer = new SharkTestPeerFS(CLARA_ID, claraFolderName);
-        TestHelper.setupComponent(this.claraPeer);
+        TestHelper.addComponentsToSharkPeer(this.claraPeer);
 
-        String davidFolderName = davidFolder + "_" + testNumber;
+        String davidFolderName = this.davidFolder + "_" + TestHelper.testNumber;
         SharkTestPeerFS.removeFolder(davidFolderName);
         this.davidPeer = new SharkTestPeerFS(DAVID_ID, davidFolderName);
-        TestHelper.setupComponent(this.davidPeer);
+        TestHelper.addComponentsToSharkPeer(this.davidPeer);
 
-        testNumber++;
+        TestHelper.testNumber++;
 
         // start peers
         this.alicePeer.start();
@@ -267,35 +233,34 @@ public class TestHelper {
         int iaDavidSideBob = davidPKI.getIdentityAssurance(BOB_ID);
         int iaDavidSideClara = davidPKI.getIdentityAssurance(CLARA_ID);
 
-        Assert.assertEquals(10, iaAliceSideBob); // met
+        Assertions.assertEquals(10, iaAliceSideBob);
         System.out.println("10 - okay, Alice met Bob");
-        Assert.assertEquals(10, iaAliceSideClara); // met
-        System.out.println("0 - okay, Alice met Clara");
-        Assert.assertEquals(10, iaAliceSideDavid); // met
-        System.out.println("0 - okay, Alice met David");
-        Assert.assertEquals(10, iaBobSideAlice); // met
+        Assertions.assertEquals(10, iaAliceSideClara);
+        System.out.println("10 - okay, Alice met Clara");
+        Assertions.assertEquals(10, iaAliceSideDavid);
+        System.out.println("10 - okay, Alice met David");
+        Assertions.assertEquals(10, iaBobSideAlice);
         System.out.println("10 - okay, Bob met Alice");
-        Assert.assertEquals(10, iaBobSideClara); // met
+        Assertions.assertEquals(10, iaBobSideClara);
         System.out.println("10 - okay, Bob met Clara");
-        Assert.assertEquals(10, iaBobSideDavid); // met
+        Assertions.assertEquals(10, iaBobSideDavid);
         System.out.println("10 - okay, Bob met David");
-        Assert.assertEquals(10, iaClaraSideAlice); // met
-        System.out.println("5 - okay, Clara met Alice");
-        Assert.assertEquals(10, iaClaraSideBob); // met
+        Assertions.assertEquals(10, iaClaraSideAlice);
+        System.out.println("10 - okay, Clara met Alice");
+        Assertions.assertEquals(10, iaClaraSideBob);
         System.out.println("10 - okay, Clara met Bob");
-        Assert.assertEquals(10, iaClaraSideDavid); // met
+        Assertions.assertEquals(10, iaClaraSideDavid);
         System.out.println("10 - okay, Clara met David");
-        Assert.assertEquals(10, iaDavidSideAlice); // met
-        System.out.println("5 - okay, David met Alice");
-        Assert.assertEquals(10, iaDavidSideBob); // met
+        Assertions.assertEquals(10, iaDavidSideAlice);
+        System.out.println("10 - okay, David met Alice");
+        Assertions.assertEquals(10, iaDavidSideBob);
         System.out.println("10 - okay, David met Bob");
-        Assert.assertEquals(10, iaDavidSideClara); // met
+        Assertions.assertEquals(10, iaDavidSideClara);
         System.out.println("10 - okay, David met David");
 
         System.out.println("********************************************************************");
         System.out.println("**                          PKI works                             **");
         System.out.println("********************************************************************");
-        /////////////////////// PKI works
 
         this.aliceMessenger = (SharkMessengerComponent) this.alicePeer.getComponent(SharkMessengerComponent.class);
         this.bobMessenger = (SharkMessengerComponent) this.bobPeer.getComponent(SharkMessengerComponent.class);
@@ -309,7 +274,10 @@ public class TestHelper {
         this.davidMessengerImpl = (SharkMessengerComponentImpl) this.davidMessenger;
     }
 
-    public static SharkMessengerComponent setupComponent(SharkPeer sharkPeer)
+    /**
+     * Adds a SharkPKIComponent and a SharkMessengerComponent to a given SharkPeer
+     */
+    public static void addComponentsToSharkPeer(SharkPeer sharkPeer)
             throws SharkException {
 
         // create a component factory
@@ -324,9 +292,5 @@ public class TestHelper {
                 );
 
         sharkPeer.addComponent(messengerFactory, SharkMessengerComponent.class);
-
-        return (SharkMessengerComponent) sharkPeer.getComponent(SharkMessengerComponent.class);
     }
-
-
 }
