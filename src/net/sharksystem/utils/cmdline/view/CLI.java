@@ -94,13 +94,13 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
 
     @Override
     public void printInfo(String information) {
-        this.standardOut.print(information);
+        this.standardOut.println(information);
     }
 
 
     @Override
     public void printError(String error) {
-        this.standardErr.print(error);
+        this.standardErr.println(error);
     }
 
 

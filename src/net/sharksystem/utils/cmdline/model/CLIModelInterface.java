@@ -14,6 +14,8 @@ public interface CLIModelInterface extends CLIModelObservable {
 
     SharkMessengerComponent getMessengerFromPeer(String name) throws SharkException;
 
+    int getNextFreePortNumber();
+
     void addCommandToHistory(String commandIdentifier);
 
     String getCommandHistory();

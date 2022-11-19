@@ -29,12 +29,15 @@ public class CLIController implements CLIControllerInterface, CLIControllerStrat
         //  specified and not the command identifier
         String commandIdentifier = cmd.remove(0);
 
+        boolean validCommand = false;
         for(CLICommand command : this.commands) {
             if(command.getIdentifier().equals(commandIdentifier)) {
+                validCommand = true;
                 if (command.rememberCommand()) this.model.addCommandToHistory(command.getIdentifier());
                 command.execute(this.view, this.model, cmd);
             }
         }
+        if (!validCommand) System.out.println("Unknown Command");
     }
 
     @Override
@@ -72,7 +75,7 @@ public class CLIController implements CLIControllerInterface, CLIControllerStrat
 
         String[] unfinishedCmd = input.split(space);
         for (String attribute : unfinishedCmd) {
-            attribute = attribute.toLowerCase();
+            //attribute = attribute.toLowerCase();
             attribute = attribute.trim();
 
             if (!attribute.equals(space)) {

@@ -7,10 +7,6 @@ import java.util.List;
 
 public abstract class CLICommand {
 
-    String description = "";
-    String detailedDescription = "";
-
-
     private final boolean rememberCommand;
     private final String identifier;
 
@@ -19,7 +15,7 @@ public abstract class CLICommand {
         this.rememberCommand = rememberCommand;
     }
 
-    public abstract void execute(CLIInterface ui, CLIModelInterface model, List<String> args);
+    public abstract void execute(CLIInterface ui, CLIModelInterface model, List<String> args) ;
 
     public String getIdentifier() { return this.identifier; };
 

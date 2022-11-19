@@ -25,7 +25,7 @@ public class AddPeerCLIC extends CLICommand {
             if (model.hasPeer(peerName)) {
                 ui.printError("Peer " + peerName + " already exists!");
             } else {
-                String peerFolderName = peerName + "_PEER_FOLDER";
+                String peerFolderName = "CLI/PEERS/" + peerName + "_PEER_FOLDER";
                 SharkTestPeerFS.removeFolder(peerFolderName);
                 SharkTestPeerFS peer = new SharkTestPeerFS(peerName, peerFolderName);
 
@@ -36,10 +36,8 @@ public class AddPeerCLIC extends CLICommand {
 
                     ui.printInfo("Successfully added PKIComponent to peer " + peerName);
 
-                    SharkMessengerComponentFactory messengerFactory =
-                            new SharkMessengerComponentFactory(
-                                    (SharkPKIComponent) peer.getComponent(SharkPKIComponent.class)
-                            );
+                    SharkMessengerComponentFactory messengerFactory = new SharkMessengerComponentFactory(
+                                    (SharkPKIComponent) peer.getComponent(SharkPKIComponent.class));
                     peer.addComponent(messengerFactory, SharkMessengerComponent.class);
 
                     ui.printInfo("Successfully added MessengerComponent to peer " + peerName);

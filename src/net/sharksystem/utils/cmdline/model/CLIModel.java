@@ -15,6 +15,9 @@ public class CLIModel implements CLIModelInterface, CLIModelObservable {
     private CLIModelStateObserver observer;
 
     private final Map<String, SharkTestPeerFS> peers;
+
+    private int startPortNumber = 7000;
+
     private final List<String> commands;
     private boolean running;
 
@@ -43,6 +46,12 @@ public class CLIModel implements CLIModelInterface, CLIModelObservable {
     public SharkMessengerComponent getMessengerFromPeer(String name) throws SharkException {
         SharkTestPeerFS peer = this.peers.get(name);
         return (SharkMessengerComponent) peer.getComponent(SharkMessengerComponent.class);
+    }
+
+    @Override
+    public int getNextFreePortNumber() {
+        return this.startPortNumber++;
+
     }
 
     @Override
