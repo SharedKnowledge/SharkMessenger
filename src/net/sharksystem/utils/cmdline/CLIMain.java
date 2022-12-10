@@ -18,7 +18,9 @@ public class CLIMain {
         controller.addCommand(new CLICStopEncounter("stopEncounter", true));
         controller.addCommand(new CLICSendMessage("sendMessage", true));
         controller.addCommand(new CLICGetMessages("getMessage", true));
+        controller.addCommand(new CLICGetHopList("getHops", true));
         controller.addCommand(new CLICCreateChannel("createChannel", true));
+        controller.addCommand(new CLICSetChannelAge("setChannelAge", true));
         controller.addCommand(new CLICRemoveChannel("rmChannel", true));
         controller.addCommand(new CLICShowLog("showLog", false));
         controller.addCommand(new CLICSaveLog("saveLog", false));
