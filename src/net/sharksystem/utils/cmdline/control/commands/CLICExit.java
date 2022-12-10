@@ -5,10 +5,10 @@ import net.sharksystem.utils.cmdline.view.CLIInterface;
 
 import java.util.List;
 
-public class ExitCLIC extends CLICommand{
+public class CLICExit extends CLICommand{
 
 
-    public ExitCLIC(String identifier, boolean rememberCommand) {
+    public CLICExit(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
     }
 

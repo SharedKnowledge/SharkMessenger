@@ -5,9 +5,9 @@ import net.sharksystem.utils.cmdline.view.CLIInterface;
 
 import java.util.List;
 
-public class ShowLogCLIC extends CLICommand {
+public class CLICShowLog extends CLICommand {
 
-    public ShowLogCLIC(String identifier, boolean rememberCommand) {
+    public CLICShowLog(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
     }
 

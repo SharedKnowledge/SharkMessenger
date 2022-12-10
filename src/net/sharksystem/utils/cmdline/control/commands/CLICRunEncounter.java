@@ -8,10 +8,10 @@ import net.sharksystem.utils.cmdline.view.CLIInterface;
 import java.io.IOException;
 import java.util.List;
 
-public class RunEncounterCLIC extends CLICommand {
+public class CLICRunEncounter extends CLICommand {
 
 
-    public RunEncounterCLIC(String identifier, boolean rememberCommand) {
+    public CLICRunEncounter(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
     }
 

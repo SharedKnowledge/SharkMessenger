@@ -12,9 +12,9 @@ import net.sharksystem.utils.cmdline.view.CLIInterface;
 
 import java.util.List;
 
-public class AddPeerCLIC extends CLICommand {
+public class CLICAddPeer extends CLICommand {
 
-    public AddPeerCLIC(String identifier, boolean rememberCommand) {
+    public CLICAddPeer(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
     }
 

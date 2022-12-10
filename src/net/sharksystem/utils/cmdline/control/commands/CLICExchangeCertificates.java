@@ -11,9 +11,9 @@ import net.sharksystem.utils.cmdline.view.CLIInterface;
 import java.io.IOException;
 import java.util.List;
 
-public class ExchangeCertificatesCLIC extends CLICommand{
+public class CLICExchangeCertificates extends CLICommand{
 
-    public ExchangeCertificatesCLIC(String identifier, boolean rememberCommand) {
+    public CLICExchangeCertificates(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
     }
 

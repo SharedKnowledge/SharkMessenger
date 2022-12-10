@@ -12,17 +12,17 @@ public class CLIMain {
         CLIModelInterface model = new CLIModel();
 
         CLIControllerInterface controller = new CLIController(model);
-        controller.addCommand(new AddPeerCLIC("addPeer", true));
-        controller.addCommand(new ExchangeCertificatesCLIC("exchangeCert", true));
-        controller.addCommand(new RunEncounterCLIC("runEncounter", true));
-        controller.addCommand(new StopEncounterCLIC("stopEncounter", true));
-        controller.addCommand(new SendMessageCLIC("sendMessage", true));
-        controller.addCommand(new GetMessagesCLIC("getMessage", true));
-        controller.addCommand(new CreateChannelCLIC("createChannel", true));
-        controller.addCommand(new RemoveChannelCLIC("rmChannel", true));
-        controller.addCommand(new ShowLogCLIC("showLog", false));
-        controller.addCommand(new SaveLogCLIC("saveLog", false));
-        controller.addCommand(new ExitCLIC("exit", true));
+        controller.addCommand(new CLICAddPeer("addPeer", true));
+        controller.addCommand(new CLICExchangeCertificates("exchangeCert", true));
+        controller.addCommand(new CLICRunEncounter("runEncounter", true));
+        controller.addCommand(new CLICStopEncounter("stopEncounter", true));
+        controller.addCommand(new CLICSendMessage("sendMessage", true));
+        controller.addCommand(new CLICGetMessages("getMessage", true));
+        controller.addCommand(new CLICCreateChannel("createChannel", true));
+        controller.addCommand(new CLICRemoveChannel("rmChannel", true));
+        controller.addCommand(new CLICShowLog("showLog", false));
+        controller.addCommand(new CLICSaveLog("saveLog", false));
+        controller.addCommand(new CLICExit("exit", true));
         controller.startCLI();
     }
 }

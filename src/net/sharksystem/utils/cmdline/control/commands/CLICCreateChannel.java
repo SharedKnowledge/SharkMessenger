@@ -9,25 +9,31 @@ import net.sharksystem.utils.cmdline.view.CLIInterface;
 import java.io.IOException;
 import java.util.List;
 
-public class RemoveChannelCLIC extends CLICommand {
+public class CLICCreateChannel extends CLICommand {
 
-
-    public RemoveChannelCLIC(String identifier, boolean rememberCommand) {
+    public CLICCreateChannel(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
     }
 
     @Override
     public void execute(CLIInterface ui, CLIModelInterface model, List<String> args) throws Exception {
-        if(args.size() >= 2) {
+        if(args.size() >= 3) {
             String peerName = args.get(0);
             String channelURI = args.get(1);
+            String channelName = args.get(2);
 
             if(model.hasPeer(peerName)) {
                 SharkTestPeerFS peer = model.getPeer(peerName);
 
                 try {
                     SharkMessengerComponent peerMessenger = (SharkMessengerComponent) peer.getComponent(SharkMessengerComponent.class);
-                    peerMessenger.removeChannel(channelURI);
+
+                    if(args.size() >= 4) {
+                        boolean mustNotExist = Boolean.parseBoolean(args.get(3));
+                        peerMessenger.createChannel(channelURI, channelName, mustNotExist);
+                    } else {
+                        peerMessenger.createChannel(channelURI, channelName);
+                    }
 
                 } catch (SharkException | IOException e) {
                     ui.printError(e.getLocalizedMessage());
@@ -43,15 +49,13 @@ public class RemoveChannelCLIC extends CLICommand {
     @Override
     public String getDescription() {
         StringBuilder sb = new StringBuilder();
-        sb.append("removes a channel");
+        sb.append("Creates a new channel.");
         return sb.toString();
     }
 
     @Override
     public String getDetailedDescription() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("removes a channel");
-        //TODO: detailed description
-        return sb.toString();
+        return this.getDescription();
+        //TODO: add detailed description
     }
 }

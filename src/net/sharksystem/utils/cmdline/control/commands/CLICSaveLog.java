@@ -8,9 +8,9 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.List;
 
-public class SaveLogCLIC extends CLICommand {
+public class CLICSaveLog extends CLICommand {
 
-    public SaveLogCLIC(String identifier, boolean rememberCommand) {
+    public CLICSaveLog(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
     }
 

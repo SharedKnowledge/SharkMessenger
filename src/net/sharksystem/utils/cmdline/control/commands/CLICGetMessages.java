@@ -12,9 +12,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-public class GetMessagesCLIC extends CLICommand {
+public class CLICGetMessages extends CLICommand {
 
-    public GetMessagesCLIC(String identifier, boolean rememberCommand) {
+    public CLICGetMessages(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
     }
 

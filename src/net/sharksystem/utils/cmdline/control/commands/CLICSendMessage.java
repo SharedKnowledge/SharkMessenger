@@ -11,10 +11,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class SendMessageCLIC extends CLICommand {
+public class CLICSendMessage extends CLICommand {
 
 
-    public SendMessageCLIC(String identifier, boolean rememberCommand) {
+    public CLICSendMessage(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
     }
 
