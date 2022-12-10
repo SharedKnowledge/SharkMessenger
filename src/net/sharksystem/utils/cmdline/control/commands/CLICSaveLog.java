@@ -1,5 +1,6 @@
 package net.sharksystem.utils.cmdline.control.commands;
 
+import net.sharksystem.utils.cmdline.control.commands.exceptions.NotEnoughArgumentsSpecifiedException;
 import net.sharksystem.utils.cmdline.model.CLIModelInterface;
 import net.sharksystem.utils.cmdline.view.CLIInterface;
 
