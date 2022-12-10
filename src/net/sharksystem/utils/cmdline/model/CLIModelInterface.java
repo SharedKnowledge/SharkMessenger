@@ -4,6 +4,8 @@ import net.sharksystem.SharkException;
 import net.sharksystem.SharkTestPeerFS;
 import net.sharksystem.messenger.SharkMessengerComponent;
 
+import java.util.List;
+
 /**
  * Interface between the CLIModel and CLIController.
  * This interface provides all methods for the CLIController to get and set the state of the model
@@ -57,6 +59,12 @@ public interface CLIModelInterface extends CLIModelObservable {
      * @return The command history
      */
     String getCommandHistory();
+
+    /**
+     * Returns the command history as a list of strings
+     * @return the command history
+     */
+    List<String> getCommandHistoryList();
 
     /**
      * Terminates the model which should inform any listeners

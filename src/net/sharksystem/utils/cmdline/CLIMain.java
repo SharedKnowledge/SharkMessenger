@@ -17,8 +17,11 @@ public class CLIMain {
         controller.addCommand(new RunEncounterCLIC("runEncounter", true));
         controller.addCommand(new StopEncounterCLIC("stopEncounter", true));
         controller.addCommand(new SendMessageCLIC("sendMessage", true));
+        controller.addCommand(new GetMessagesCLIC("getMessage", true));
         controller.addCommand(new CreateChannelCLIC("createChannel", true));
         controller.addCommand(new RemoveChannelCLIC("rmChannel", true));
+        controller.addCommand(new ShowLogCLIC("showLog", false));
+        controller.addCommand(new SaveLogCLIC("saveLog", false));
         controller.addCommand(new ExitCLIC("exit", true));
         controller.startCLI();
     }

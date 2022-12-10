@@ -64,8 +64,14 @@ public class CLIModel implements CLIModelInterface, CLIModelObservable {
         StringBuilder sb = new StringBuilder();
         for(String s : this.commands){
             sb.append(s);
+            sb.append(System.lineSeparator());
         }
         return sb.toString();
+    }
+
+    @Override
+    public List<String> getCommandHistoryList() {
+        return this.commands;
     }
 
     @Override
