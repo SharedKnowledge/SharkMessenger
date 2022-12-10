@@ -19,7 +19,7 @@ public class AddPeerCLIC extends CLICommand {
     }
 
     @Override
-    public void execute(CLIInterface ui, CLIModelInterface model, List<String> args) {
+    public void execute(CLIInterface ui, CLIModelInterface model, List<String> args) throws Exception {
         if (args.size() == 1) {
             String peerName = args.get(0);
             if (model.hasPeer(peerName)) {

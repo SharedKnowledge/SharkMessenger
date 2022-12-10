@@ -10,7 +10,6 @@ import net.sharksystem.utils.cmdline.view.CLIInterface;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.List;
 
 public class GetMessagesCLIC extends CLICommand {
@@ -20,7 +19,7 @@ public class GetMessagesCLIC extends CLICommand {
     }
 
     @Override
-    public void execute(CLIInterface ui, CLIModelInterface model, List<String> args) {
+    public void execute(CLIInterface ui, CLIModelInterface model, List<String> args) throws Exception {
         try {
             SharkMessengerComponent messenger = model.getMessengerFromPeer(args.get(0));
             SharkMessengerChannel channel = messenger.getChannel(args.get(1));

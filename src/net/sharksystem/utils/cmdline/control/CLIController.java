@@ -33,8 +33,12 @@ public class CLIController implements CLIControllerInterface, CLIControllerStrat
         for(CLICommand command : this.commands) {
             if(command.getIdentifier().equals(commandIdentifier)) {
                 validCommand = true;
-                if (command.rememberCommand()) this.model.addCommandToHistory(command.getIdentifier());
-                command.execute(this.view, this.model, cmd);
+                if (command.rememberCommand()) this.saveCommandInHistory(command.getIdentifier(), cmd);
+                try {
+                    command.execute(this.view, this.model, cmd);
+                } catch (Exception e) {
+                    this.view.exceptionOccurred(e);
+                }
             }
         }
         if (!validCommand) System.out.println("Unknown Command");
@@ -58,6 +62,18 @@ public class CLIController implements CLIControllerInterface, CLIControllerStrat
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                    Helpers                                                     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private void saveCommandInHistory(String idenifier, List<String> arguments) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(idenifier);
+
+        for(String s : arguments) {
+            sb.append(" ");
+            sb.append(s);
+        }
+
+        this.model.addCommandToHistory(sb.toString());
+    }
 
     /**
      * Converts a string representing a command input by the user into a list of all command arguments.

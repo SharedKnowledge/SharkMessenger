@@ -15,7 +15,7 @@ public abstract class CLICommand {
         this.rememberCommand = rememberCommand;
     }
 
-    public abstract void execute(CLIInterface ui, CLIModelInterface model, List<String> args) ;
+    public abstract void execute(CLIInterface ui, CLIModelInterface model, List<String> args) throws Exception;
 
     public String getIdentifier() { return this.identifier; };
 

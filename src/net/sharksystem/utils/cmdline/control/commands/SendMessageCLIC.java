@@ -19,7 +19,7 @@ public class SendMessageCLIC extends CLICommand {
     }
 
     @Override
-    public void execute(CLIInterface ui, CLIModelInterface model, List<String> args) {
+    public void execute(CLIInterface ui, CLIModelInterface model, List<String> args) throws Exception {
 
         if(args.size() >= 5) {
             String peerName = args.get(0);

@@ -103,6 +103,11 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
         this.standardErr.println(error);
     }
 
+    @Override
+    public void exceptionOccurred(Exception exception) {
+        this.standardErr.println(exception.getLocalizedMessage());
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                             Model Observer Methods                                             //

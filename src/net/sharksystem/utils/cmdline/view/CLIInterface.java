@@ -16,4 +16,9 @@ public interface CLIInterface {
      * @param error The error message
      */
     void printError(String error);
+
+    /**
+     *
+     */
+    void exceptionOccurred(Exception exception);
 }

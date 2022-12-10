@@ -17,7 +17,7 @@ public class RemoveChannelCLIC extends CLICommand {
     }
 
     @Override
-    public void execute(CLIInterface ui, CLIModelInterface model, List<String> args) {
+    public void execute(CLIInterface ui, CLIModelInterface model, List<String> args) throws Exception {
         if(args.size() >= 2) {
             String peerName = args.get(0);
             String channelURI = args.get(1);

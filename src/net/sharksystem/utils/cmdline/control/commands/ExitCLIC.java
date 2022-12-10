@@ -13,7 +13,7 @@ public class ExitCLIC extends CLICommand{
     }
 
     @Override
-    public void execute(CLIInterface ui, CLIModelInterface model, List<String> args) {
+    public void execute(CLIInterface ui, CLIModelInterface model, List<String> args) throws Exception {
         model.terminate();
     }
 

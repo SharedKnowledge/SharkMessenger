@@ -12,7 +12,7 @@ public class ShowLogCLIC extends CLICommand {
     }
 
     @Override
-    public void execute(CLIInterface ui, CLIModelInterface model, List<String> args) {
+    public void execute(CLIInterface ui, CLIModelInterface model, List<String> args) throws Exception {
         ui.printInfo(model.getCommandHistory());
     }
 

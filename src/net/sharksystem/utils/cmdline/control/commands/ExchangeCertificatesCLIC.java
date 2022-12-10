@@ -18,7 +18,7 @@ public class ExchangeCertificatesCLIC extends CLICommand{
     }
 
     @Override
-    public void execute(CLIInterface ui, CLIModelInterface model, List<String> args) {
+    public void execute(CLIInterface ui, CLIModelInterface model, List<String> args) throws Exception {
         if (args.size() >= 2) {
             String peerName1 = args.get(0);
             String peerName2 = args.get(1);
