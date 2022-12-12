@@ -15,26 +15,32 @@ public class CLICGetHopList extends CLICommand {
 
     @Override
     public void execute(CLIInterface ui, CLIModelInterface model, List<String> args) throws Exception {
-        if (args.size() >= 1) {
+        if (args.size() >= 3) {
             String peer = args.get(0);
             String uri = args.get(1);
-            List<ASAPHop> hops  =
-                    model.getMessengerFromPeer(peer)
-                            .getChannel(uri)
-                            .getMessages()
-                            .getSharkMessage(0, true)
-                            .getASAPHopsList();
+            try {
+                int position = Integer.parseInt(args.get(2));
+
+                List<ASAPHop> hops =
+                        model.getMessengerFromPeer(peer)
+                                .getChannel(uri)
+                                .getMessages()
+                                .getSharkMessage(position, true)
+                                .getASAPHopsList();
 
 
-            StringBuilder sb = new StringBuilder();
-            hops.stream()
-                    .forEach(hop -> {
-                        sb.append(hop.sender());
-                        if (hop != hops.get(hops.size() - 1)) {
-                            sb.append(" -> ");
-                        }
-                    });
-            ui.printInfo(sb.toString());
+                StringBuilder sb = new StringBuilder();
+                hops.stream()
+                        .forEach(hop -> {
+                            sb.append(hop.sender());
+                            if (hop != hops.get(hops.size() - 1)) {
+                                sb.append(" -> ");
+                            }
+                        });
+                ui.printInfo(sb.toString());
+            } catch (NumberFormatException e) {
+                ui.printError("Could not parse string to integer: " + args.get(2));
+            }
         }
     }
 
