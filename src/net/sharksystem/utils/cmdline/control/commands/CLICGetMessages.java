@@ -25,10 +25,15 @@ public class CLICGetMessages extends CLICommand {
             SharkMessengerChannel channel = messenger.getChannel(args.get(1));
             SharkMessageList list = channel.getMessages();
 
+            StringBuilder sb = new StringBuilder();
             for (int i = 0; i < list.size(); i++) {
                 SharkMessage m = list.getSharkMessage(i, true);
-                ui.printInfo(new String(m.getContent(), StandardCharsets.UTF_8));
+                sb.append(i);
+                sb.append("\t");
+                sb.append(new String(m.getContent(), StandardCharsets.UTF_8));
+                sb.append(System.lineSeparator());
             }
+            ui.printInfo(sb.toString());
 
         } catch (SharkException | IOException e) {
             ui.printError(e.getLocalizedMessage());
