@@ -29,6 +29,7 @@ public class CLICSaveLog extends CLICommand {
                         pw.println(s);
                     }
 
+                    pw.println("exit");
                     pw.close();
 
                 } catch (FileNotFoundException e) {
