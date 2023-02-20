@@ -27,6 +27,7 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
         this.bufferedReader = new BufferedReader(new InputStreamReader(in));
         this.standardErr = err;
         this.standardOut = out;
+        //redirect System.in here so that logging is better
 
         this.controller = controller;
         this.model = model;
@@ -126,3 +127,4 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
         this.running = false;
     }
 }
+
