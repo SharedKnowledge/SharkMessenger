@@ -1,29 +1,38 @@
-package net.sharksystem.utils.cmdline.control.commands;
+package net.sharksystem.utils.cmdline.control.commands.messenger;
 
 import net.sharksystem.SharkException;
 import net.sharksystem.messenger.SharkMessage;
 import net.sharksystem.messenger.SharkMessageList;
-import net.sharksystem.messenger.SharkMessengerChannel;
-import net.sharksystem.messenger.SharkMessengerComponent;
+import net.sharksystem.utils.cmdline.control.*;
 import net.sharksystem.utils.cmdline.model.CLIModelInterface;
 import net.sharksystem.utils.cmdline.view.CLIInterface;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 public class CLICGetMessages extends CLICommand {
 
+    private final CLICSharkPeerArgument peer;
+    private final CLICChannelArgument channel;
+
     public CLICGetMessages(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
+        this.peer = new CLICSharkPeerArgument();
+        this.channel = new CLICChannelArgument(this.peer);
     }
 
     @Override
-    public void execute(CLIInterface ui, CLIModelInterface model, List<String> args) throws Exception {
+    public CLICQuestionnaire specifyCommandStructure() {
+        return new CLICQuestionnaireBuilder().
+                addQuestion("Peer name: ", this.peer).
+                addQuestion("Channel URI: ", this.channel).
+                build();
+    }
+
+    @Override
+    public void execute(CLIInterface ui, CLIModelInterface model) throws Exception {
         try {
-            SharkMessengerComponent messenger = model.getMessengerFromPeer(args.get(0));
-            SharkMessengerChannel channel = messenger.getChannel(args.get(1));
-            SharkMessageList list = channel.getMessages();
+            SharkMessageList list = this.channel.getValue().getMessages();
 
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < list.size(); i++) {
