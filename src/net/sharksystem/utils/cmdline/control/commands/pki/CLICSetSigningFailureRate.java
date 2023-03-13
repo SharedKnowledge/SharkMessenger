@@ -1,23 +1,22 @@
 package net.sharksystem.utils.cmdline.control.commands.pki;
 
 import net.sharksystem.pki.SharkPKIComponent;
-import net.sharksystem.utils.cmdline.control.CLICQuestionnaireBuilder;
-import net.sharksystem.utils.cmdline.control.CLICSharkPeerArgument;
-import net.sharksystem.utils.cmdline.control.CLICommand;
-import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
+import net.sharksystem.utils.cmdline.control.*;
 import net.sharksystem.utils.cmdline.model.CLIModelInterface;
 import net.sharksystem.utils.cmdline.view.CLIInterface;
 
 public class CLICSetSigningFailureRate extends CLICommand {
 
     private final CLICSharkPeerArgument owner;
-
     private final CLICSharkPeerArgument subject;
+
+    private final CLICIntegerArgument failureRate;
 
     public CLICSetSigningFailureRate(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
         this.owner = new CLICSharkPeerArgument();
         this.subject = new CLICSharkPeerArgument();
+        this.failureRate = new CLICIntegerArgument();
     }
 
     @Override
@@ -25,21 +24,18 @@ public class CLICSetSigningFailureRate extends CLICommand {
         return new CLICQuestionnaireBuilder().
                 addQuestion("Owner peer name: ", this.owner).
                 addQuestion("Subject peer name: ", this.subject).
+                addQuestion("Failure rate: ", this.failureRate).
                 build();
     }
 
     @Override
     public void execute(CLIInterface ui, CLIModelInterface model) throws Exception {
         SharkPKIComponent pki = model.getPKIFromPeer(this.owner.getValue());
-        int failureRate = pki.getSigningFailureRate(this.subject.getValue().getPeerID());
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("Failure Rate of ");
-        sb.append(this.subject.getValue().getPeerID());
-        sb.append("is: ");
-        sb.append(failureRate);
-
-        ui.printInfo(sb.toString());
+        if(this.failureRate.getValue() >= 1 && this.failureRate.getValue() <= 10) {
+            pki.setSigningFailureRate(this.subject.getValue().getPeerID(), this.failureRate.getValue());
+        } else {
+            ui.printError("Failure rate must be between 1 and 10 (1 and 10 inclusive)!");
+        }
     }
 
     @Override
