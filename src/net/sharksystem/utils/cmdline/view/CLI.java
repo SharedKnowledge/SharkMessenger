@@ -98,6 +98,8 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
             } catch (NumberFormatException nfe) {
                 this.standardErr.println("The given input can't be parsed to a number!");
                 this.standardOut.println("Please input the corresponding number of the command you want to execute.");
+            } catch (Exception e) {
+                this.standardErr.println(e.getLocalizedMessage());
             }
         }
     }
@@ -118,10 +120,6 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
         this.standardErr.println(error);
     }
 
-    @Override
-    public void exceptionOccurred(Exception exception) {
-        this.standardErr.println(exception.getLocalizedMessage());
-    }
 
     @Override
     public void letUserFillOutQuestionnaire(CLICQuestionnaire questionnaire) {

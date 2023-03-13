@@ -19,10 +19,5 @@ public interface CLIInterface {
      */
     void printError(String error);
 
-    /**
-     *
-     */
-    void exceptionOccurred(Exception exception);
-
     void letUserFillOutQuestionnaire(CLICQuestionnaire questionnaire);
 }

@@ -13,7 +13,7 @@ public interface CLIControllerStrategyInterface {
      */
     //void handleUserInput(String input);
 
-    void handleUserInput(int commandIndex);
+    void handleUserInput(int commandIndex) throws Exception;
 
     /**
      * Returns a list of all valid commands

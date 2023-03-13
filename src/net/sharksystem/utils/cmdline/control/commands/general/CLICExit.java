@@ -5,6 +5,9 @@ import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
 import net.sharksystem.utils.cmdline.model.CLIModelInterface;
 import net.sharksystem.utils.cmdline.view.CLIInterface;
 
+/**
+ * Command for terminating the messanger
+ */
 public class CLICExit extends CLICommand {
 
 

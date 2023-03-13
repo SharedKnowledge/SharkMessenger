@@ -5,6 +5,9 @@ import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
 import net.sharksystem.utils.cmdline.model.CLIModelInterface;
 import net.sharksystem.utils.cmdline.view.CLIInterface;
 
+/**
+ * Command for displaying the log history to the user
+ */
 public class CLICShowLog extends CLICommand {
 
     public CLICShowLog(String identifier, boolean rememberCommand) {

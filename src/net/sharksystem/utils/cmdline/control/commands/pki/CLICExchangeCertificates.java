@@ -55,7 +55,6 @@ public class CLICExchangeCertificates extends CLICommand {
                 ASAPCertificate peer2IssuedPeer1Certificate = peer2PKI.acceptAndSignCredential(peer1CredentialMessage);
 
                 //TODO: save certificates in model as they are likely needed again
-                //TODO: add identity assurance or make extra command for that
 
             } catch (SharkException | IOException e) {
                 ui.printError(e.getLocalizedMessage());

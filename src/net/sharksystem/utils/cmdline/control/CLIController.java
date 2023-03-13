@@ -20,7 +20,7 @@ public class CLIController implements CLIControllerInterface, CLIControllerStrat
     }
 
     @Override
-    public void handleUserInput(int commandIndex) {
+    public void handleUserInput(int commandIndex) throws Exception {
         //List<String> cmd = optimizeUserInputString(input);
 
         //the reason for removing the first argument (=command identifier) is that this here is the only
@@ -29,19 +29,16 @@ public class CLIController implements CLIControllerInterface, CLIControllerStrat
         //String commandIdentifier = cmd.remove(0);
 
         boolean validCommand = false;
-        for(int i = 0; i < this.commands.size(); i++) {
-            if(i == commandIndex) {
+        for (int i = 0; i < this.commands.size(); i++) {
+            if (i == commandIndex) {
                 validCommand = true;
 
                 CLICommand command = this.commands.get(i);
 
-                if(command.rememberCommand()) this.saveCommandInHistory(command.getIdentifier());
+                if (command.rememberCommand()) this.saveCommandInHistory(command.getIdentifier());
 
-                try {
-                    command.startCommandExecution(this.view, model);
-                } catch (Exception e) {
-                    this.view.exceptionOccurred(e);
-                }
+                command.startCommandExecution(this.view, model);
+
             }
         }
 

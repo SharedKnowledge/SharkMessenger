@@ -5,7 +5,11 @@ import net.sharksystem.messenger.SharkMessengerChannel;
 
 import java.io.IOException;
 
+/**
+ * Predefined argument for a SharkMessangerChannel retrieved through its uri.
+ */
 public class CLICChannelArgument extends CLICArgument<SharkMessengerChannel>{
+
 
     private final CLICSharkPeerArgument peerArgument;
 

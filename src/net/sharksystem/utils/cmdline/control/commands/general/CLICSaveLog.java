@@ -11,6 +11,9 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.List;
 
+/**
+ * Command for saving the log in a file
+ */
 public class CLICSaveLog extends CLICommand {
 
     private final CLICStringArgument fileName;
