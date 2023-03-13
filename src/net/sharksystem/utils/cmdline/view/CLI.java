@@ -86,6 +86,7 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
 
         while(running) {
             try {
+                this.standardOut.println(System.lineSeparator());
                 this.standardOut.print("Please select a command via an index: ");
                 String userInputString = this.scanner.nextLine();
 
@@ -97,7 +98,6 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
             } catch (NumberFormatException nfe) {
                 this.standardErr.println("The given input can't be parsed to a number!");
                 this.standardOut.println("Please input the corresponding number of the command you want to execute.");
-
             }
         }
     }
