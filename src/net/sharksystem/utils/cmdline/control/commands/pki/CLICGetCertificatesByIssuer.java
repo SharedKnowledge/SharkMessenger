@@ -46,6 +46,8 @@ public class CLICGetCertificatesByIssuer extends CLICommand {
             sb.append(certificate.getValidUntil());
             sb.append(System.lineSeparator());
             sb.append(System.lineSeparator());
+
+            ui.printInfo(sb.toString());
         });
     }
 
