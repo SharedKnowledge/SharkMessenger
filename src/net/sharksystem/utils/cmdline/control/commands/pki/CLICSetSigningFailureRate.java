@@ -33,6 +33,15 @@ public class CLICSetSigningFailureRate extends CLICommand {
         SharkPKIComponent pki = model.getPKIFromPeer(this.owner.getValue());
         if(this.failureRate.getValue() >= 1 && this.failureRate.getValue() <= 10) {
             pki.setSigningFailureRate(this.subject.getValue().getPeerID(), this.failureRate.getValue());
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("Failure rate was set to ");
+            sb.append(this.failureRate.getValue());
+            sb.append(" for peer ");
+            sb.append(this.subject.getValue().getPeerID());
+
+            ui.printInfo(sb.toString());
+
         } else {
             ui.printError("Failure rate must be between 1 and 10 (1 and 10 inclusive)!");
         }
