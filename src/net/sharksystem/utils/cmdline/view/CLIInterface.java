@@ -1,5 +1,7 @@
 package net.sharksystem.utils.cmdline.view;
 
+import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
+
 /**
  * Interface that allows the CLIController to inform the CLI over any changes
  */
@@ -21,4 +23,6 @@ public interface CLIInterface {
      *
      */
     void exceptionOccurred(Exception exception);
+
+    void letUserFillOutQuestionnaire(CLICQuestionnaire questionnaire);
 }
