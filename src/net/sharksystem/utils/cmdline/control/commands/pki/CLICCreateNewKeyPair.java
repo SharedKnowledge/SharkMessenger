@@ -28,6 +28,7 @@ public class CLICCreateNewKeyPair extends CLICommand {
     @Override
     public void execute(CLIInterface ui, CLIModelInterface model) throws Exception {
         SharkPKIComponent pki = (SharkPKIComponent) this.peer.getValue().getComponent(SharkPKIComponent.class);
+        pki.createNewKeyPair();
         String creationTime = DateTimeHelper.long2DateString(pki.getKeysCreationTime());
 
         ui.printInfo("New RSA key pair was created at: " + creationTime);
