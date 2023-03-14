@@ -11,19 +11,18 @@ import java.io.IOException;
 public class CLICChannelArgument extends CLICArgument<SharkMessengerChannel>{
 
 
-    private final CLICSharkPeerArgument peerArgument;
+    private final CLICStringArgument peerNameArgument;
 
-    public CLICChannelArgument(CLICSharkPeerArgument peerArgument) {
-        this.peerArgument = peerArgument;
+
+    public CLICChannelArgument(CLICStringArgument peerArgument) {
+        this.peerNameArgument = peerArgument;
     }
 
     @Override
     public boolean tryParse(String input) {
         try {
-            this.parsedInput = CLIController.getModel().getMessengerFromPeer(this.peerArgument.getValue().getStatus().
-                    name()).getChannel(input);
+            this.parsedInput = CLIController.getModel().getMessengerFromPeer(this.peerNameArgument.getValue()).getChannel(input);
             return true;
-
         } catch (SharkException | IOException e) {
             return false;
         }
