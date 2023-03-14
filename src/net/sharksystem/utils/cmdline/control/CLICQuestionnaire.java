@@ -22,7 +22,7 @@ public class CLICQuestionnaire {
 
     /**
      * Starts the questionnaire. The user gets prompted with every question and his answer will be stored if it was
-     * successfully parsed. If the argument logic couldn't parse the input, the user is promted again.
+     * successfully parsed. If the argument logic couldn't parse the input, the user is asked again.
      * @param ps The PrintStream to which the question is written
      * @param sc The Scanner through which the user input is read.
      */
@@ -33,6 +33,7 @@ public class CLICQuestionnaire {
                 question.ask(ps);
                 userInput = sc.nextLine();
             } while (!question.submitAnswer(userInput));
+            CLIController.getModel().addCommandToHistory(userInput);
         }
     }
 }
