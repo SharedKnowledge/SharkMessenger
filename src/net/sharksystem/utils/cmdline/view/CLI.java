@@ -1,5 +1,6 @@
 package net.sharksystem.utils.cmdline.view;
 
+import net.sharksystem.utils.cmdline.control.CLICommand;
 import net.sharksystem.utils.cmdline.control.CLIControllerStrategyInterface;
 import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
 import net.sharksystem.utils.cmdline.model.CLIModelObservable;
@@ -64,14 +65,19 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
         sb.append("COMMANDS:");
         sb.append(System.lineSeparator());
 
-        String number = String.valueOf(this.controller.getCommands().size());
-        int chars = number.length();
+        int longestCmd = 0;
+        for(CLICommand cmd : this.controller.getCommands()) {
+            int curLength = cmd.getIdentifier().length();
+            if (curLength> longestCmd) {
+                longestCmd = curLength;
+            }
+        }
 
-        for(int i = 0; i < this.controller.getCommands().size(); i++) {
-            sb.append(i);
-            sb.append(" ".repeat(Math.max(0, chars - String.valueOf(i).length())));
+        for(CLICommand cmd : this.controller.getCommands()) {
+            sb.append(cmd.getIdentifier());
+            sb.append(" ".repeat(Math.max(0, longestCmd - cmd.getIdentifier().length())));
             sb.append("\t");
-            sb.append(this.controller.getCommands().get(i).getDescription());
+            sb.append(cmd.getDescription());
             sb.append(System.lineSeparator());
         }
 
@@ -86,23 +92,23 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
 
         while(running) {
             try {
-                this.standardOut.println(System.lineSeparator());
-                this.standardOut.print("Please select a command via an index: ");
+                this.standardOut.println();
+                this.standardOut.println("Run a command by entering its name from the list above:");
                 String userInputString = this.scanner.nextLine();
 
                 if(userInputString != null) {
-                    int commandIndex = Integer.parseInt(userInputString);
-                    this.controller.handleUserInput(commandIndex);
+                    this.controller.handleUserInput(userInputString);
                 }
 
             } catch (NumberFormatException nfe) {
-                this.standardErr.println("The given input can't be parsed to a number!");
-                this.standardOut.println("Please input the corresponding number of the command you want to execute.");
+                this.printError("given input can't be parsed to a number!");
+                this.printError("Please input the corresponding number of the command you want to execute.");
             } catch (Exception e) {
-                this.standardErr.println(e.getLocalizedMessage());
+                this.printError(e.getLocalizedMessage());
             }
         }
     }
+
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,13 +117,19 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
 
     @Override
     public void printInfo(String information) {
-        this.standardOut.println(information);
+        StringBuilder sb = new StringBuilder();
+        sb.append(" > ");
+        sb.append(information);
+        this.standardOut.println(sb);
     }
 
 
     @Override
     public void printError(String error) {
-        this.standardErr.println(error);
+        StringBuilder sb = new StringBuilder();
+        sb.append(" ERROR: ");
+        sb.append(error);
+        this.standardErr.println(sb);
     }
 
 
