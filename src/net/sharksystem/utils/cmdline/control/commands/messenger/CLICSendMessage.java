@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class CLICSendMessage extends CLICommand {
 
-    private final CLICSharkPeerArgument peer;
+    private final CLICStringArgument peerName;
     private final CLICChannelArgument channel;
     private final CLICBooleanArgument sign;
     private final CLICBooleanArgument encrypt;
@@ -22,8 +22,8 @@ public class CLICSendMessage extends CLICommand {
 
     public CLICSendMessage(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
-        this.peer = new CLICSharkPeerArgument();
-        this.channel = new CLICChannelArgument(this.peer);
+        this.peerName = new CLICStringArgument();
+        this.channel = new CLICChannelArgument(this.peerName);
         this.sign = new CLICBooleanArgument();
         this.encrypt = new CLICBooleanArgument();
         this.message = new CLICStringArgument();
@@ -33,7 +33,7 @@ public class CLICSendMessage extends CLICommand {
     @Override
     public CLICQuestionnaire specifyCommandStructure() {
         return new CLICQuestionnaireBuilder().
-                addQuestion("Sender peer name: ", this.peer).
+                addQuestion("Sender peer name: ", this.peerName).
                 addQuestion("Channel URI: ", this.channel).
                 addQuestion("Sign? ", this.sign).
                 addQuestion("Encrypt? ", this.encrypt).
@@ -45,8 +45,7 @@ public class CLICSendMessage extends CLICommand {
     @Override
     public void execute(CLIInterface ui, CLIModelInterface model) throws Exception {
         try {
-            SharkMessengerComponent messenger = (SharkMessengerComponent) this.peer.getValue().
-                    getComponent(SharkMessengerComponent.class);
+            SharkMessengerComponent messenger = model.getMessengerFromPeer(this.peerName.getValue());
 
             CharSequence channelURI = this.channel.getValue().getURI();
             boolean sing = this.sign.getValue();
