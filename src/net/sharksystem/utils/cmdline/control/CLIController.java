@@ -20,41 +20,61 @@ public class CLIController implements CLIControllerInterface, CLIControllerStrat
     }
 
     @Override
-    public void handleUserInput(int commandIndex) throws Exception {
-        //List<String> cmd = optimizeUserInputString(input);
+    public void handleUserInput(String input) throws Exception {
+        List<String> cmd = optimizeUserInputString(input);
 
         //the reason for removing the first argument (=command identifier) is that this here is the only
         //  place where it's needed. A method performing the action of a command only needs the arguments
         //  specified and not the command identifier
-        //String commandIdentifier = cmd.remove(0);
+        String commandIdentifier = cmd.remove(0);
 
         boolean validCommand = false;
-        for (int i = 0; i < this.commands.size(); i++) {
-            if (i == commandIndex) {
+        for(CLICommand command : this.commands) {
+            if (command.getIdentifier().equals(commandIdentifier)) {
                 validCommand = true;
-
-                CLICommand command = this.commands.get(i);
-
-                if (command.rememberCommand()) this.saveCommandInHistory(command.getIdentifier());
-
+                if (command.rememberCommand()) model.addCommandToHistory(command.getIdentifier());
                 command.startCommandExecution(this.view, model);
-
             }
         }
 
-        //for(CLICommand command : this.commands) {
-        //    if(command.getIdentifier().equals(commandIdentifier)) {
-        //        validCommand = true;
-        //        if (command.rememberCommand()) this.saveCommandInHistory(command.getIdentifier(), cmd);
-        //        try {
-        //            command.execute(this.view, this.model, cmd);
-        //        } catch (Exception e) {
-        //            this.view.exceptionOccurred(e);
-        //        }
-        //    }
-        //}
-        if (!validCommand) System.out.println("Unknown Command");
     }
+
+//    @Override
+//    public void handleUserInput(int commandIndex) throws Exception {
+//        //List<String> cmd = optimizeUserInputString(input);
+//
+//        //the reason for removing the first argument (=command identifier) is that this here is the only
+//        //  place where it's needed. A method performing the action of a command only needs the arguments
+//        //  specified and not the command identifier
+//        //String commandIdentifier = cmd.remove(0);
+//
+//        boolean validCommand = false;
+//        for (int i = 0; i < this.commands.size(); i++) {
+//            if (i == commandIndex) {
+//                validCommand = true;
+//
+//                CLICommand command = this.commands.get(i);
+//
+//                if (command.rememberCommand()) this.saveCommandInHistory(command.getIdentifier());
+//
+//                command.startCommandExecution(this.view, model);
+//
+//            }
+//        }
+//
+//        //for(CLICommand command : this.commands) {
+//        //    if(command.getIdentifier().equals(commandIdentifier)) {
+//        //        validCommand = true;
+//        //        if (command.rememberCommand()) this.saveCommandInHistory(command.getIdentifier(), cmd);
+//        //        try {
+//        //            command.execute(this.view, this.model, cmd);
+//        //        } catch (Exception e) {
+//        //            this.view.exceptionOccurred(e);
+//        //        }
+//        //    }
+//        //}
+//        if (!validCommand) System.out.println("Unknown Command");
+//    }
 
     @Override
     public List<CLICommand> getCommands() {
@@ -78,13 +98,6 @@ public class CLIController implements CLIControllerInterface, CLIControllerStrat
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                    Helpers                                                     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    private void saveCommandInHistory(String identifier) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(identifier);
-
-        this.model.addCommandToHistory(sb.toString());
-    }
 
     /**
      * Converts a string representing a command input by the user into a list of all command arguments.
