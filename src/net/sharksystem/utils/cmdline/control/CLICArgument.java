@@ -7,6 +7,8 @@ package net.sharksystem.utils.cmdline.control;
  */
 public abstract class CLICArgument<T> {
 
+    private boolean isEmptyStringAllowed;
+
     /**
      * The parsed input from type T
      */
@@ -20,9 +22,23 @@ public abstract class CLICArgument<T> {
     }
 
     /**
-     * This function does the parsing and sets the parsed input if parsing was successful
+     * This function does the parsing and sets the parsed input if parsing was successful.
+     * Always call super when overwriting in own class
      * @param input The user input.
      * @return true, if parsing was possible; false otherwise
      */
-    public abstract boolean tryParse(String input);
+    public boolean tryParse(String input) {
+        //if empty string is allowed, the input is always fine.
+        //Otherwise, the input can't be "" but must be something else.
+        return this.isEmptyStringAllowed || !input.equals("");
+    }
+
+    /**
+     * Set if an empty input result in a successful parse.
+     * The default is false.
+     * @param isAllowed if the empty string is a correct value to be entered by the user
+     */
+    public void setEmptyStringAllowed(boolean isAllowed) {
+        this.isEmptyStringAllowed = isAllowed;
+    }
 }

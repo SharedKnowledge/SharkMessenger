@@ -27,6 +27,7 @@ public class CLICSendMessage extends CLICommand {
         this.encrypt = new CLICBooleanArgument();
         this.message = new CLICStringArgument();
         this.receivers = new CLICStringArgument();
+        this.receivers.setEmptyStringAllowed(true);
     }
 
     @Override
@@ -37,7 +38,7 @@ public class CLICSendMessage extends CLICommand {
                 addQuestion("Sign? ", this.sign).
                 addQuestion("Encrypt? ", this.encrypt).
                 addQuestion("Message: ", this.message).
-                addQuestion("Receivers: ", this.receivers).
+                addQuestion("Receivers (leave blank for anybody): ", this.receivers).
                 build();
     }
 

@@ -11,11 +11,10 @@ public class CLICStringArgument extends CLICArgument<String> {
      */
     @Override
     public boolean tryParse(String input) {
-        if (input == null || input.equals("")) {
-            return false;
-        } else {
+        if(super.tryParse(input)) {
             this.parsedInput = input;
             return true;
         }
+        return false;
     }
 }

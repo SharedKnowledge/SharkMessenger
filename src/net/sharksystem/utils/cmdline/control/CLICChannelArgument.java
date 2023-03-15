@@ -20,12 +20,16 @@ public class CLICChannelArgument extends CLICArgument<SharkMessengerChannel>{
 
     @Override
     public boolean tryParse(String input) {
-        try {
-            this.parsedInput = CLIController.getModel()
-                    .getMessengerFromPeer(this.peerNameArgument.getValue()).getChannel(input);
-            return true;
-        } catch (SharkException | IOException e) {
-            return false;
+        super.setEmptyStringAllowed(false);
+        if(super.tryParse(input)) {
+            try {
+                this.parsedInput = CLIController.getModel()
+                        .getMessengerFromPeer(this.peerNameArgument.getValue()).getChannel(input);
+                return true;
+            } catch (SharkException | IOException e) {
+                return false;
+            }
         }
+        return false;
     }
 }

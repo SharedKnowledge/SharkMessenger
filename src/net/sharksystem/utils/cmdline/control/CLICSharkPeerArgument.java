@@ -13,11 +13,10 @@ public class CLICSharkPeerArgument extends CLICArgument<SharkTestPeerFS> {
      */
     @Override
     public boolean tryParse(String input) {
-        if(input != null) {
-            if(CLIController.getModel().hasPeer(input)) {
-                this.parsedInput = CLIController.getModel().getPeer(input);
-                return true;
-            }
+        super.setEmptyStringAllowed(false);
+        if (super.tryParse(input) && CLIController.getModel().hasPeer(input)) {
+            this.parsedInput = CLIController.getModel().getPeer(input);
+            return true;
         }
         return false;
     }

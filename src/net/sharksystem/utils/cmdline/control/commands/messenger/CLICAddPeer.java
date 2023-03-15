@@ -8,14 +8,13 @@ import net.sharksystem.messenger.SharkMessengerComponentFactory;
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.pki.SharkPKIComponentFactory;
 import net.sharksystem.utils.cmdline.control.CLICQuestionnaireBuilder;
-import net.sharksystem.utils.cmdline.control.CLICArgument;
 import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
 import net.sharksystem.utils.cmdline.control.CLICStringArgument;
 import net.sharksystem.utils.cmdline.control.CLICommand;
 
 public class CLICAddPeer extends CLICommand {
 
-    private final CLICArgument<String> name;
+    private final CLICStringArgument name;
 
     public CLICAddPeer(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
