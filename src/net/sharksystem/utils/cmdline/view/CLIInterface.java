@@ -19,5 +19,5 @@ public interface CLIInterface {
      */
     void printError(String error);
 
-    void letUserFillOutQuestionnaire(CLICQuestionnaire questionnaire);
+    boolean letUserFillOutQuestionnaire(CLICQuestionnaire questionnaire);
 }

@@ -4,7 +4,6 @@ import net.sharksystem.utils.cmdline.control.*;
 import net.sharksystem.utils.cmdline.model.CLIModelObservable;
 
 import java.io.*;
-import java.util.Scanner;
 
 public class CLI implements CLIInterface, CLIModelStateObserver {
     private final PrintStream standardOut;
@@ -135,7 +134,7 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
 
 
     @Override
-    public void letUserFillOutQuestionnaire(CLICQuestionnaire questionnaire) {
+    public boolean letUserFillOutQuestionnaire(CLICQuestionnaire questionnaire) {
         for(CLICQuestion question : questionnaire.getQuestions()) {
             String userInput = "";
             do {
@@ -146,9 +145,15 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
                     this.printError(e.getLocalizedMessage());
                 }
             } while (!question.submitAnswer(userInput));
-            this.printInfo("INPUT: " + userInput);
-            this.controller.logQuestionAnswer(userInput);
+            if(userInput.equals(CLICQuestionnaire.EXIT_SEQUENCE)) {
+                this.controller.logQuestionAnswer(CLICQuestionnaire.EXIT_SEQUENCE);
+                return false;
+            } else {
+                this.printInfo("INPUT: " + userInput);
+                this.controller.logQuestionAnswer(userInput);
+            }
         }
+        return true;
     }
 
 

@@ -39,10 +39,11 @@ public abstract class CLICommand {
      */
     public void startCommandExecution() throws Exception {
         CLICQuestionnaire questionnaire = this.specifyCommandStructure();
-        if(questionnaire != null) {
-            CLIController.getView().letUserFillOutQuestionnaire(questionnaire);
+        if(questionnaire != null && !CLIController.getView().letUserFillOutQuestionnaire(questionnaire)) {
+            ui.printInfo("Stopped command execution " + this.identifier);
+        } else {
+            this.execute();
         }
-        this.execute();
     }
 
     /**

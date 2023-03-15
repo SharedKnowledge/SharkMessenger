@@ -8,6 +8,11 @@ import java.util.List;
  */
 public class CLICQuestionnaire {
 
+    /**
+     * What the user needs to input in order to end the questionnaire
+     */
+    public static final String EXIT_SEQUENCE = "exit";
+
     private final List<CLICQuestion> questionnaire;
 
     public CLICQuestionnaire() {
