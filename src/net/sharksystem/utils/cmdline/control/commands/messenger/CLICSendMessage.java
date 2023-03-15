@@ -4,7 +4,6 @@ import net.sharksystem.SharkException;
 import net.sharksystem.messenger.SharkMessengerComponent;
 import net.sharksystem.utils.cmdline.control.*;
 import net.sharksystem.utils.cmdline.model.CLIModelInterface;
-import net.sharksystem.utils.cmdline.view.CLIInterface;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -43,7 +42,7 @@ public class CLICSendMessage extends CLICommand {
     }
 
     @Override
-    public void execute(CLIInterface ui, CLIModelInterface model) throws Exception {
+    public void execute() throws Exception {
         try {
             SharkMessengerComponent messenger = model.getMessengerFromPeer(this.peerName.getValue());
 

@@ -4,8 +4,6 @@ import net.sharksystem.SharkException;
 import net.sharksystem.messenger.SharkMessage;
 import net.sharksystem.messenger.SharkMessageList;
 import net.sharksystem.utils.cmdline.control.*;
-import net.sharksystem.utils.cmdline.model.CLIModelInterface;
-import net.sharksystem.utils.cmdline.view.CLIInterface;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -30,7 +28,7 @@ public class CLICGetMessages extends CLICommand {
     }
 
     @Override
-    public void execute(CLIInterface ui, CLIModelInterface model) throws Exception {
+    public void execute() throws Exception {
         try {
             SharkMessageList list = this.channel.getValue().getMessages();
 

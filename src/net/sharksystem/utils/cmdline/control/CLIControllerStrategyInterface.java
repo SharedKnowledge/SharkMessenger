@@ -13,11 +13,11 @@ public interface CLIControllerStrategyInterface {
      */
     void handleUserInput(String input) throws Exception;
 
-    //void handleUserInput(int commandIndex) throws Exception;
-
     /**
      * Returns a list of all valid commands
      * @return the list of valid commands
      */
     List<CLICommand> getCommands();
+
+    void logQuestionAnswer(String userInput);
 }

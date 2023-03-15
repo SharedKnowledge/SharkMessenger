@@ -4,8 +4,6 @@ import net.sharksystem.utils.cmdline.control.CLICQuestionnaireBuilder;
 import net.sharksystem.utils.cmdline.control.CLICommand;
 import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
 import net.sharksystem.utils.cmdline.control.CLICStringArgument;
-import net.sharksystem.utils.cmdline.model.CLIModelInterface;
-import net.sharksystem.utils.cmdline.view.CLIInterface;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,7 +30,7 @@ public class CLICSaveLog extends CLICommand {
     }
 
     @Override
-    public void execute(CLIInterface ui, CLIModelInterface model) throws Exception {
+    public void execute() throws Exception {
         String fileName = this.fileName.getValue();
         File file = new File(fileName);
         if (file.createNewFile()) {

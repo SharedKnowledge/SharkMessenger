@@ -8,8 +8,6 @@ import net.sharksystem.utils.cmdline.control.CLICBooleanArgument;
 import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
 import net.sharksystem.utils.cmdline.control.CLICQuestionnaireBuilder;
 import net.sharksystem.utils.cmdline.control.CLICStringArgument;
-import net.sharksystem.utils.cmdline.model.CLIModelInterface;
-import net.sharksystem.utils.cmdline.view.CLIInterface;
 
 import java.io.IOException;
 
@@ -39,7 +37,7 @@ public class CLICCreateChannel extends CLICommand {
     }
 
     @Override
-    public void execute(CLIInterface ui, CLIModelInterface model) throws Exception {
+    public void execute() throws Exception {
         String peerName = this.peerName.getValue();
         String channelURI = this.channelUri.getValue();
         String channelName = this.channelName.getValue();

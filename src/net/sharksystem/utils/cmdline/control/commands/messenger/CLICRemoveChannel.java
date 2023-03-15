@@ -3,8 +3,6 @@ package net.sharksystem.utils.cmdline.control.commands.messenger;
 import net.sharksystem.SharkException;
 import net.sharksystem.messenger.SharkMessengerComponent;
 import net.sharksystem.utils.cmdline.control.*;
-import net.sharksystem.utils.cmdline.model.CLIModelInterface;
-import net.sharksystem.utils.cmdline.view.CLIInterface;
 
 import java.io.IOException;
 
@@ -29,7 +27,7 @@ public class CLICRemoveChannel extends CLICommand {
     }
 
     @Override
-    public void execute(CLIInterface ui, CLIModelInterface model) throws Exception {
+    public void execute() throws Exception {
         try {
             SharkMessengerComponent peerMessenger = model.getMessengerFromPeer(this.peerName.getValue());
             peerMessenger.removeChannel(this.channel.getValue().getURI());

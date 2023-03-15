@@ -6,8 +6,6 @@ import net.sharksystem.utils.cmdline.control.CLICQuestionnaireBuilder;
 import net.sharksystem.utils.cmdline.control.CLICSharkPeerArgument;
 import net.sharksystem.utils.cmdline.control.CLICommand;
 import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
-import net.sharksystem.utils.cmdline.model.CLIModelInterface;
-import net.sharksystem.utils.cmdline.view.CLIInterface;
 
 import java.util.Collection;
 
@@ -30,7 +28,7 @@ public class CLICGetCertificatesByIssuer extends CLICommand {
     }
 
     @Override
-    public void execute(CLIInterface ui, CLIModelInterface model) throws Exception {
+    public void execute() throws Exception {
         SharkPKIComponent pki = model.getPKIFromPeer(this.owner.getValue());
         Collection<ASAPCertificate> certificates = pki.getCertificatesByIssuer(this.issuer.getValue().getPeerID());
 

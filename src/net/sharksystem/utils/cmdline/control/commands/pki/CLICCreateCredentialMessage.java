@@ -2,8 +2,6 @@ package net.sharksystem.utils.cmdline.control.commands.pki;
 
 import net.sharksystem.utils.cmdline.control.CLICommand;
 import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
-import net.sharksystem.utils.cmdline.model.CLIModelInterface;
-import net.sharksystem.utils.cmdline.view.CLIInterface;
 
 public class CLICCreateCredentialMessage extends CLICommand {
     public CLICCreateCredentialMessage(String identifier, boolean rememberCommand) {
@@ -16,7 +14,7 @@ public class CLICCreateCredentialMessage extends CLICommand {
     }
 
     @Override
-    public void execute(CLIInterface ui, CLIModelInterface model) throws Exception {
+    public void execute() throws Exception {
 
     }
 

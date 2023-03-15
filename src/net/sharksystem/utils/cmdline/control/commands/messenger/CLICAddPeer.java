@@ -12,8 +12,6 @@ import net.sharksystem.utils.cmdline.control.CLICArgument;
 import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
 import net.sharksystem.utils.cmdline.control.CLICStringArgument;
 import net.sharksystem.utils.cmdline.control.CLICommand;
-import net.sharksystem.utils.cmdline.model.CLIModelInterface;
-import net.sharksystem.utils.cmdline.view.CLIInterface;
 
 public class CLICAddPeer extends CLICommand {
 
@@ -33,9 +31,10 @@ public class CLICAddPeer extends CLICommand {
 
 
     @Override
-    public void execute(CLIInterface ui, CLIModelInterface model) throws Exception {
+    public void execute() throws Exception {
         String peerName = this.name.getValue();
         if (model.hasPeer(peerName)) {
+
             ui.printError("Peer " + peerName + " already exists!");
         } else {
             String peerFolderName = "CLI/PEERS/" + peerName + "_PEER_FOLDER";

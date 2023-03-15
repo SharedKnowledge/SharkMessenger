@@ -5,8 +5,6 @@ import net.sharksystem.utils.cmdline.control.CLICQuestionnaireBuilder;
 import net.sharksystem.utils.cmdline.control.CLICSharkPeerArgument;
 import net.sharksystem.utils.cmdline.control.CLICommand;
 import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
-import net.sharksystem.utils.cmdline.model.CLIModelInterface;
-import net.sharksystem.utils.cmdline.view.CLIInterface;
 
 public class CLICGetOwnerInfo extends CLICommand {
 
@@ -25,7 +23,7 @@ public class CLICGetOwnerInfo extends CLICommand {
     }
 
     @Override
-    public void execute(CLIInterface ui, CLIModelInterface model) throws Exception {
+    public void execute() throws Exception {
         SharkPKIComponent pki = model.getPKIFromPeer(this.peer.getValue());
         CharSequence ownerID = pki.getOwnerID();
         CharSequence ownerName = pki.getOwnerName();

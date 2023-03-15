@@ -1,7 +1,5 @@
 package net.sharksystem.utils.cmdline.control;
 
-import java.io.PrintStream;
-
 /**
  * A question which can be asked and answered.
  */
@@ -22,11 +20,11 @@ public class CLICQuestion {
         this.argument = argument;
     }
 
-    boolean submitAnswer(String input) {
+    public boolean submitAnswer(String input) {
         return argument.tryParse(input);
     }
 
-    void ask(PrintStream ps){
-        ps.print(question);
+    public String getQuestionText() {
+        return this.question;
     }
 }

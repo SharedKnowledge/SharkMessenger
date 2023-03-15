@@ -1,8 +1,6 @@
 package net.sharksystem.utils.cmdline.view;
 
-import net.sharksystem.utils.cmdline.control.CLICommand;
-import net.sharksystem.utils.cmdline.control.CLIControllerStrategyInterface;
-import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
+import net.sharksystem.utils.cmdline.control.*;
 import net.sharksystem.utils.cmdline.model.CLIModelObservable;
 
 import java.io.*;
@@ -11,7 +9,6 @@ import java.util.Scanner;
 public class CLI implements CLIInterface, CLIModelStateObserver {
     private final PrintStream standardOut;
     private final PrintStream standardErr;
-    private final Scanner scanner;
 
     private final BufferedReader bufferedReader;
 
@@ -29,7 +26,6 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
      * @param out print stream to write to
      */
     public CLI(InputStream in, PrintStream err, PrintStream out, CLIControllerStrategyInterface controller, CLIModelObservable model) {
-        this.scanner = new Scanner(in);
         this.standardErr = err;
         this.standardOut = out;
         this.bufferedReader = new BufferedReader(new InputStreamReader(in));
@@ -140,7 +136,19 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
 
     @Override
     public void letUserFillOutQuestionnaire(CLICQuestionnaire questionnaire) {
-        questionnaire.start(this.standardOut, this.bufferedReader);
+        for(CLICQuestion question : questionnaire.getQuestions()) {
+            String userInput = "";
+            do {
+                this.standardOut.print(question.getQuestionText());
+                try {
+                    userInput = bufferedReader.readLine();
+                } catch (IOException e) {
+                    this.printError(e.getLocalizedMessage());
+                }
+            } while (!question.submitAnswer(userInput));
+            this.printInfo("INPUT: " + userInput);
+            this.controller.logQuestionAnswer(userInput);
+        }
     }
 
 

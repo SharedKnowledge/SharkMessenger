@@ -2,8 +2,6 @@ package net.sharksystem.utils.cmdline.control.commands.pki;
 
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.utils.cmdline.control.*;
-import net.sharksystem.utils.cmdline.model.CLIModelInterface;
-import net.sharksystem.utils.cmdline.view.CLIInterface;
 
 public class CLICSetSigningFailureRate extends CLICommand {
 
@@ -29,7 +27,7 @@ public class CLICSetSigningFailureRate extends CLICommand {
     }
 
     @Override
-    public void execute(CLIInterface ui, CLIModelInterface model) throws Exception {
+    public void execute() throws Exception {
         SharkPKIComponent pki = model.getPKIFromPeer(this.owner.getValue());
         if(this.failureRate.getValue() >= 1 && this.failureRate.getValue() <= 10) {
             pki.setSigningFailureRate(this.subject.getValue().getPeerID(), this.failureRate.getValue());

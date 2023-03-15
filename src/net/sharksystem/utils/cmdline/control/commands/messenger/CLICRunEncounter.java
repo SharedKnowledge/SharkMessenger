@@ -2,8 +2,6 @@ package net.sharksystem.utils.cmdline.control.commands.messenger;
 
 import net.sharksystem.SharkException;
 import net.sharksystem.utils.cmdline.control.*;
-import net.sharksystem.utils.cmdline.model.CLIModelInterface;
-import net.sharksystem.utils.cmdline.view.CLIInterface;
 
 import java.io.IOException;
 
@@ -31,7 +29,7 @@ public class CLICRunEncounter extends CLICommand {
     }
 
     @Override
-    public void execute(CLIInterface ui, CLIModelInterface model) throws Exception {
+    public void execute() throws Exception {
         ui.printInfo("This command is weak. The encounter is simulated on the local machine over a TCP connection that can't be extended to a larger network.");
 
         boolean stopExchange = this.stopExchange.getValue();
@@ -46,6 +44,7 @@ public class CLICRunEncounter extends CLICommand {
         if (stopExchange) {
             try {
                 Thread.sleep(1000);
+                this.peer1.getValue().getASAPTestPeerFS().stopEncounter(this.peer2.getValue().getASAPTestPeerFS());
             } catch (InterruptedException ignored) {
             }
         } else {

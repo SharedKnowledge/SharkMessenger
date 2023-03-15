@@ -11,12 +11,26 @@ public class CLIController implements CLIControllerInterface, CLIControllerStrat
 
     private final List<CLICommand> commands;
     private static CLIModelInterface model;
-    private final CLIInterface view;
+    private static CLIInterface view;
+    private static CLIController instance;
 
+    static CLIControllerInterface getController() {
+        return CLIController.instance;
+    }
+
+    static CLIModelInterface getModel() {
+        return CLIController.model;
+    }
+
+    static CLIInterface getView() {
+        return CLIController.view;
+    }
+    
     public CLIController(CLIModelInterface cliModel) {
-        model = cliModel;
-        this.view = new CLI(System.in, System.err, System.out, this, model);
+        CLIController.model = cliModel;
+        CLIController.view = new CLI(System.in, System.err, System.out, this, CLIController.model);
         this.commands = new ArrayList<>();
+        CLIController.instance = this;
     }
 
     @Override
@@ -30,8 +44,8 @@ public class CLIController implements CLIControllerInterface, CLIControllerStrat
 
         for(CLICommand command : this.commands) {
             if (command.getIdentifier().equals(commandIdentifier)) {
-                if (command.rememberCommand()) model.addCommandToHistory(command.getIdentifier());
-                command.startCommandExecution(this.view, model);
+                if (command.rememberCommand()) CLIController.model.addCommandToHistory(command.getIdentifier());
+                command.startCommandExecution();
             }
         }
 
@@ -80,17 +94,18 @@ public class CLIController implements CLIControllerInterface, CLIControllerStrat
     }
 
     @Override
+    public void logQuestionAnswer(String userInput) {
+        CLIController.model.addCommandToHistory(userInput);
+    }
+
+    @Override
     public void addCommand(CLICommand command) {
         this.commands.add(command);
     }
 
     @Override
     public void startCLI() {
-        model.start();
-    }
-
-    static CLIModelInterface getModel() {
-        return model;
+        CLIController.model.start();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

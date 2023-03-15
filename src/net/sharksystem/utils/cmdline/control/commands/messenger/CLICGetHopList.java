@@ -2,8 +2,6 @@ package net.sharksystem.utils.cmdline.control.commands.messenger;
 
 import net.sharksystem.asap.ASAPHop;
 import net.sharksystem.utils.cmdline.control.*;
-import net.sharksystem.utils.cmdline.model.CLIModelInterface;
-import net.sharksystem.utils.cmdline.view.CLIInterface;
 
 import java.util.List;
 
@@ -30,7 +28,7 @@ public class CLICGetHopList extends CLICommand {
     }
 
     @Override
-    public void execute(CLIInterface ui, CLIModelInterface model) throws Exception {
+    public void execute() throws Exception {
         int position = this.position.getValue();
 
         List<ASAPHop> hops = this.channel.getValue()

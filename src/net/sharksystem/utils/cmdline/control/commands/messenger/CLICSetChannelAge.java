@@ -2,8 +2,6 @@ package net.sharksystem.utils.cmdline.control.commands.messenger;
 
 import net.sharksystem.messenger.SharkCommunicationAge;
 import net.sharksystem.utils.cmdline.control.*;
-import net.sharksystem.utils.cmdline.model.CLIModelInterface;
-import net.sharksystem.utils.cmdline.view.CLIInterface;
 
 public class CLICSetChannelAge extends CLICommand {
 
@@ -28,7 +26,7 @@ public class CLICSetChannelAge extends CLICommand {
     }
 
     @Override
-    public void execute(CLIInterface ui, CLIModelInterface model) throws Exception {
+    public void execute() throws Exception {
         SharkCommunicationAge age = SharkCommunicationAge.valueOf(this.channelAge.getValue());
         this.channel.getValue().setAge(age);
     }

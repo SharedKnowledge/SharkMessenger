@@ -7,7 +7,6 @@ import net.sharksystem.utils.cmdline.view.CLIInterface;
  * Command which can be executed from the command line
  */
 public abstract class CLICommand {
-
     /**
      * If this flag is true, the command is saved in a log which can be used for testing a specific scenario
      */
@@ -17,6 +16,11 @@ public abstract class CLICommand {
      * The name of the command
      */
     private final String identifier;
+
+    protected static CLIModelInterface model = CLIController.getModel();
+
+    protected static CLIInterface ui = CLIController.getView();
+    protected static CLIControllerInterface controller = CLIController.getController();
 
     /**
      * Creates a command object
@@ -31,16 +35,14 @@ public abstract class CLICommand {
     /**
      * This method runs the command. It asks the user for any input that is needed and was defined in the class of the
      * command which is run.
-     * @param ui The user interface
-     * @param model The model
      * @throws Exception which might occur when executing the command.
      */
-    public void startCommandExecution(CLIInterface ui, CLIModelInterface model) throws Exception {
+    public void startCommandExecution() throws Exception {
         CLICQuestionnaire questionnaire = this.specifyCommandStructure();
         if(questionnaire != null) {
-            ui.letUserFillOutQuestionnaire(questionnaire);
+            CLIController.getView().letUserFillOutQuestionnaire(questionnaire);
         }
-        this.execute(ui, model);
+        this.execute();
     }
 
     /**
@@ -49,15 +51,14 @@ public abstract class CLICommand {
      * for setting up the questions.
      * @return A questionnaire wich is just an ordered list of questions
      */
-    public abstract CLICQuestionnaire specifyCommandStructure();
+    protected abstract CLICQuestionnaire specifyCommandStructure();
 
     /**
      * This method includes the logic of the command
-     * @param ui the user interface
-     * @param model the model
+     *
      * @throws Exception any exception that might be thrown
      */
-    public abstract void execute(CLIInterface ui, CLIModelInterface model) throws Exception;
+    protected abstract void execute() throws Exception;
 
     public String getIdentifier() { return this.identifier; }
 
