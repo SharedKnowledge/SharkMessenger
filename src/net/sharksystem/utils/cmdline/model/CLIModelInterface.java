@@ -3,6 +3,7 @@ package net.sharksystem.utils.cmdline.model;
 import net.sharksystem.SharkException;
 import net.sharksystem.SharkTestPeerFS;
 import net.sharksystem.messenger.SharkMessengerComponent;
+import net.sharksystem.pki.SharkPKIComponent;
 
 import java.util.List;
 
@@ -42,6 +43,14 @@ public interface CLIModelInterface extends CLIModelObservable {
     SharkMessengerComponent getMessengerFromPeer(String name) throws SharkException;
 
     /**
+     * Returns the SharkPKIComponent from a peer
+     * @param peer the peer
+     * @return SharkPKIComponent of that peer
+     * @throws SharkException
+     */
+    SharkPKIComponent getPKIFromPeer(SharkTestPeerFS peer) throws SharkException;
+
+    /**
      * Returns a free port number which can be used for a tcp connection
      * @return Port number
      */
@@ -50,7 +59,7 @@ public interface CLIModelInterface extends CLIModelObservable {
     /**
      * Adds a command by its identifier to the command history. The history saves the order of all valid user inputs,
      *  so that any scenario can be reconstructed
-     * @param commandIdentifier
+     * @param commandIdentifier the command which was executed
      */
     void addCommandToHistory(String commandIdentifier);
 

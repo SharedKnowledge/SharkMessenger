@@ -3,6 +3,7 @@ package net.sharksystem.utils.cmdline.model;
 import net.sharksystem.SharkException;
 import net.sharksystem.SharkTestPeerFS;
 import net.sharksystem.messenger.SharkMessengerComponent;
+import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.utils.cmdline.view.CLIModelStateObserver;
 
 import java.util.ArrayList;
@@ -19,12 +20,10 @@ public class CLIModel implements CLIModelInterface, CLIModelObservable {
     private int startPortNumber = 7000;
 
     private final List<String> commands;
-    private boolean running;
 
     public CLIModel() {
         this.peers = new HashMap<>();
         this.commands = new ArrayList<>();
-        this.running = false;
     }
 
     @Override
@@ -46,6 +45,11 @@ public class CLIModel implements CLIModelInterface, CLIModelObservable {
     public SharkMessengerComponent getMessengerFromPeer(String name) throws SharkException {
         SharkTestPeerFS peer = this.peers.get(name);
         return (SharkMessengerComponent) peer.getComponent(SharkMessengerComponent.class);
+    }
+
+    @Override
+    public SharkPKIComponent getPKIFromPeer(SharkTestPeerFS peer) throws SharkException {
+        return (SharkPKIComponent) peer.getComponent(SharkPKIComponent.class);
     }
 
     @Override
@@ -76,13 +80,11 @@ public class CLIModel implements CLIModelInterface, CLIModelObservable {
 
     @Override
     public void terminate() {
-        this.running = false;
         if(this.observer != null) this.observer.terminated();
     }
 
     @Override
     public void start() {
-        this.running = true;
         if(observer != null) this.observer.started();
     }
 

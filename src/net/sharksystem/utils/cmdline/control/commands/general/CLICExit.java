@@ -1,11 +1,14 @@
-package net.sharksystem.utils.cmdline.control.commands;
+package net.sharksystem.utils.cmdline.control.commands.general;
 
+import net.sharksystem.utils.cmdline.control.CLICommand;
+import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
 import net.sharksystem.utils.cmdline.model.CLIModelInterface;
 import net.sharksystem.utils.cmdline.view.CLIInterface;
 
-import java.util.List;
-
-public class CLICExit extends CLICommand{
+/**
+ * Command for terminating the messanger
+ */
+public class CLICExit extends CLICommand {
 
 
     public CLICExit(String identifier, boolean rememberCommand) {
@@ -13,7 +16,12 @@ public class CLICExit extends CLICommand{
     }
 
     @Override
-    public void execute(CLIInterface ui, CLIModelInterface model, List<String> args) throws Exception {
+    public CLICQuestionnaire specifyCommandStructure() {
+        return null;
+    }
+
+    @Override
+    public void execute(CLIInterface ui, CLIModelInterface model) throws Exception {
         model.terminate();
     }
 
@@ -21,7 +29,7 @@ public class CLICExit extends CLICommand{
     @Override
     public String getDescription() {
         StringBuilder sb = new StringBuilder();
-        sb.append("exit");
+        sb.append("Terminates the messanger.");
         return sb.toString();
     }
 

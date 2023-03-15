@@ -1,7 +1,5 @@
 package net.sharksystem.utils.cmdline.control;
 
-import net.sharksystem.utils.cmdline.control.commands.CLICommand;
-
 /**
  * Interface to extend the functionalities of the CLIController
  */

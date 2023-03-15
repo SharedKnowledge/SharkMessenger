@@ -1,15 +1,17 @@
 package net.sharksystem.utils.cmdline.view;
 
+import net.sharksystem.utils.cmdline.control.CLICommand;
 import net.sharksystem.utils.cmdline.control.CLIControllerStrategyInterface;
-import net.sharksystem.utils.cmdline.control.commands.CLICommand;
+import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
 import net.sharksystem.utils.cmdline.model.CLIModelObservable;
 
 import java.io.*;
+import java.util.Scanner;
 
 public class CLI implements CLIInterface, CLIModelStateObserver {
     private final PrintStream standardOut;
     private final PrintStream standardErr;
-    private final BufferedReader bufferedReader;
+    private final Scanner scanner;
 
     private final CLIControllerStrategyInterface controller;
     private final CLIModelObservable model;
@@ -24,10 +26,15 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
      * @param out print stream to write to
      */
     public CLI(InputStream in, PrintStream err, PrintStream out, CLIControllerStrategyInterface controller, CLIModelObservable model) {
-        this.bufferedReader = new BufferedReader(new InputStreamReader(in));
+        this.scanner = new Scanner(in);
         this.standardErr = err;
         this.standardOut = out;
-        //redirect System.in here so that logging is better
+        //redirect System.out here so that logging is better
+        System.setOut(new PrintStream(new OutputStream() {
+                    @Override
+                    public void write(int b) {
+                    }
+                }, false));
 
         this.controller = controller;
         this.model = model;
@@ -58,12 +65,22 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
         sb.append("COMMANDS:");
         sb.append(System.lineSeparator());
 
-        for(CLICommand command : this.controller.getCommands()) {
-            sb.append(command.getIdentifier());
-            sb.append("\t\t\t");
-            sb.append(command.getDescription());
+        int longestCmd = 0;
+        for(CLICommand cmd : this.controller.getCommands()) {
+            int curLength = cmd.getIdentifier().length();
+            if (curLength> longestCmd) {
+                longestCmd = curLength;
+            }
+        }
+
+        for(CLICommand cmd : this.controller.getCommands()) {
+            sb.append(cmd.getIdentifier());
+            sb.append(" ".repeat(Math.max(0, longestCmd - cmd.getIdentifier().length())));
+            sb.append("\t");
+            sb.append(cmd.getDescription());
             sb.append(System.lineSeparator());
         }
+
         this.standardOut.println(sb);
     }
 
@@ -75,18 +92,23 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
 
         while(running) {
             try {
-                String userInputString = this.bufferedReader.readLine();
+                this.standardOut.println();
+                this.standardOut.println("Run a command by entering its name from the list above:");
+                String userInputString = this.scanner.nextLine();
 
                 if(userInputString != null) {
-
                     this.controller.handleUserInput(userInputString);
                 }
 
-            } catch (IOException e) {
-                this.standardErr.println("Error: cannot read from input stream");
+            } catch (NumberFormatException nfe) {
+                this.printError("given input can't be parsed to a number!");
+                this.printError("Please input the corresponding number of the command you want to execute.");
+            } catch (Exception e) {
+                this.printError(e.getLocalizedMessage());
             }
         }
     }
+
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,18 +117,25 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
 
     @Override
     public void printInfo(String information) {
-        this.standardOut.println(information);
+        StringBuilder sb = new StringBuilder();
+        sb.append(" > ");
+        sb.append(information);
+        this.standardOut.println(sb);
     }
 
 
     @Override
     public void printError(String error) {
-        this.standardErr.println(error);
+        StringBuilder sb = new StringBuilder();
+        sb.append(" ERROR: ");
+        sb.append(error);
+        this.standardErr.println(sb);
     }
 
+
     @Override
-    public void exceptionOccurred(Exception exception) {
-        this.standardErr.println(exception.getLocalizedMessage());
+    public void letUserFillOutQuestionnaire(CLICQuestionnaire questionnaire) {
+        questionnaire.start(this.standardOut, this.scanner);
     }
 
 
