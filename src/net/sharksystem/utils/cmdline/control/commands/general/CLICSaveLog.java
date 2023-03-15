@@ -1,5 +1,6 @@
 package net.sharksystem.utils.cmdline.control.commands.general;
 
+import net.sharksystem.utils.cmdline.control.CLICQuestionnaireBuilder;
 import net.sharksystem.utils.cmdline.control.CLICommand;
 import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
 import net.sharksystem.utils.cmdline.control.CLICStringArgument;
@@ -25,7 +26,9 @@ public class CLICSaveLog extends CLICommand {
 
     @Override
     public CLICQuestionnaire specifyCommandStructure() {
-        return null;
+        return new CLICQuestionnaireBuilder().
+                addQuestion("File path: ", this.fileName).
+                build();
     }
 
     @Override

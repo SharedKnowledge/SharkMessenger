@@ -1,9 +1,12 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="SharkMessenger">
-    <output-path>$PROJECT_DIR$/out/</output-path>
+    <output-path>$PROJECT_DIR$/out/artifacts/SharkMessenger</output-path>
     <root id="archive" name="SharkMessenger.jar">
       <element id="module-output" name="SharkMessenger" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/ASAPHub.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/libs/ASAPJava.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/SharkPKI.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/SharkPeer.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

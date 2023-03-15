@@ -37,6 +37,7 @@ public class CLICQuestionnaire {
                     ps.println(e.getLocalizedMessage());
                 }
             } while (!question.submitAnswer(userInput));
+            ps.println(" > INPUT: " + userInput);
             CLIController.getModel().addCommandToHistory(userInput);
         }
     }

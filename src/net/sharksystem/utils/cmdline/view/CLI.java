@@ -6,7 +6,6 @@ import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
 import net.sharksystem.utils.cmdline.model.CLIModelObservable;
 
 import java.io.*;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class CLI implements CLIInterface, CLIModelStateObserver {
@@ -102,6 +101,7 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
                 this.standardOut.println("Run a command by entering its name from the list above:");
 
                 String userInputString = this.bufferedReader.readLine();
+                this.printInfo("INPUT: " + userInputString);
 
                 if (userInputString != null) {
                     this.controller.handleUserInput(userInputString);
@@ -109,7 +109,6 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
             } catch (NumberFormatException nfe) {
                 this.printError("Given input can't be parsed to a number!");
                 this.printError("Please input the corresponding number of the command you want to execute.");
-            } catch (NoSuchElementException e) {
             } catch (Exception e) {
                 this.printError(e.getLocalizedMessage());
             }

@@ -28,10 +28,8 @@ public class CLIController implements CLIControllerInterface, CLIControllerStrat
         //  specified and not the command identifier
         String commandIdentifier = cmd.remove(0);
 
-        boolean validCommand = false;
         for(CLICommand command : this.commands) {
             if (command.getIdentifier().equals(commandIdentifier)) {
-                validCommand = true;
                 if (command.rememberCommand()) model.addCommandToHistory(command.getIdentifier());
                 command.startCommandExecution(this.view, model);
             }
