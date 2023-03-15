@@ -10,20 +10,20 @@ import java.io.IOException;
 
 public class CLICRemoveChannel extends CLICommand {
 
-    private final CLICSharkPeerArgument peer;
+    private final CLICStringArgument peerName;
     private final CLICChannelArgument channel;
 
 
     public CLICRemoveChannel(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
-        this.peer = new CLICSharkPeerArgument();
-        this.channel = new CLICChannelArgument(this.peer);
+        this.peerName = new CLICStringArgument();
+        this.channel = new CLICChannelArgument(this.peerName);
     }
 
     @Override
     public CLICQuestionnaire specifyCommandStructure() {
         return new CLICQuestionnaireBuilder().
-                addQuestion("Peer name: ", this.peer).
+                addQuestion("Peer name: ", this.peerName).
                 addQuestion("Channel URI: ", this.channel).
                 build();
     }
@@ -31,8 +31,7 @@ public class CLICRemoveChannel extends CLICommand {
     @Override
     public void execute(CLIInterface ui, CLIModelInterface model) throws Exception {
         try {
-            SharkMessengerComponent peerMessenger = (SharkMessengerComponent) this.peer.getValue().
-                    getComponent(SharkMessengerComponent.class);
+            SharkMessengerComponent peerMessenger = model.getMessengerFromPeer(this.peerName.getValue());
             peerMessenger.removeChannel(this.channel.getValue().getURI());
 
         } catch (SharkException | IOException e) {

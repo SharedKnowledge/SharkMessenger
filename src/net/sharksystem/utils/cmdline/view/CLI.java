@@ -6,12 +6,15 @@ import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
 import net.sharksystem.utils.cmdline.model.CLIModelObservable;
 
 import java.io.*;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class CLI implements CLIInterface, CLIModelStateObserver {
     private final PrintStream standardOut;
     private final PrintStream standardErr;
     private final Scanner scanner;
+
+    private final BufferedReader bufferedReader;
 
     private final CLIControllerStrategyInterface controller;
     private final CLIModelObservable model;
@@ -21,7 +24,8 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
 
     /**
      * Constructor for the UI
-     * @param in input stream from which the UI should read user input
+     *
+     * @param in  input stream from which the UI should read user input
      * @param err print stream for occurring errors
      * @param out print stream to write to
      */
@@ -29,12 +33,13 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
         this.scanner = new Scanner(in);
         this.standardErr = err;
         this.standardOut = out;
+        this.bufferedReader = new BufferedReader(new InputStreamReader(in));
         //redirect System.out here so that logging is better
         System.setOut(new PrintStream(new OutputStream() {
-                    @Override
-                    public void write(int b) {
-                    }
-                }, false));
+            @Override
+            public void write(int b) {
+            }
+        }, false));
 
         this.controller = controller;
         this.model = model;
@@ -66,14 +71,14 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
         sb.append(System.lineSeparator());
 
         int longestCmd = 0;
-        for(CLICommand cmd : this.controller.getCommands()) {
+        for (CLICommand cmd : this.controller.getCommands()) {
             int curLength = cmd.getIdentifier().length();
-            if (curLength> longestCmd) {
+            if (curLength > longestCmd) {
                 longestCmd = curLength;
             }
         }
 
-        for(CLICommand cmd : this.controller.getCommands()) {
+        for (CLICommand cmd : this.controller.getCommands()) {
             sb.append(cmd.getIdentifier());
             sb.append(" ".repeat(Math.max(0, longestCmd - cmd.getIdentifier().length())));
             sb.append("\t");
@@ -90,25 +95,26 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
      */
     public void runCommandLoop() {
 
-        while(running) {
+        while (running) {
             try {
                 this.standardOut.println();
-                this.standardOut.println("Run a command by entering its name from the list above:");
-                String userInputString = this.scanner.nextLine();
 
-                if(userInputString != null) {
+                this.standardOut.println("Run a command by entering its name from the list above:");
+
+                String userInputString = this.bufferedReader.readLine();
+
+                if (userInputString != null) {
                     this.controller.handleUserInput(userInputString);
                 }
-
             } catch (NumberFormatException nfe) {
-                this.printError("given input can't be parsed to a number!");
+                this.printError("Given input can't be parsed to a number!");
                 this.printError("Please input the corresponding number of the command you want to execute.");
+            } catch (NoSuchElementException e) {
             } catch (Exception e) {
                 this.printError(e.getLocalizedMessage());
             }
         }
     }
-
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,7 +141,7 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
 
     @Override
     public void letUserFillOutQuestionnaire(CLICQuestionnaire questionnaire) {
-        questionnaire.start(this.standardOut, this.scanner);
+        questionnaire.start(this.standardOut, this.bufferedReader);
     }
 
 

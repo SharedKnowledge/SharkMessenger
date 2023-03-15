@@ -12,19 +12,19 @@ import java.nio.charset.StandardCharsets;
 
 public class CLICGetMessages extends CLICommand {
 
-    private final CLICSharkPeerArgument peer;
+    private final CLICStringArgument peerName;
     private final CLICChannelArgument channel;
 
     public CLICGetMessages(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
-        this.peer = new CLICSharkPeerArgument();
-        this.channel = new CLICChannelArgument(this.peer);
+        this.peerName = new CLICStringArgument();
+        this.channel = new CLICChannelArgument(this.peerName);
     }
 
     @Override
     public CLICQuestionnaire specifyCommandStructure() {
         return new CLICQuestionnaireBuilder().
-                addQuestion("Peer name: ", this.peer).
+                addQuestion("Peer name: ", this.peerName).
                 addQuestion("Channel URI: ", this.channel).
                 build();
     }

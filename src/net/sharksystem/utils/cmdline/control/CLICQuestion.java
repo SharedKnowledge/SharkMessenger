@@ -27,6 +27,6 @@ public class CLICQuestion {
     }
 
     void ask(PrintStream ps){
-        ps.print(question);
+        ps.println(question);
     }
 }

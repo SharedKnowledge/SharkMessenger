@@ -7,21 +7,21 @@ import net.sharksystem.utils.cmdline.view.CLIInterface;
 
 public class CLICSetChannelAge extends CLICommand {
 
-    private final CLICSharkPeerArgument peer;
+    private final CLICStringArgument peerName;
     private final CLICChannelArgument channel;
     private final CLICStringArgument channelAge;
 
     public CLICSetChannelAge(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
-        this.peer = new CLICSharkPeerArgument();
-        this.channel = new CLICChannelArgument(this.peer);
+        this.peerName = new CLICStringArgument();
+        this.channel = new CLICChannelArgument(this.peerName);
         channelAge = new CLICStringArgument();
     }
 
     @Override
     public CLICQuestionnaire specifyCommandStructure() {
         return new CLICQuestionnaireBuilder().
-                addQuestion("Peer Name: ", this.peer).
+                addQuestion("Peer Name: ", this.peerName).
                 addQuestion("Channel URI: ", this.channel).
                 addQuestion("Channel age: ", this.channelAge).
                 build();

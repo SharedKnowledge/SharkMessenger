@@ -9,23 +9,23 @@ import java.util.List;
 
 public class CLICGetHopList extends CLICommand {
 
-    private final CLICSharkPeerArgument peer;
+    private final CLICStringArgument peerName;
     private final CLICChannelArgument channel;
     private final CLICIntegerArgument position;
 
     public CLICGetHopList(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
-        this.peer = new CLICSharkPeerArgument();
-        this.channel = new CLICChannelArgument(this.peer);
+        this.peerName = new CLICStringArgument();
+        this.channel = new CLICChannelArgument(this.peerName);
         this.position = new CLICIntegerArgument();
     }
 
     @Override
     public CLICQuestionnaire specifyCommandStructure() {
         return new CLICQuestionnaireBuilder().
-                addQuestion("Please insert the peer name: ", peer).
-                addQuestion("Please set the channel uri: ", channel).
-                addQuestion("Please specify the position: ", position).
+                addQuestion("Please insert the peer name: ", this.peerName).
+                addQuestion("Please set the channel uri: ", this.channel).
+                addQuestion("Please specify the position: ", this.position).
                 build();
     }
 
