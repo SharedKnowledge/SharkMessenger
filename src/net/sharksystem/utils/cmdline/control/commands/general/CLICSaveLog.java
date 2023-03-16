@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 /**
- * Command for saving the log in a file
+ * Command for saving the log in a file.
  */
 public class CLICSaveLog extends CLICommand {
 
@@ -60,8 +60,4 @@ public class CLICSaveLog extends CLICommand {
         return sb.toString();
     }
 
-    @Override
-    public String getDetailedDescription() {
-        return this.getDescription();
-    }
 }

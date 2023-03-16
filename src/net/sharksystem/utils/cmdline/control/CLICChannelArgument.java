@@ -6,25 +6,17 @@ import net.sharksystem.messenger.SharkMessengerChannel;
 import java.io.IOException;
 
 /**
- * Predefined argument for a SharkMessangerChannel retrieved through its uri.
+ * Predefined argument for a SharkMessangerChannel retrieved through its uri and a peer
  */
 public class CLICChannelArgument extends CLICArgument<SharkMessengerChannel>{
 
-
-    private final CLICStringArgument peerNameArgument;
-
-
-    public CLICChannelArgument(CLICStringArgument peerArgument) {
-        this.peerNameArgument = peerArgument;
-    }
-
     @Override
-    public boolean tryParse(String input) {
+    public boolean tryParse(String input) throws Exception {
         super.setEmptyStringAllowed(false);
         if(super.tryParse(input)) {
             try {
                 this.parsedInput = CLIController.getModel()
-                        .getMessengerFromPeer(this.peerNameArgument.getValue()).getChannel(input);
+                        .getMessengerComponent().getChannel(input);
                 return true;
             } catch (SharkException | IOException e) {
                 return false;

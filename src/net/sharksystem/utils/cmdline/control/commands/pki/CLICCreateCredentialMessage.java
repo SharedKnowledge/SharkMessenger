@@ -25,8 +25,4 @@ public class CLICCreateCredentialMessage extends CLICommand {
         return sb.toString();
     }
 
-    @Override
-    public String getDetailedDescription() {
-        return this.getDescription();
-    }
 }

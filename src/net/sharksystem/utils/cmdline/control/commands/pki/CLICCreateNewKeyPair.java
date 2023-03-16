@@ -2,30 +2,23 @@ package net.sharksystem.utils.cmdline.control.commands.pki;
 
 import net.sharksystem.asap.utils.DateTimeHelper;
 import net.sharksystem.pki.SharkPKIComponent;
-import net.sharksystem.utils.cmdline.control.CLICQuestionnaireBuilder;
-import net.sharksystem.utils.cmdline.control.CLICSharkPeerArgument;
 import net.sharksystem.utils.cmdline.control.CLICommand;
 import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
 
 public class CLICCreateNewKeyPair extends CLICommand {
 
-    private final CLICSharkPeerArgument peer;
-
     public CLICCreateNewKeyPair(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
-        this.peer = new CLICSharkPeerArgument();
     }
 
     @Override
     public CLICQuestionnaire specifyCommandStructure() {
-        return new CLICQuestionnaireBuilder().
-                addQuestion("Peer name: ", this.peer).
-                build();
+        return null;
     }
 
     @Override
     public void execute() throws Exception {
-        SharkPKIComponent pki = (SharkPKIComponent) this.peer.getValue().getComponent(SharkPKIComponent.class);
+        SharkPKIComponent pki = model.getPKIComponent();
         pki.createNewKeyPair();
         String creationTime = DateTimeHelper.long2DateString(pki.getKeysCreationTime());
 
@@ -39,8 +32,4 @@ public class CLICCreateNewKeyPair extends CLICommand {
         return sb.toString();
     }
 
-    @Override
-    public String getDetailedDescription() {
-        return this.getDescription();
-    }
 }

@@ -10,21 +10,18 @@ import java.nio.charset.StandardCharsets;
 
 public class CLICGetMessages extends CLICommand {
 
-    private final CLICStringArgument peerName;
     private final CLICChannelArgument channel;
 
     public CLICGetMessages(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
-        this.peerName = new CLICStringArgument();
-        this.channel = new CLICChannelArgument(this.peerName);
+        this.channel = new CLICChannelArgument();
     }
 
     @Override
     public CLICQuestionnaire specifyCommandStructure() {
-        return new CLICQuestionnaireBuilder().
-                addQuestion("Peer name: ", this.peerName).
-                addQuestion("Channel URI: ", this.channel).
-                build();
+        return new CLICQuestionnaireBuilder()
+                .addQuestion("Channel URI: ", this.channel)
+                .build();
     }
 
     @Override
@@ -54,9 +51,4 @@ public class CLICGetMessages extends CLICommand {
         return sb.toString();
     }
 
-    @Override
-    public String getDetailedDescription() {
-        return this.getDescription();
-        //TODO: add detailed description
-    }
 }

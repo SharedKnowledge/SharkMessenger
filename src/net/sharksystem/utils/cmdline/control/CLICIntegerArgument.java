@@ -5,7 +5,7 @@ package net.sharksystem.utils.cmdline.control;
  */
 public class CLICIntegerArgument extends CLICArgument<Integer> {
     @Override
-    public boolean tryParse(String input) {
+    public boolean tryParse(String input) throws Exception {
         super.setEmptyStringAllowed(false);
         if(super.tryParse(input)) {
             try {

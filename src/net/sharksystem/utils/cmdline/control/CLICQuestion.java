@@ -20,7 +20,7 @@ public class CLICQuestion {
         this.argument = argument;
     }
 
-    public boolean submitAnswer(String input) {
+    public boolean submitAnswer(String input) throws Exception {
         return argument.tryParse(input);
     }
 

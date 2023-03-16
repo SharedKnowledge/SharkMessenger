@@ -3,12 +3,12 @@ package net.sharksystem.utils.cmdline.control.commands.pki;
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
 import net.sharksystem.utils.cmdline.control.CLICQuestionnaireBuilder;
-import net.sharksystem.utils.cmdline.control.CLICSharkPeerArgument;
+import net.sharksystem.utils.cmdline.control.CLICKnownPeerArgument;
 import net.sharksystem.utils.cmdline.control.CLICommand;
 
 public class CLICGetNumberOfKnownPeers extends CLICommand {
 
-    private final CLICSharkPeerArgument owner;
+    private final CLICKnownPeerArgument owner;
 
     /**
      * Creates a command object
@@ -18,7 +18,7 @@ public class CLICGetNumberOfKnownPeers extends CLICommand {
      */
     public CLICGetNumberOfKnownPeers(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
-        this.owner = new CLICSharkPeerArgument();
+        this.owner = new CLICKnownPeerArgument();
     }
 
     @Override
@@ -30,7 +30,7 @@ public class CLICGetNumberOfKnownPeers extends CLICommand {
 
     @Override
     protected void execute() throws Exception {
-        SharkPKIComponent pki = model.getPKIFromPeer(this.owner.getValue());
+        SharkPKIComponent pki = model.getPKIComponent();
         ui.printInfo(String.valueOf(pki.getNumberOfPersons()));
     }
 
@@ -39,8 +39,4 @@ public class CLICGetNumberOfKnownPeers extends CLICommand {
         return "Returns the number of known peers.";
     }
 
-    @Override
-    public String getDetailedDescription() {
-        return this.getDescription();
-    }
 }

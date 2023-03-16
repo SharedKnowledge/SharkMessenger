@@ -2,17 +2,17 @@ package net.sharksystem.utils.cmdline.control.commands.pki;
 
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.utils.cmdline.control.CLICQuestionnaireBuilder;
-import net.sharksystem.utils.cmdline.control.CLICSharkPeerArgument;
+import net.sharksystem.utils.cmdline.control.CLICKnownPeerArgument;
 import net.sharksystem.utils.cmdline.control.CLICommand;
 import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
 
 public class CLICGetOwnerInfo extends CLICommand {
 
-    private final CLICSharkPeerArgument peer;
+    private final CLICKnownPeerArgument peer;
 
     public CLICGetOwnerInfo(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
-        this.peer = new CLICSharkPeerArgument();
+        this.peer = new CLICKnownPeerArgument();
     }
 
     @Override
@@ -24,7 +24,7 @@ public class CLICGetOwnerInfo extends CLICommand {
 
     @Override
     public void execute() throws Exception {
-        SharkPKIComponent pki = model.getPKIFromPeer(this.peer.getValue());
+        SharkPKIComponent pki = model.getPKIComponent();
         CharSequence ownerID = pki.getOwnerID();
         CharSequence ownerName = pki.getOwnerName();
 
@@ -43,8 +43,4 @@ public class CLICGetOwnerInfo extends CLICommand {
         return sb.toString();
     }
 
-    @Override
-    public String getDetailedDescription() {
-        return this.getDescription();
-    }
 }

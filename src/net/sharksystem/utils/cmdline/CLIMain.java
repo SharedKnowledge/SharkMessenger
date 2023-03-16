@@ -1,5 +1,6 @@
 package net.sharksystem.utils.cmdline;
 
+import net.sharksystem.SharkException;
 import net.sharksystem.utils.cmdline.control.CLIController;
 import net.sharksystem.utils.cmdline.control.CLIControllerInterface;
 import net.sharksystem.utils.cmdline.control.commands.general.CLICExit;
@@ -12,7 +13,7 @@ import net.sharksystem.utils.cmdline.model.CLIModelInterface;
 
 public class CLIMain {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SharkException {
         CLIModelInterface model = new CLIModel();
 
         CLIControllerInterface controller = new CLIController(model);
@@ -23,9 +24,9 @@ public class CLIMain {
         controller.addCommand(new CLICExit("exit", false));
 
         //Messenger
-        controller.addCommand(new CLICAddPeer("mkPeer", true));
-        controller.addCommand(new CLICRunEncounter("runEncounter", true));
-        controller.addCommand(new CLICStopEncounter("stopEncounter", true));
+        //controller.addCommand(new CLICAddPeer("mkPeer", true));
+        //controller.addCommand(new CLICRunEncounter("runEncounter", true));
+        //controller.addCommand(new CLICStopEncounter("stopEncounter", true));
         controller.addCommand(new CLICSendMessage("sendMsg", true));
         controller.addCommand(new CLICGetMessages("messages", true));
         controller.addCommand(new CLICGetHopList("hops", true));
@@ -48,7 +49,5 @@ public class CLIMain {
         controller.addCommand(new CLICGetCertificationPath("certPath", true));
 
         controller.startCLI();
-
-
     }
 }

@@ -1,5 +1,7 @@
 package net.sharksystem.utils.cmdline.control;
 
+import net.sharksystem.SharkException;
+
 /**
  * Interface to extend the functionalities of the CLIController
  */
@@ -14,5 +16,5 @@ public interface CLIControllerInterface {
     /**
      * Starts the CLI
      */
-    void startCLI();
+    void startCLI() throws SharkException;
 }

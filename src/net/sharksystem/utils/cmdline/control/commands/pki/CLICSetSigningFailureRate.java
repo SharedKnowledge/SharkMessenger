@@ -4,39 +4,35 @@ import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.utils.cmdline.control.*;
 
 public class CLICSetSigningFailureRate extends CLICommand {
-
-    private final CLICSharkPeerArgument owner;
-    private final CLICSharkPeerArgument subject;
+    private final CLICKnownPeerArgument subject;
 
     private final CLICIntegerArgument failureRate;
 
     public CLICSetSigningFailureRate(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
-        this.owner = new CLICSharkPeerArgument();
-        this.subject = new CLICSharkPeerArgument();
+        this.subject = new CLICKnownPeerArgument();
         this.failureRate = new CLICIntegerArgument();
     }
 
     @Override
     public CLICQuestionnaire specifyCommandStructure() {
-        return new CLICQuestionnaireBuilder().
-                addQuestion("Owner peer name: ", this.owner).
-                addQuestion("Subject peer name: ", this.subject).
-                addQuestion("Failure rate: ", this.failureRate).
-                build();
+        return new CLICQuestionnaireBuilder()
+                .addQuestion("Subject peer name: ", this.subject)
+                .addQuestion("Failure rate: ", this.failureRate)
+                .build();
     }
 
     @Override
     public void execute() throws Exception {
-        SharkPKIComponent pki = model.getPKIFromPeer(this.owner.getValue());
+        SharkPKIComponent pki = model.getPKIComponent();
         if(this.failureRate.getValue() >= 1 && this.failureRate.getValue() <= 10) {
-            pki.setSigningFailureRate(this.subject.getValue().getPeerID(), this.failureRate.getValue());
+            pki.setSigningFailureRate(this.subject.getValue().getUserID(), this.failureRate.getValue());
 
             StringBuilder sb = new StringBuilder();
             sb.append("Failure rate was set to ");
             sb.append(this.failureRate.getValue());
             sb.append(" for peer ");
-            sb.append(this.subject.getValue().getPeerID());
+            sb.append(this.subject.getValue().getUserID());
 
             ui.printInfo(sb.toString());
 
@@ -52,8 +48,4 @@ public class CLICSetSigningFailureRate extends CLICommand {
         return sb.toString();
     }
 
-    @Override
-    public String getDetailedDescription() {
-        return this.getDescription();
-    }
 }

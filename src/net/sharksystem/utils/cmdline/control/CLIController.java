@@ -1,5 +1,6 @@
 package net.sharksystem.utils.cmdline.control;
 
+import net.sharksystem.SharkException;
 import net.sharksystem.utils.cmdline.model.CLIModelInterface;
 import net.sharksystem.utils.cmdline.view.CLI;
 import net.sharksystem.utils.cmdline.view.CLIInterface;
@@ -42,51 +43,19 @@ public class CLIController implements CLIControllerInterface, CLIControllerStrat
         //  specified and not the command identifier
         String commandIdentifier = cmd.remove(0);
 
+        boolean foundCommand = false;
         for(CLICommand command : this.commands) {
             if (command.getIdentifier().equals(commandIdentifier)) {
+                foundCommand = true;
                 if (command.rememberCommand()) CLIController.model.addCommandToHistory(command.getIdentifier());
                 command.startCommandExecution();
             }
         }
+        if(!foundCommand){
+            view.commandNotFound(commandIdentifier);
+        }
 
     }
-
-//    @Override
-//    public void handleUserInput(int commandIndex) throws Exception {
-//        //List<String> cmd = optimizeUserInputString(input);
-//
-//        //the reason for removing the first argument (=command identifier) is that this here is the only
-//        //  place where it's needed. A method performing the action of a command only needs the arguments
-//        //  specified and not the command identifier
-//        //String commandIdentifier = cmd.remove(0);
-//
-//        boolean validCommand = false;
-//        for (int i = 0; i < this.commands.size(); i++) {
-//            if (i == commandIndex) {
-//                validCommand = true;
-//
-//                CLICommand command = this.commands.get(i);
-//
-//                if (command.rememberCommand()) this.saveCommandInHistory(command.getIdentifier());
-//
-//                command.startCommandExecution(this.view, model);
-//
-//            }
-//        }
-//
-//        //for(CLICommand command : this.commands) {
-//        //    if(command.getIdentifier().equals(commandIdentifier)) {
-//        //        validCommand = true;
-//        //        if (command.rememberCommand()) this.saveCommandInHistory(command.getIdentifier(), cmd);
-//        //        try {
-//        //            command.execute(this.view, this.model, cmd);
-//        //        } catch (Exception e) {
-//        //            this.view.exceptionOccurred(e);
-//        //        }
-//        //    }
-//        //}
-//        if (!validCommand) System.out.println("Unknown Command");
-//    }
 
     @Override
     public List<CLICommand> getCommands() {
@@ -104,7 +73,7 @@ public class CLIController implements CLIControllerInterface, CLIControllerStrat
     }
 
     @Override
-    public void startCLI() {
+    public void startCLI() throws SharkException {
         CLIController.model.start();
     }
 

@@ -6,25 +6,21 @@ import net.sharksystem.utils.cmdline.control.*;
 import java.util.List;
 
 public class CLICGetHopList extends CLICommand {
-
-    private final CLICStringArgument peerName;
     private final CLICChannelArgument channel;
     private final CLICIntegerArgument position;
 
     public CLICGetHopList(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
-        this.peerName = new CLICStringArgument();
-        this.channel = new CLICChannelArgument(this.peerName);
+        this.channel = new CLICChannelArgument();
         this.position = new CLICIntegerArgument();
     }
 
     @Override
     public CLICQuestionnaire specifyCommandStructure() {
-        return new CLICQuestionnaireBuilder().
-                addQuestion("Please insert the peer name: ", this.peerName).
-                addQuestion("Please set the channel uri: ", this.channel).
-                addQuestion("Please specify the position: ", this.position).
-                build();
+        return new CLICQuestionnaireBuilder()
+                .addQuestion("Please set the channel uri: ", this.channel)
+                .addQuestion("Please specify the position: ", this.position)
+                .build();
     }
 
     @Override
@@ -54,8 +50,4 @@ public class CLICGetHopList extends CLICommand {
         return sb.toString();
     }
 
-    @Override
-    public String getDetailedDescription() {
-        return this.getDescription();
-    }
 }

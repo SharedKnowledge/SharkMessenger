@@ -1,19 +1,17 @@
 package net.sharksystem.utils.cmdline.control.commands.messenger;
 
-import net.sharksystem.SharkException;
 import net.sharksystem.utils.cmdline.control.*;
 
-import java.io.IOException;
-
+@Deprecated
 public class CLICStopEncounter extends CLICommand {
 
-    private final CLICSharkPeerArgument peer1;
-    private final CLICSharkPeerArgument peer2;
+    private final CLICKnownPeerArgument peer1;
+    private final CLICKnownPeerArgument peer2;
 
     public CLICStopEncounter(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
-        this.peer1 = new CLICSharkPeerArgument();
-        this.peer2 = new CLICSharkPeerArgument();
+        this.peer1 = new CLICKnownPeerArgument();
+        this.peer2 = new CLICKnownPeerArgument();
     }
 
     @Override
@@ -26,11 +24,11 @@ public class CLICStopEncounter extends CLICommand {
 
     @Override
     public void execute() throws Exception {
-        try {
-            this.peer1.getValue().getASAPTestPeerFS().stopEncounter(this.peer2.getValue().getASAPTestPeerFS());
-        } catch (SharkException | IOException e) {
-            ui.printError(e.getLocalizedMessage());
-        }
+        //try {
+            //this.peer1.getValue().getASAPTestPeerFS().stopEncounter(this.peer2.getValue().getASAPTestPeerFS());
+        //} catch (SharkException | IOException e) {
+         //   ui.printError(e.getLocalizedMessage());
+        //
     }
 
     @Override
@@ -40,8 +38,4 @@ public class CLICStopEncounter extends CLICommand {
         return sb.toString();
     }
 
-    @Override
-    public String getDetailedDescription() {
-        return this.getDescription();
-    }
 }

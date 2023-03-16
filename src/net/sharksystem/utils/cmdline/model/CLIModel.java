@@ -1,55 +1,45 @@
 package net.sharksystem.utils.cmdline.model;
 
 import net.sharksystem.SharkException;
-import net.sharksystem.SharkTestPeerFS;
-import net.sharksystem.messenger.SharkMessengerComponent;
+import net.sharksystem.SharkPeerFS;
+import net.sharksystem.messenger.*;
+import net.sharksystem.pki.CredentialMessage;
+import net.sharksystem.pki.SharkCredentialReceivedListener;
 import net.sharksystem.pki.SharkPKIComponent;
+import net.sharksystem.pki.SharkPKIComponentFactory;
 import net.sharksystem.utils.cmdline.view.CLIModelStateObserver;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CLIModel implements CLIModelInterface, CLIModelObservable {
-
+    private static final CharSequence ROOTFOLDER = "sharkComponent";
     private CLIModelStateObserver observer;
-
-    private final Map<String, SharkTestPeerFS> peers;
-
     private int startPortNumber = 7000;
-
     private final List<String> commands;
+    private SharkPeerFS messengerPeer;
+    private SharkMessengerComponent messengerComponent;
+    private SharkPKIComponent pkiComponent;
+
 
     public CLIModel() {
-        this.peers = new HashMap<>();
         this.commands = new ArrayList<>();
     }
 
     @Override
-    public void addPeer(String name, SharkTestPeerFS peer) {
-        this.peers.put(name, peer);
+    public SharkPeerFS getPeer() {
+        return this.messengerPeer;
     }
 
     @Override
-    public boolean hasPeer(String name) {
-        return this.peers.containsKey(name);
+    public SharkMessengerComponent getMessengerComponent() {
+        return this.messengerComponent;
     }
 
     @Override
-    public SharkTestPeerFS getPeer(String name) {
-        return this.peers.get(name);
-    }
-
-    @Override
-    public SharkMessengerComponent getMessengerFromPeer(String name) throws SharkException {
-        SharkTestPeerFS peer = this.peers.get(name);
-        return (SharkMessengerComponent) peer.getComponent(SharkMessengerComponent.class);
-    }
-
-    @Override
-    public SharkPKIComponent getPKIFromPeer(SharkTestPeerFS peer) throws SharkException {
-        return (SharkPKIComponent) peer.getComponent(SharkPKIComponent.class);
+    public SharkPKIComponent getPKIComponent() {
+        return this.pkiComponent;
     }
 
     @Override
@@ -84,12 +74,57 @@ public class CLIModel implements CLIModelInterface, CLIModelObservable {
     }
 
     @Override
-    public void start() {
-        if(observer != null) this.observer.started();
+    public void start() throws SharkException {
+        String username = "";
+        if(observer != null) username = this.observer.getUsername();
+
+        this.messengerPeer = new SharkPeerFS(username, ROOTFOLDER + "/" + username);
+
+            SharkPKIComponentFactory pkiComponentFactory = new SharkPKIComponentFactory();
+
+            messengerPeer.addComponent(pkiComponentFactory, SharkPKIComponent.class);
+            SharkMessengerComponentFactory messengerComponentFactory = new SharkMessengerComponentFactory(
+                    (SharkPKIComponent) messengerPeer.getComponent(SharkPKIComponent.class));
+
+            messengerPeer.addComponent(messengerComponentFactory, SharkMessengerComponent.class);
+
+            messengerPeer.start();
+
+            this.messengerComponent = (SharkMessengerComponent) this.messengerPeer.
+                    getComponent(SharkMessengerComponent.class);
+
+            this.messengerComponent.addSharkMessagesReceivedListener(new MessageReceivedListener());
+
+            this.pkiComponent = (SharkPKIComponent) this.messengerPeer.getComponent(SharkPKIComponent.class);
+
+            this.pkiComponent.setSharkCredentialReceivedListener(new CredentialReceivedListener());
+
+            this.observer.started();
     }
 
     @Override
     public void registerObserver(CLIModelStateObserver observer) {
         this.observer = observer;
+    }
+
+    private class MessageReceivedListener implements SharkMessagesReceivedListener {
+        @Override
+        public void sharkMessagesReceived(CharSequence uri) {
+            try {
+                SharkMessageList messages = CLIModel.this.messengerComponent.getChannel(uri).getMessages();
+                CLIModel.this.observer.displayMessages(messages);
+
+            } catch (SharkMessengerException | IOException e) {
+                CLIModel.this.observer.onChannelDisappeared(uri.toString());
+            }
+        }
+    }
+
+    private class CredentialReceivedListener implements SharkCredentialReceivedListener {
+
+        @Override
+        public void credentialReceived(CredentialMessage credentialMessage) {
+            CLIModel.this.observer.displayCredentialMessage(credentialMessage);
+        }
     }
 }

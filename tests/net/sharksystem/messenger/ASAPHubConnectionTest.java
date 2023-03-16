@@ -86,7 +86,7 @@ public class ASAPHubConnectionTest {
         ASAPEncounterManager aliceEncounterManager = new ASAPEncounterManagerImpl(aliceConnectionHandler);
         ASAPEncounterManager bobEncounterManager = new ASAPEncounterManagerImpl(bobConnectionHandler);
 
-//        ////////////////////////// set up server socket and handle connection requests
+        //////////////////////////// set up server socket and handle connection requests
         TCPServerSocketAcceptor aliceTcpServerSocketAcceptor =
                 new TCPServerSocketAcceptor(portNumberAlice, aliceEncounterManager);
 

@@ -4,7 +4,7 @@ import net.sharksystem.utils.cmdline.control.CLICommand;
 import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
 
 /**
- * Command for displaying the log history to the user
+ * Command for displaying the log history to the user.
  */
 public class CLICShowLog extends CLICommand {
 
@@ -29,9 +29,4 @@ public class CLICShowLog extends CLICommand {
         return sb.toString();
     }
 
-    @Override
-    public String getDetailedDescription() {
-        return this.getDescription();
-        //TODO: add detailed description
-    }
 }

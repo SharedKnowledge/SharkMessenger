@@ -3,17 +3,17 @@ package net.sharksystem.utils.cmdline.control.commands.pki;
 import net.sharksystem.asap.utils.DateTimeHelper;
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.utils.cmdline.control.CLICQuestionnaireBuilder;
-import net.sharksystem.utils.cmdline.control.CLICSharkPeerArgument;
+import net.sharksystem.utils.cmdline.control.CLICKnownPeerArgument;
 import net.sharksystem.utils.cmdline.control.CLICommand;
 import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
 
 public class CLICGetKeysCreationTime extends CLICommand {
 
-    private final CLICSharkPeerArgument peer;
+    private final CLICKnownPeerArgument peer;
 
     public CLICGetKeysCreationTime(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
-        this.peer = new CLICSharkPeerArgument();
+        this.peer = new CLICKnownPeerArgument();
     }
 
     @Override
@@ -25,7 +25,7 @@ public class CLICGetKeysCreationTime extends CLICommand {
 
     @Override
     public void execute() throws Exception {
-        SharkPKIComponent pki = (SharkPKIComponent) this.peer.getValue().getComponent(SharkPKIComponent.class);
+        SharkPKIComponent pki = model.getPKIComponent();
         String creationTime = DateTimeHelper.long2DateString(pki.getKeysCreationTime());
 
         ui.printInfo("RSA key pairs were created at: " + creationTime);
@@ -38,8 +38,4 @@ public class CLICGetKeysCreationTime extends CLICommand {
         return sb.toString();
     }
 
-    @Override
-    public String getDetailedDescription() {
-        return this.getDescription();
-    }
 }

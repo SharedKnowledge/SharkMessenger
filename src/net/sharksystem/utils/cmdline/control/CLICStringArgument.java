@@ -10,7 +10,7 @@ public class CLICStringArgument extends CLICArgument<String> {
      * @return false, if the input is empty
      */
     @Override
-    public boolean tryParse(String input) {
+    public boolean tryParse(String input) throws Exception {
         if(super.tryParse(input)) {
             this.parsedInput = input;
             return true;

@@ -4,25 +4,21 @@ import net.sharksystem.messenger.SharkCommunicationAge;
 import net.sharksystem.utils.cmdline.control.*;
 
 public class CLICSetChannelAge extends CLICommand {
-
-    private final CLICStringArgument peerName;
     private final CLICChannelArgument channel;
     private final CLICStringArgument channelAge;
 
     public CLICSetChannelAge(String identifier, boolean rememberCommand) {
         super(identifier, rememberCommand);
-        this.peerName = new CLICStringArgument();
-        this.channel = new CLICChannelArgument(this.peerName);
+        this.channel = new CLICChannelArgument();
         channelAge = new CLICStringArgument();
     }
 
     @Override
     public CLICQuestionnaire specifyCommandStructure() {
-        return new CLICQuestionnaireBuilder().
-                addQuestion("Peer Name: ", this.peerName).
-                addQuestion("Channel URI: ", this.channel).
-                addQuestion("Channel age: ", this.channelAge).
-                build();
+        return new CLICQuestionnaireBuilder()
+                .addQuestion("Channel URI: ", this.channel)
+                .addQuestion("Channel age: ", this.channelAge)
+                .build();
     }
 
     @Override
@@ -38,8 +34,4 @@ public class CLICSetChannelAge extends CLICommand {
         return sb.toString();
     }
 
-    @Override
-    public String getDetailedDescription() {
-        return this.getDescription();
-    }
 }

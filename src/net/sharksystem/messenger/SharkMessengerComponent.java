@@ -2,7 +2,6 @@ package net.sharksystem.messenger;
 
 import net.sharksystem.ASAPFormats;
 import net.sharksystem.SharkComponent;
-import net.sharksystem.SharkUnknownBehaviourException;
 import net.sharksystem.pki.SharkPKIComponent;
 
 import java.io.IOException;
@@ -103,7 +102,7 @@ public interface SharkMessengerComponent extends SharkComponent {
 
     /*
         TODO: that is the Shark - Shared Knowledge. Find a way to allow projects to set its own application format
-        and make this the end of all thinking. What we have here is Shark. Finally it is.
+        and make this the end of all thinking. What we have here is Shark. Finally, it is.
      */
 
     String SHARK_MESSENGER_FORMAT = "shark/messenger";
