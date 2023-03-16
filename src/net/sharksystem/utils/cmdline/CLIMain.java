@@ -35,6 +35,7 @@ public class CLIMain {
 
         //PKI
         controller.addCommand(new CLICGetOwnerInfo("ownerInfo", true));
+        controller.addCommand(new CLICGetNumberOfKnownPeers("numPeers", true));
         controller.addCommand(new CLICCreateNewKeyPair("mkKeys", true));
         controller.addCommand(new CLICGetKeysCreationTime("keysTime", true));
         controller.addCommand(new CLICGetCertificatesByIssuer("certByIssuer", true));

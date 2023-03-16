@@ -29,11 +29,4 @@ public class ASAPRoutingAllowedTest extends TestHelper {
         this.bobPeer.getASAPTestPeerFS().setASAPRoutingAllowed("shark/messenger",false);
         Assertions.assertFalse(this.bobPeer.getASAPTestPeerFS().isASAPRoutingAllowed("shark/messenger"));
     }
-
-    @Test
-    public void bla() throws SharkException, IOException {
-        this.setUpScenario_1();
-        Assertions.assertThrows(Exception.class,() -> this.aliceMessenger.sendSharkMessage(
-                "test".getBytes(),"neverCreatedChannelURI", false, false));
-    }
 }

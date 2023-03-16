@@ -1,5 +1,6 @@
 package net.sharksystem.utils.cmdline.view;
 
+import net.sharksystem.pki.CredentialMessage;
 import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
 
 /**
@@ -20,4 +21,6 @@ public interface CLIInterface {
     void printError(String error);
 
     boolean letUserFillOutQuestionnaire(CLICQuestionnaire questionnaire);
+
+    void displayCredentialMessage(CredentialMessage credentialMessage);
 }

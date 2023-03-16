@@ -5,6 +5,8 @@ import net.sharksystem.SharkException;
 import net.sharksystem.SharkTestPeerFS;
 import net.sharksystem.messenger.SharkMessengerComponent;
 import net.sharksystem.messenger.SharkMessengerComponentFactory;
+import net.sharksystem.pki.CredentialMessage;
+import net.sharksystem.pki.SharkCredentialReceivedListener;
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.pki.SharkPKIComponentFactory;
 import net.sharksystem.utils.cmdline.control.CLICQuestionnaireBuilder;
@@ -56,6 +58,9 @@ public class CLICAddPeer extends CLICommand {
                 model.addPeer(peerName, peer);
                 peer.start();
 
+                model.getPKIFromPeer(peer).setSharkCredentialReceivedListener(credentialMessage ->
+                        ui.displayCredentialMessage(credentialMessage));
+
                 ui.printInfo(peerName + " was started!");
 
             } catch (SharkException e) {
@@ -76,4 +81,5 @@ public class CLICAddPeer extends CLICommand {
     public String getDetailedDescription() {
         return this.getDescription();
     }
+
 }

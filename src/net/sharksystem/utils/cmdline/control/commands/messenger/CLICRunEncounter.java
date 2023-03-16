@@ -36,6 +36,7 @@ public class CLICRunEncounter extends CLICommand {
         try {
             this.peer1.getValue().getASAPTestPeerFS().startEncounter(model.getNextFreePortNumber(), this.peer2.
                     getValue().getASAPTestPeerFS());
+            Thread.sleep(1000);
 
         } catch (SharkException | IOException e) {
             ui.printError(e.getLocalizedMessage());
