@@ -14,11 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CLIModel implements CLIModelInterface, CLIModelObservable {
-    private static final CharSequence ROOTFOLDER = "sharkComponent";
+    private static final CharSequence ROOTFOLDER = "sharkMessenger";
     private CLIModelStateObserver observer;
     private int startPortNumber = 7000;
     private final List<String> commands;
-    private SharkPeerFS messengerPeer;
+    private SharkPeerFS sharkPeerFS;
     private SharkMessengerComponent messengerComponent;
     private SharkPKIComponent pkiComponent;
 
@@ -29,7 +29,7 @@ public class CLIModel implements CLIModelInterface, CLIModelObservable {
 
     @Override
     public SharkPeerFS getPeer() {
-        return this.messengerPeer;
+        return this.sharkPeerFS;
     }
 
     @Override
@@ -78,28 +78,28 @@ public class CLIModel implements CLIModelInterface, CLIModelObservable {
         String username = "";
         if(observer != null) username = this.observer.getUsername();
 
-        this.messengerPeer = new SharkPeerFS(username, ROOTFOLDER + "/" + username);
+        this.sharkPeerFS = new SharkPeerFS(username, ROOTFOLDER + "/" + username);
 
-            SharkPKIComponentFactory pkiComponentFactory = new SharkPKIComponentFactory();
+        SharkPKIComponentFactory pkiComponentFactory = new SharkPKIComponentFactory();
 
-            messengerPeer.addComponent(pkiComponentFactory, SharkPKIComponent.class);
-            SharkMessengerComponentFactory messengerComponentFactory = new SharkMessengerComponentFactory(
-                    (SharkPKIComponent) messengerPeer.getComponent(SharkPKIComponent.class));
+        this.sharkPeerFS.addComponent(pkiComponentFactory, SharkPKIComponent.class);
+        SharkMessengerComponentFactory messengerComponentFactory = new SharkMessengerComponentFactory(
+                (SharkPKIComponent) sharkPeerFS.getComponent(SharkPKIComponent.class));
 
-            messengerPeer.addComponent(messengerComponentFactory, SharkMessengerComponent.class);
+        this.sharkPeerFS.addComponent(messengerComponentFactory, SharkMessengerComponent.class);
 
-            messengerPeer.start();
+        this.sharkPeerFS.start();
 
-            this.messengerComponent = (SharkMessengerComponent) this.messengerPeer.
-                    getComponent(SharkMessengerComponent.class);
+        this.messengerComponent = (SharkMessengerComponent) this.sharkPeerFS.
+                getComponent(SharkMessengerComponent.class);
 
-            this.messengerComponent.addSharkMessagesReceivedListener(new MessageReceivedListener());
+        this.messengerComponent.addSharkMessagesReceivedListener(new MessageReceivedListener());
 
-            this.pkiComponent = (SharkPKIComponent) this.messengerPeer.getComponent(SharkPKIComponent.class);
+        this.pkiComponent = (SharkPKIComponent) this.sharkPeerFS.getComponent(SharkPKIComponent.class);
 
-            this.pkiComponent.setSharkCredentialReceivedListener(new CredentialReceivedListener());
+        this.pkiComponent.setSharkCredentialReceivedListener(new CredentialReceivedListener());
 
-            this.observer.started();
+        this.observer.started();
     }
 
     @Override

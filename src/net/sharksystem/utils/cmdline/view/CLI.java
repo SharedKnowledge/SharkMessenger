@@ -7,7 +7,7 @@ import net.sharksystem.messenger.SharkMessage;
 import net.sharksystem.messenger.SharkMessageList;
 import net.sharksystem.messenger.SharkMessengerException;
 import net.sharksystem.pki.CredentialMessage;
-import net.sharksystem.utils.cmdline.control.*;
+import net.sharksystem.utils.cmdline.ui.*;
 import net.sharksystem.utils.cmdline.model.CLIModelObservable;
 
 import java.io.*;
@@ -39,11 +39,13 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
         this.standardOut = out;
         this.bufferedReader = new BufferedReader(new InputStreamReader(in));
         //redirect System.out here so that logging is better
+        /*
         System.setOut(new PrintStream(new OutputStream() {
             @Override
             public void write(int b) {
             }
         }, false));
+        */
 
         this.controller = controller;
         this.model = model;

@@ -1,6 +1,6 @@
 package net.sharksystem.utils.cmdline.view;
 
-import net.sharksystem.utils.cmdline.control.CLICQuestionnaire;
+import net.sharksystem.utils.cmdline.ui.CLICQuestionnaire;
 
 /**
  * Interface that allows the CLIController to inform the CLI over any changes
