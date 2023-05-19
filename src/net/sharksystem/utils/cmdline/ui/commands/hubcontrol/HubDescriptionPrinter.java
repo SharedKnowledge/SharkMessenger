@@ -4,8 +4,24 @@ import net.sharksystem.hub.ASAPHubException;
 import net.sharksystem.hub.peerside.HubConnectorDescription;
 
 import java.io.PrintStream;
+import java.util.List;
 
 public class HubDescriptionPrinter {
+    static void print(PrintStream ps, List<HubConnectorDescription> hcdList) {
+        if(hcdList == null || hcdList.isEmpty()) {
+            ps.println("no hub descriptions available");
+        }
+
+        boolean first = true;
+        int index = 0;
+        for(HubConnectorDescription hcd : hcdList) {
+            if(!first) ps.print('\n');
+            else first = false;
+            ps.print(index++ + ": ");
+            HubDescriptionPrinter.print(ps, hcd);
+        }
+    }
+
     static void print(PrintStream ps, HubConnectorDescription hcd) {
         try {
             CharSequence hostname = hcd.getHostName();

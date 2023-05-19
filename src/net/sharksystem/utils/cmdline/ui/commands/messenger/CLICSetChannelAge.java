@@ -2,14 +2,16 @@ package net.sharksystem.utils.cmdline.ui.commands.messenger;
 
 import net.sharksystem.messenger.SharkCommunicationAge;
 import net.sharksystem.utils.cmdline.SharkMessengerApp;
+import net.sharksystem.utils.cmdline.SharkMessengerUI;
 import net.sharksystem.utils.cmdline.ui.*;
 
 public class CLICSetChannelAge extends CLICommand {
     private final CLICChannelArgument channel;
     private final CLICStringArgument channelAge;
 
-    public CLICSetChannelAge(SharkMessengerApp sharkMessengerApp, String identifier, boolean rememberCommand) {
-        super(sharkMessengerApp, identifier, rememberCommand);
+    public CLICSetChannelAge(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                             String identifier, boolean rememberCommand) {
+        super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.channel = new CLICChannelArgument();
         channelAge = new CLICStringArgument();
     }

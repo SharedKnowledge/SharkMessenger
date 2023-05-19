@@ -2,6 +2,7 @@ package net.sharksystem.utils.cmdline.ui.commands.pki;
 
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.utils.cmdline.SharkMessengerApp;
+import net.sharksystem.utils.cmdline.SharkMessengerUI;
 import net.sharksystem.utils.cmdline.ui.CLICQuestionnaire;
 import net.sharksystem.utils.cmdline.ui.CLICQuestionnaireBuilder;
 import net.sharksystem.utils.cmdline.ui.CLICKnownPeerArgument;
@@ -17,8 +18,9 @@ public class CLICGetNumberOfKnownPeers extends CLICommand {
      * @param identifier      the identifier of the command
      * @param rememberCommand if the command should be saved in the history log
      */
-    public CLICGetNumberOfKnownPeers(SharkMessengerApp sharkMessengerApp, String identifier, boolean rememberCommand) {
-        super(sharkMessengerApp, identifier, rememberCommand);
+    public CLICGetNumberOfKnownPeers(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                                     String identifier, boolean rememberCommand) {
+        super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.owner = new CLICKnownPeerArgument();
     }
 

@@ -1,6 +1,7 @@
 package net.sharksystem.utils.cmdline.ui.commands.general;
 
 import net.sharksystem.utils.cmdline.SharkMessengerApp;
+import net.sharksystem.utils.cmdline.SharkMessengerUI;
 import net.sharksystem.utils.cmdline.ui.CLICommand;
 import net.sharksystem.utils.cmdline.ui.CLICQuestionnaire;
 
@@ -10,8 +11,9 @@ import net.sharksystem.utils.cmdline.ui.CLICQuestionnaire;
 public class CLICExit extends CLICommand {
 
 
-    public CLICExit(SharkMessengerApp sharkMessengerApp, String identifier, boolean rememberCommand) {
-        super(sharkMessengerApp, identifier, rememberCommand);
+    public CLICExit(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                    String identifier, boolean rememberCommand) {
+        super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
     }
 
     @Override

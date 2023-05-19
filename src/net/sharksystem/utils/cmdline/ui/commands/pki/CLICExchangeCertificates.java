@@ -3,13 +3,15 @@ package net.sharksystem.utils.cmdline.ui.commands.pki;
 import net.sharksystem.pki.CredentialMessage;
 import net.sharksystem.pki.SharkCredentialReceivedListener;
 import net.sharksystem.utils.cmdline.SharkMessengerApp;
+import net.sharksystem.utils.cmdline.SharkMessengerUI;
 import net.sharksystem.utils.cmdline.ui.*;
 
 public class CLICExchangeCertificates extends CLICommand implements SharkCredentialReceivedListener {
     private final CLICKnownPeerArgument subject;
 
-    public CLICExchangeCertificates(SharkMessengerApp sharkMessengerApp, String identifier, boolean rememberCommand) {
-        super(sharkMessengerApp, identifier, rememberCommand);
+    public CLICExchangeCertificates(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                                    String identifier, boolean rememberCommand) {
+        super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.subject = new CLICKnownPeerArgument();
     }
 

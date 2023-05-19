@@ -3,6 +3,7 @@ package net.sharksystem.utils.cmdline.ui.commands.hubcontrol;
 import net.sharksystem.hub.peerside.HubConnectorDescription;
 import net.sharksystem.hub.peerside.TCPHubConnectorDescriptionImpl;
 import net.sharksystem.utils.cmdline.SharkMessengerApp;
+import net.sharksystem.utils.cmdline.SharkMessengerUI;
 import net.sharksystem.utils.cmdline.ui.*;
 
 public class CLICAddHubDescription extends CLICommand {
@@ -10,8 +11,9 @@ public class CLICAddHubDescription extends CLICommand {
     private CLICIntegerArgument hubPort = new CLICIntegerArgument();
     private CLICBooleanArgument multiChannel = new CLICBooleanArgument();
 
-    public CLICAddHubDescription(SharkMessengerApp sharkMessengerApp, String identifier, boolean rememberCommand) {
-        super(sharkMessengerApp, identifier, rememberCommand);
+    public CLICAddHubDescription(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                                 String identifier, boolean rememberCommand) {
+        super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
     }
 
     @Override

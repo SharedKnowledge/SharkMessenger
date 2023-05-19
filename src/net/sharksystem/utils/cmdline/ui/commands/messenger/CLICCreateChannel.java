@@ -4,6 +4,7 @@ import net.sharksystem.SharkException;
 import net.sharksystem.SharkPeerFS;
 import net.sharksystem.messenger.SharkMessengerComponent;
 import net.sharksystem.utils.cmdline.SharkMessengerApp;
+import net.sharksystem.utils.cmdline.SharkMessengerUI;
 import net.sharksystem.utils.cmdline.ui.CLICommand;
 import net.sharksystem.utils.cmdline.ui.CLICBooleanArgument;
 import net.sharksystem.utils.cmdline.ui.CLICQuestionnaire;
@@ -17,8 +18,9 @@ public class CLICCreateChannel extends CLICommand {
     private final CLICStringArgument channelName;
     private final CLICBooleanArgument channelMustNotExist;
 
-    public CLICCreateChannel(SharkMessengerApp sharkMessengerApp, String identifier, boolean rememberCommand) {
-        super(sharkMessengerApp, identifier, rememberCommand);
+    public CLICCreateChannel(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                             String identifier, boolean rememberCommand) {
+        super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.channelUri = new CLICStringArgument();
         this.channelName = new CLICStringArgument();
         this.channelMustNotExist = new CLICBooleanArgument();

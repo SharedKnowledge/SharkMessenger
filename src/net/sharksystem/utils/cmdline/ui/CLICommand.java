@@ -1,6 +1,7 @@
 package net.sharksystem.utils.cmdline.ui;
 
 import net.sharksystem.utils.cmdline.SharkMessengerApp;
+import net.sharksystem.utils.cmdline.SharkMessengerUI;
 import net.sharksystem.utils.cmdline.model.CLIModelInterface;
 import net.sharksystem.utils.cmdline.view.CLIInterface;
 
@@ -35,10 +36,14 @@ public abstract class CLICommand {
      */
     protected static CLIControllerInterface controller = CLIController.getController();
     private final SharkMessengerApp sharkMessengerApp;
+    private final SharkMessengerUI sharkMessengerUI;
     private PrintStream printStream;
 
     protected SharkMessengerApp getSharkMessengerApp() {
         return this.sharkMessengerApp;
+    }
+    protected SharkMessengerUI getSharkMessengerUI() {
+        return this.sharkMessengerUI;
     }
 
     protected PrintStream getPrintStream() {
@@ -50,8 +55,10 @@ public abstract class CLICommand {
      * @param identifier The identifier of the command.
      * @param rememberCommand If the command should be saved in the history log.
      */
-    public CLICommand(SharkMessengerApp sharkMessengerApp, String identifier, boolean rememberCommand) {
+    public CLICommand(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                      String identifier, boolean rememberCommand) {
         this.sharkMessengerApp = sharkMessengerApp;
+        this.sharkMessengerUI = sharkMessengerUI;
         this.identifier = identifier;
         this.rememberCommand = rememberCommand;
     }
@@ -63,8 +70,10 @@ public abstract class CLICommand {
      */
     public void startCommandExecution() throws Exception {
         CLICQuestionnaire questionnaire = this.specifyCommandStructure();
-        if(questionnaire != null && !CLIController.getView().letUserFillOutQuestionnaire(questionnaire)) {
-            ui.commandWasTerminated(this.identifier);
+//        if(questionnaire != null && !CLIController.getView().letUserFillOutQuestionnaire(questionnaire)) {
+        if(questionnaire != null && !this.sharkMessengerUI.letUserFillOutQuestionnaire(questionnaire)) {
+//            ui.commandWasTerminated(this.identifier);
+            this.sharkMessengerUI.commandWasTerminated(this.identifier);
         } else {
             this.execute();
         }

@@ -3,18 +3,18 @@ package net.sharksystem.utils.cmdline.model;
 import net.sharksystem.SharkException;
 import net.sharksystem.SharkPeerFS;
 import net.sharksystem.messenger.*;
-import net.sharksystem.pki.CredentialMessage;
-import net.sharksystem.pki.SharkCredentialReceivedListener;
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.pki.SharkPKIComponentFactory;
+import net.sharksystem.utils.cmdline.CredentialReceivedListener;
+import net.sharksystem.utils.cmdline.MessageReceivedListener;
 import net.sharksystem.utils.cmdline.view.CLIModelStateObserver;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CLIModel implements CLIModelInterface, CLIModelObservable {
     private static final CharSequence ROOTFOLDER = "sharkMessenger";
+    private final String peerName;
     private CLIModelStateObserver observer;
     private int startPortNumber = 7000;
     private final List<String> commands;
@@ -23,7 +23,8 @@ public class CLIModel implements CLIModelInterface, CLIModelObservable {
     private SharkPKIComponent pkiComponent;
 
 
-    public CLIModel() {
+    public CLIModel(String peerName) {
+        this.peerName = peerName;
         this.commands = new ArrayList<>();
     }
 
@@ -75,31 +76,36 @@ public class CLIModel implements CLIModelInterface, CLIModelObservable {
 
     @Override
     public void start() throws SharkException {
-        String username = "";
-        if(observer != null) username = this.observer.getUsername();
+    /*
+        this.sharkPeerFS = new SharkPeerFS(this.peerName, ROOTFOLDER + "/" + this.peerName);
 
-        this.sharkPeerFS = new SharkPeerFS(username, ROOTFOLDER + "/" + username);
+        // set up shark components
 
+        // get PKI factory
         SharkPKIComponentFactory pkiComponentFactory = new SharkPKIComponentFactory();
 
+        // tell peer
         this.sharkPeerFS.addComponent(pkiComponentFactory, SharkPKIComponent.class);
+
+        // get messenger factory with pki component as parameter.
         SharkMessengerComponentFactory messengerComponentFactory = new SharkMessengerComponentFactory(
                 (SharkPKIComponent) sharkPeerFS.getComponent(SharkPKIComponent.class));
 
+        // tell peer
         this.sharkPeerFS.addComponent(messengerComponentFactory, SharkMessengerComponent.class);
 
+        // all component in place - start peer
         this.sharkPeerFS.start();
 
+        // get component to add listener
         this.messengerComponent = (SharkMessengerComponent) this.sharkPeerFS.
                 getComponent(SharkMessengerComponent.class);
+        this.messengerComponent.addSharkMessagesReceivedListener(new MessageReceivedListener(this));
 
-        this.messengerComponent.addSharkMessagesReceivedListener(new MessageReceivedListener());
-
+        // get component to add listener
         this.pkiComponent = (SharkPKIComponent) this.sharkPeerFS.getComponent(SharkPKIComponent.class);
-
-        this.pkiComponent.setSharkCredentialReceivedListener(new CredentialReceivedListener());
-
-        this.observer.started();
+        this.pkiComponent.setSharkCredentialReceivedListener(new CredentialReceivedListener(this));
+     */
     }
 
     @Override
@@ -107,24 +113,4 @@ public class CLIModel implements CLIModelInterface, CLIModelObservable {
         this.observer = observer;
     }
 
-    private class MessageReceivedListener implements SharkMessagesReceivedListener {
-        @Override
-        public void sharkMessagesReceived(CharSequence uri) {
-            try {
-                SharkMessageList messages = CLIModel.this.messengerComponent.getChannel(uri).getMessages();
-                CLIModel.this.observer.displayMessages(messages);
-
-            } catch (SharkMessengerException | IOException e) {
-                CLIModel.this.observer.onChannelDisappeared(uri.toString());
-            }
-        }
-    }
-
-    private class CredentialReceivedListener implements SharkCredentialReceivedListener {
-
-        @Override
-        public void credentialReceived(CredentialMessage credentialMessage) {
-            CLIModel.this.observer.displayCredentialMessage(credentialMessage);
-        }
-    }
 }

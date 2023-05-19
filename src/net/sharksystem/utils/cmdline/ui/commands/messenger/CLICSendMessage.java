@@ -3,6 +3,7 @@ package net.sharksystem.utils.cmdline.ui.commands.messenger;
 import net.sharksystem.SharkException;
 import net.sharksystem.messenger.SharkMessengerComponent;
 import net.sharksystem.utils.cmdline.SharkMessengerApp;
+import net.sharksystem.utils.cmdline.SharkMessengerUI;
 import net.sharksystem.utils.cmdline.ui.*;
 import net.sharksystem.utils.cmdline.model.CLIModelInterface;
 
@@ -18,8 +19,9 @@ public class CLICSendMessage extends CLICommand {
     private final CLICStringArgument receivers;
 
 
-    public CLICSendMessage(SharkMessengerApp sharkMessengerApp, String identifier, boolean rememberCommand) {
-        super(sharkMessengerApp, identifier, rememberCommand);
+    public CLICSendMessage(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                           String identifier, boolean rememberCommand) {
+        super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.channel = new CLICChannelArgument();
         this.sign = new CLICBooleanArgument();
         this.encrypt = new CLICBooleanArgument();

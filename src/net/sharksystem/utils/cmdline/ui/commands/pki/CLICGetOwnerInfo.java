@@ -2,6 +2,7 @@ package net.sharksystem.utils.cmdline.ui.commands.pki;
 
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.utils.cmdline.SharkMessengerApp;
+import net.sharksystem.utils.cmdline.SharkMessengerUI;
 import net.sharksystem.utils.cmdline.ui.CLICQuestionnaireBuilder;
 import net.sharksystem.utils.cmdline.ui.CLICKnownPeerArgument;
 import net.sharksystem.utils.cmdline.ui.CLICommand;
@@ -11,8 +12,9 @@ public class CLICGetOwnerInfo extends CLICommand {
 
     private final CLICKnownPeerArgument peer;
 
-    public CLICGetOwnerInfo(SharkMessengerApp sharkMessengerApp, String identifier, boolean rememberCommand) {
-        super(sharkMessengerApp, identifier, rememberCommand);
+    public CLICGetOwnerInfo(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                            String identifier, boolean rememberCommand) {
+        super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.peer = new CLICKnownPeerArgument();
     }
 

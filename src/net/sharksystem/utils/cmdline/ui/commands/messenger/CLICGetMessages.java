@@ -4,6 +4,7 @@ import net.sharksystem.SharkException;
 import net.sharksystem.messenger.SharkMessage;
 import net.sharksystem.messenger.SharkMessageList;
 import net.sharksystem.utils.cmdline.SharkMessengerApp;
+import net.sharksystem.utils.cmdline.SharkMessengerUI;
 import net.sharksystem.utils.cmdline.ui.*;
 
 import java.io.IOException;
@@ -13,8 +14,9 @@ public class CLICGetMessages extends CLICommand {
 
     private final CLICChannelArgument channel;
 
-    public CLICGetMessages(SharkMessengerApp sharkMessengerApp, String identifier, boolean rememberCommand) {
-        super(sharkMessengerApp, identifier, rememberCommand);
+    public CLICGetMessages(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                           String identifier, boolean rememberCommand) {
+        super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.channel = new CLICChannelArgument();
     }
 

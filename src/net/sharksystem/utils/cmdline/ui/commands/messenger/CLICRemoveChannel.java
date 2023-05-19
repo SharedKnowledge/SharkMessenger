@@ -3,6 +3,7 @@ package net.sharksystem.utils.cmdline.ui.commands.messenger;
 import net.sharksystem.SharkException;
 import net.sharksystem.messenger.SharkMessengerComponent;
 import net.sharksystem.utils.cmdline.SharkMessengerApp;
+import net.sharksystem.utils.cmdline.SharkMessengerUI;
 import net.sharksystem.utils.cmdline.ui.*;
 
 import java.io.IOException;
@@ -12,8 +13,9 @@ public class CLICRemoveChannel extends CLICommand {
     private final CLICChannelArgument channel;
 
 
-    public CLICRemoveChannel(SharkMessengerApp sharkMessengerApp, String identifier, boolean rememberCommand) {
-        super(sharkMessengerApp, identifier, rememberCommand);
+    public CLICRemoveChannel(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                             String identifier, boolean rememberCommand) {
+        super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.channel = new CLICChannelArgument();
     }
 

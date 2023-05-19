@@ -2,6 +2,7 @@ package net.sharksystem.utils.cmdline.ui.commands.pki;
 
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.utils.cmdline.SharkMessengerApp;
+import net.sharksystem.utils.cmdline.SharkMessengerUI;
 import net.sharksystem.utils.cmdline.ui.CLICQuestionnaireBuilder;
 import net.sharksystem.utils.cmdline.ui.CLICKnownPeerArgument;
 import net.sharksystem.utils.cmdline.ui.CLICommand;
@@ -11,8 +12,9 @@ public class CLICGetSigningFailureRate extends CLICommand {
 
     private final CLICKnownPeerArgument subject;
 
-    public CLICGetSigningFailureRate(SharkMessengerApp sharkMessengerApp, String identifier, boolean rememberCommand) {
-        super(sharkMessengerApp, identifier, rememberCommand);
+    public CLICGetSigningFailureRate(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                                     String identifier, boolean rememberCommand) {
+        super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.subject = new CLICKnownPeerArgument();
     }
 

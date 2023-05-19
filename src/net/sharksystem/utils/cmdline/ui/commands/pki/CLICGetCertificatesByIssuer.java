@@ -3,6 +3,7 @@ package net.sharksystem.utils.cmdline.ui.commands.pki;
 import net.sharksystem.asap.pki.ASAPCertificate;
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.utils.cmdline.SharkMessengerApp;
+import net.sharksystem.utils.cmdline.SharkMessengerUI;
 import net.sharksystem.utils.cmdline.ui.CLICQuestionnaireBuilder;
 import net.sharksystem.utils.cmdline.ui.CLICKnownPeerArgument;
 import net.sharksystem.utils.cmdline.ui.CLICommand;
@@ -13,8 +14,9 @@ import java.util.Collection;
 public class CLICGetCertificatesByIssuer extends CLICommand {
 
     private final CLICKnownPeerArgument issuer;
-    public CLICGetCertificatesByIssuer(SharkMessengerApp sharkMessengerApp, String identifier, boolean rememberCommand) {
-        super(sharkMessengerApp, identifier, rememberCommand);
+    public CLICGetCertificatesByIssuer(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                                       String identifier, boolean rememberCommand) {
+        super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.issuer = new CLICKnownPeerArgument();
     }
 

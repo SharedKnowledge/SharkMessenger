@@ -1,6 +1,7 @@
 package net.sharksystem.utils.cmdline.ui.commands.messenger;
 
 import net.sharksystem.utils.cmdline.SharkMessengerApp;
+import net.sharksystem.utils.cmdline.SharkMessengerUI;
 import net.sharksystem.utils.cmdline.ui.*;
 
 @Deprecated
@@ -11,8 +12,9 @@ public class CLICRunEncounter extends CLICommand {
     private final CLICBooleanArgument stopExchange;
 
 
-    public CLICRunEncounter(SharkMessengerApp sharkMessengerApp, String identifier, boolean rememberCommand) {
-        super(sharkMessengerApp, identifier, rememberCommand);
+    public CLICRunEncounter(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                            String identifier, boolean rememberCommand) {
+        super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.peer1 = new CLICKnownPeerArgument();
         this.peer2 = new CLICKnownPeerArgument();
         this.stopExchange = new CLICBooleanArgument();

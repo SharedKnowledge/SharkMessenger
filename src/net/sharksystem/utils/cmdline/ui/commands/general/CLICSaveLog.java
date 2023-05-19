@@ -1,6 +1,7 @@
 package net.sharksystem.utils.cmdline.ui.commands.general;
 
 import net.sharksystem.utils.cmdline.SharkMessengerApp;
+import net.sharksystem.utils.cmdline.SharkMessengerUI;
 import net.sharksystem.utils.cmdline.ui.CLICQuestionnaireBuilder;
 import net.sharksystem.utils.cmdline.ui.CLICommand;
 import net.sharksystem.utils.cmdline.ui.CLICQuestionnaire;
@@ -18,8 +19,9 @@ public class CLICSaveLog extends CLICommand {
 
     private final CLICStringArgument fileName;
 
-    public CLICSaveLog(SharkMessengerApp sharkMessengerApp, String identifier, boolean rememberCommand) {
-        super(sharkMessengerApp, identifier, rememberCommand);
+    public CLICSaveLog(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                       String identifier, boolean rememberCommand) {
+        super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.fileName = new CLICStringArgument();
     }
 

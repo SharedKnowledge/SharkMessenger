@@ -2,6 +2,7 @@ package net.sharksystem.utils.cmdline.ui.commands.messenger;
 
 import net.sharksystem.asap.ASAPHop;
 import net.sharksystem.utils.cmdline.SharkMessengerApp;
+import net.sharksystem.utils.cmdline.SharkMessengerUI;
 import net.sharksystem.utils.cmdline.ui.*;
 
 import java.util.List;
@@ -10,8 +11,9 @@ public class CLICGetHopList extends CLICommand {
     private final CLICChannelArgument channel;
     private final CLICIntegerArgument position;
 
-    public CLICGetHopList(SharkMessengerApp sharkMessengerApp, String identifier, boolean rememberCommand) {
-        super(sharkMessengerApp, identifier, rememberCommand);
+    public CLICGetHopList(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                          String identifier, boolean rememberCommand) {
+        super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.channel = new CLICChannelArgument();
         this.position = new CLICIntegerArgument();
     }
