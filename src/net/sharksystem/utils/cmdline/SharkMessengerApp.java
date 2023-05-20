@@ -1,18 +1,19 @@
 package net.sharksystem.utils.cmdline;
 
-import net.sharksystem.SharkConnectionManager;
 import net.sharksystem.SharkException;
 import net.sharksystem.SharkPeer;
 import net.sharksystem.SharkPeerFS;
+import net.sharksystem.asap.ASAPConnectionHandler;
 import net.sharksystem.asap.ASAPEncounterManager;
 import net.sharksystem.asap.ASAPEncounterManagerImpl;
-import net.sharksystem.hub.peerside.ASAPHubManager;
-import net.sharksystem.hub.peerside.ASAPHubManagerImpl;
+import net.sharksystem.asap.ASAPPeer;
+import net.sharksystem.hub.HubConnectionManager;
+import net.sharksystem.hub.HubConnectionManagerImpl;
 import net.sharksystem.messenger.SharkMessengerComponent;
 import net.sharksystem.messenger.SharkMessengerComponentFactory;
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.pki.SharkPKIComponentFactory;
-import net.sharksystem.serviceSide.SharkPeerFSServiceSide;
+import net.sharksystem.utils.Log;
 
 /**
  * Proposed and suggested pattern for Shark app. Implement a central entity (could even be a singleton)
@@ -24,9 +25,10 @@ public class SharkMessengerApp {
     private static final CharSequence ROOTFOLDER = "sharkMessenger";
     private final SharkMessengerComponent messengerComponent;
     private final SharkPKIComponent pkiComponent;
+    private final HubConnectionManager hubConnectionManager;
 
     SharkMessengerApp(String peerName) throws SharkException {
-        this.sharkPeerFS = new SharkPeerFSServiceSide(peerName, ROOTFOLDER + "/" + peerName);
+        this.sharkPeerFS = new SharkPeerFS(peerName, ROOTFOLDER + "/" + peerName);
 
         // set up shark components
 
@@ -54,6 +56,20 @@ public class SharkMessengerApp {
         // get component to add listener
         this.pkiComponent = (SharkPKIComponent) this.sharkPeerFS.getComponent(SharkPKIComponent.class);
         this.pkiComponent.setSharkCredentialReceivedListener(new CredentialReceivedListener(this));
+
+        //////////////////////// setup hub connection management
+        // TODO: that's still a design flaw. We need something that extracts a connection handler from a peer. Do we?
+        ASAPPeer asapPeer = this.sharkPeerFS.getASAPPeer();
+        // this code runs on service side - this peer should be a connection handler
+        if (asapPeer instanceof ASAPConnectionHandler) { // TODO: aaaaargs
+            // yes it is
+            ASAPEncounterManager encounterManager = new ASAPEncounterManagerImpl((ASAPConnectionHandler) asapPeer);
+            this.hubConnectionManager = new HubConnectionManagerImpl(encounterManager, asapPeer);
+        } else {
+            Log.writeLogErr(this,
+                    "ASAP peer set but is not a connection handler - cannot set up connection management");
+            throw new SharkException("Cannot set up connection management, see error logs.");
+        }
     }
 
     public SharkPeer getSharkPeer() {
@@ -64,7 +80,7 @@ public class SharkMessengerApp {
         return this.messengerComponent;
     }
 
-    public SharkConnectionManager getSharkConnectionManager() throws SharkException {
-        return this.sharkPeerFS.getSharkConnectionManager();
+    public HubConnectionManager getSharkConnectionManager() throws SharkException {
+        return this.hubConnectionManager;
     }
 }
