@@ -2,7 +2,6 @@ package net.sharksystem.utils.cmdline.ui.commands.hubcontrol;
 
 import net.sharksystem.asap.utils.DateTimeHelper;
 import net.sharksystem.hub.HubConnectionManager;
-import net.sharksystem.hub.peerside.HubConnectorDescription;
 import net.sharksystem.utils.cmdline.SharkMessengerApp;
 import net.sharksystem.utils.cmdline.SharkMessengerUI;
 import net.sharksystem.utils.cmdline.ui.CLICQuestionnaire;
@@ -26,10 +25,10 @@ public class CLICListConnectedHubs extends CLICommand {
     protected void execute() throws Exception {
         this.getPrintStream().println("connected hubs:");
         HubDescriptionPrinter.print(this.getPrintStream(),
-                this.getSharkMessengerApp().getSharkConnectionManager().getConnectedHubs());
+                this.getSharkMessengerApp().getHubConnectionManager().getConnectedHubs());
 
         List<HubConnectionManager.FailedConnectionAttempt> failedConnectionAttemptsList =
-                this.getSharkMessengerApp().getSharkConnectionManager().getFailedConnectionAttempts();
+                this.getSharkMessengerApp().getHubConnectionManager().getFailedConnectionAttempts();
         if(!failedConnectionAttemptsList.isEmpty()) {
             this.getPrintStream().println("failed connection attempts:");
             for(HubConnectionManager.FailedConnectionAttempt failedConnectionAttempt : failedConnectionAttemptsList) {

@@ -31,7 +31,7 @@ public class CLICConnectHub extends CLICommand {
         this.getSharkMessengerUI().getOutStream().println("try to connect to hub");
         HubDescriptionPrinter.print(this.getSharkMessengerUI().getOutStream(), hubDescription);
 
-        this.getSharkMessengerApp().getSharkConnectionManager().connectHub(hubDescription);
+        this.getSharkMessengerApp().getHubConnectionManager().connectHub(hubDescription);
     }
 
     @Override

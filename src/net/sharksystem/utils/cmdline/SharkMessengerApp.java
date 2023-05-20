@@ -80,7 +80,7 @@ public class SharkMessengerApp {
         return this.messengerComponent;
     }
 
-    public HubConnectionManager getSharkConnectionManager() throws SharkException {
+    public HubConnectionManager getHubConnectionManager() throws SharkException {
         return this.hubConnectionManager;
     }
 }

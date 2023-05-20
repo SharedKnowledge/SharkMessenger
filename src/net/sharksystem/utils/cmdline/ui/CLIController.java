@@ -9,6 +9,8 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
+// Kann weg, inklusive der Interfaces, siehe Kommentare im Model.
+// Die Nutzung des Command-Patterns für die Kommandos ist sehr nett.
 public class CLIController implements CLIControllerInterface, CLIControllerStrategyInterface {
 
     private final List<CLICommand> commands;

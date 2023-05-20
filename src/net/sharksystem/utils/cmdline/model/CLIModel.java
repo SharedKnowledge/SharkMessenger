@@ -11,7 +11,10 @@ import net.sharksystem.utils.cmdline.view.CLIModelStateObserver;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/* TODO: kann weg. Ganze Package kann weg. Das gesamte Projekt ist ein View. Das noch einmal in MVC zu teilen
+ist nunja - viel. Auch unnötig. Das sind einfach Algorithmen und Multithreading findet in ASAP statt - nicht hier,
+weshalb man auch keine Observer braucht. Das macht alles sehr wenig übersichtlich und schwer zu warten.
+*/
 public class CLIModel implements CLIModelInterface, CLIModelObservable {
     private static final CharSequence ROOTFOLDER = "sharkMessenger";
     private final String peerName;
