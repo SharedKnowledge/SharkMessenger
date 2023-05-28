@@ -5,6 +5,7 @@ import net.sharksystem.SharkTestPeerFS;
 import net.sharksystem.SortedMessage;
 import net.sharksystem.SortedMessageFactory;
 import net.sharksystem.asap.ASAPSecurityException;
+import net.sharksystem.asap.utils.PeerIDHelper;
 import net.sharksystem.pki.SharkPKIComponent;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
@@ -54,9 +55,11 @@ public class MessageExchangeTests extends TestHelper {
         System.out.println("slept a moment");
 
         if(stop) {
-            System.out.println(">>>>>>>>>>>>>>>>>  stop encounter: "
+            System.out.println("############################################################################");
+            System.out.println("                   stop encounter: "
                     + leftPeer.getASAPPeer().getPeerID() + " <--> " + rightPeer.getASAPPeer().getPeerID());
             leftPeer.getASAPTestPeerFS().stopEncounter(rightPeer.getASAPTestPeerFS());
+            System.out.println("############################################################################");
             Thread.sleep(100);
         }
     }
@@ -261,169 +264,146 @@ public class MessageExchangeTests extends TestHelper {
     }
 
     /**
-     * Clara sends two messages (unsigned and encrypted) to B and A afterwards. Both can decrypt.
-     * B is assured of Clara identity, Alice has no clue.
+     * Clara sends two messages (unsigned and encrypted) to B and A. She encounters Bob an Alice.
+     * Both receive both message. Both (Alice and Bob) see each other as recipients but can only decrypt their
+     * own message.
      */
     @Test
     public void test1_5() throws SharkException, IOException, InterruptedException {
         this.setUpScenario_1();
 
-        // send two encrypted message - one for Bob, another for Alice.
+        // Clara sends two encrypted message for Bob and Alice. She can, is in possession of both public keys
         this.claraMessenger.sendSharkMessage(MESSAGE_BYTE, URI, this.bobPeer.getPeerID(), false, true);
         this.claraMessenger.sendSharkMessage(MESSAGE_BYTE, URI, this.alicePeer.getPeerID(), false, true);
 
         ///////////////////////////////// Encounter Clara - Bob ////////////////////////////////////////////////////
         this.runEncounter(this.claraPeer, this.bobPeer, true);
 
-        // Did Bob get Clara's messages?
+        // Did Bob receive both messages from Clara?
         SharkMessengerChannel bobChannel = this.bobMessenger.getChannel(URI);
         SharkMessageList bobChannelMessages = bobChannel.getMessages();
         Assertions.assertEquals(2, bobChannelMessages.size());
-        int posOfBobMsg = this.oneEncryptableOneIsNot(bobChannelMessages);
-        int posOfAliceMsg = 1 - posOfBobMsg;
 
-        // make sure Bob can encrypt his message
-        SharkMessage sharkMessage = bobChannelMessages.getSharkMessage(posOfBobMsg, true);
-        Assertions.assertNotNull(sharkMessage);
-        Assertions.assertTrue(this.claraPeer.samePeer(sharkMessage.getSender()));
-        Assertions.assertTrue(sharkMessage.encrypted());
-        Assertions.assertFalse(sharkMessage.verified());
-        Assertions.assertArrayEquals(MESSAGE_BYTE, sharkMessage.getContent());
-
-        // make sure Bob cannot decipher any information about the encrypted (Alice's) message
-        sharkMessage = bobChannelMessages.getSharkMessage(posOfAliceMsg, true);
-        Assertions.assertNotNull(sharkMessage);
-        Assertions.assertTrue(sharkMessage.encrypted()); // TODO message was encrypted --> therefore return true
-//        Assertions.assertFalse(sharkMessage.verified()); // TODO but this is encrypted
-//        Assertions.assertArrayEquals(MESSAGE_BYTE, sharkMessage.getContent());
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::verified);
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::getSender);
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::getRecipients);
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::getCreationTime);
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::getASAPHopsList);
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::getContent);
+        // one is for him and can be encrypted - the other one for alice - Bob cannot read it
+        for(int index = 0; index < 2; index++) {
+            SharkMessage sharkMessage = bobChannelMessages.getSharkMessage(index, true);
+            // first - there is a message
+            Assertions.assertNotNull(sharkMessage);
+            // it is encrypted
+            Assertions.assertTrue(sharkMessage.encrypted());
+            // we can see recipients
+            Set<CharSequence> recipients = sharkMessage.getRecipients();
+            // there is just a single recipient
+            Assertions.assertEquals(1, recipients.size());
+            CharSequence recipient = recipients.iterator().next();
+            if(PeerIDHelper.sameID(recipient, this.bobPeer.getPeerID())) {
+                // bob can decrypt his message
+                Assertions.assertArrayEquals(MESSAGE_BYTE, sharkMessage.getContent());
+                // he can see sender
+                Assertions.assertTrue(PeerIDHelper.sameID(sharkMessage.getSender(), this.claraPeer.getPeerID()));
+            } else if(PeerIDHelper.sameID(recipient, this.alicePeer.getPeerID())) {
+                // Bob cannot decrypt Alice' message
+                Assertions.assertFalse(sharkMessage.couldBeDecrypted());
+                Assertions.assertThrows(SharkException.class, () -> sharkMessage.getContent());
+            } else {
+                Assertions.fail("unknown recipient, neither Bob nor Alice");
+            }
+        }
 
         ///////////////////////////////// Encounter Alice - Clara ////////////////////////////////////////////////////
         this.runEncounter(this.alicePeer, this.claraPeer, true);
 
-        // Did Alice get Clara's messages?
-        SharkMessengerChannel aliceChannelChannel = this.aliceMessenger.getChannel(URI);
-        SharkMessageList aliceChannelMessages = aliceChannelChannel.getMessages();
+        // Did Bob receive both messages from Clara?
+        SharkMessengerChannel aliceChannel = this.aliceMessenger.getChannel(URI);
+        SharkMessageList aliceChannelMessages = aliceChannel.getMessages();
         Assertions.assertEquals(2, aliceChannelMessages.size());
-        posOfAliceMsg = this.oneEncryptableOneIsNot(aliceChannelMessages);
-        posOfBobMsg = 1 - posOfAliceMsg;
 
-        // make sure Alice can encrypt her message
-        sharkMessage = aliceChannelMessages.getSharkMessage(posOfAliceMsg, true);
-        Assertions.assertNotNull(sharkMessage);
-        Assertions.assertTrue(this.claraPeer.samePeer(sharkMessage.getSender()));
-        Assertions.assertTrue(sharkMessage.encrypted());
-        Assertions.assertFalse(sharkMessage.verified());
-        Assertions.assertArrayEquals(MESSAGE_BYTE, sharkMessage.getContent());
-
-        // make sure Alice cannot decipher any information about the encrypted message
-        sharkMessage = aliceChannelMessages.getSharkMessage(posOfBobMsg, true);
-        Assertions.assertNotNull(sharkMessage);
-        Assertions.assertTrue(sharkMessage.encrypted()); // TODO message was encrypted --> therefore return true
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::verified);
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::getSender);
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::getRecipients);
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::getCreationTime);
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::getASAPHopsList);
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::getContent);
+        for(int index = 0; index < 2; index++) {
+            // we only check for decipherability - rest is already tested
+            SharkMessage sharkMessage = aliceChannelMessages.getSharkMessage(index, true);
+            Set<CharSequence> recipients = sharkMessage.getRecipients();
+            CharSequence recipient = recipients.iterator().next();
+            if(PeerIDHelper.sameID(recipient, this.alicePeer.getPeerID())) {
+                // Alice can decipher her message
+                Assertions.assertArrayEquals(MESSAGE_BYTE, sharkMessage.getContent());
+            } else if(PeerIDHelper.sameID(recipient, this.bobPeer.getPeerID())) {
+                // Alice cannot decrypt Bobs' message
+                Assertions.assertFalse(sharkMessage.couldBeDecrypted());
+                Assertions.assertThrows(SharkException.class, () -> sharkMessage.getContent());
+            } else {
+                Assertions.fail("unknown recipient, neither Bob nor Alice");
+            }
+        }
     }
 
     /**
-     * Alice sends two signed and encrypted messages to C and B with success.
+     * Clara sends two messages (signed and encrypted) to B and A. She encounters Bob. Bob encounters Alice.
+     * This test focuses on verification (and message and certificate forwarding) - encryption is already tested before.
      */
-//    @Test TODO
+    @Test
     public void test1_6() throws SharkException, IOException, InterruptedException {
         this.setUpScenario_1();
 
-        // TODO first encounter, then send message
-        // Alice sends two encrypted and signed messages, one to Bob and one to Clara
-        this.aliceMessenger.sendSharkMessage(MESSAGE_BYTE, URI, this.bobPeer.getPeerID(), true, true);
+        // Clara sends two encrypted and signed message for Bob and Alice. She can, is in possession of both public keys
+        this.claraMessenger.sendSharkMessage(MESSAGE_BYTE, URI, this.bobPeer.getPeerID(), true, true);
+        this.claraMessenger.sendSharkMessage(MESSAGE_BYTE, URI, this.alicePeer.getPeerID(), true, true);
 
-        // Alice does not know of clara in scenario 1 therefore no public key to encrypt with
-        try {
-            this.aliceMessenger.sendSharkMessage(MESSAGE_BYTE, URI, this.claraPeer.getPeerID(), true, true);
-            Assertions.fail("call must fail: alice cannot encrypt message - she has not got Claras' public key");
-        }
-        catch(SharkException e) {
-        }
+        ///////////////////////////////// Encounter Clara - Bob ////////////////////////////////////////////////////
+        this.runEncounter(this.claraPeer, this.bobPeer, true);
 
-        ///////////////////////////////// Encounter Alice - Bob ////////////////////////////////////////////////////
-        this.runEncounter(this.alicePeer, this.bobPeer, true);
-
-        // Did Bob get the messages?
+        // Did Bob receive both messages from Clara?
         SharkMessengerChannel bobChannel = this.bobMessenger.getChannel(URI);
-        SharkMessageList sharkMessageList = bobChannel.getMessages();
-        Assertions.assertEquals(1, sharkMessageList.size());
-        // make sure that Bob can only encrypt one message and remember which it is
-        int posOfBobMsg = this.oneEncryptableOneIsNot(sharkMessageList);
-        int posOfClaraMsg = 1 - posOfBobMsg;
+        SharkMessageList bobChannelMessages = bobChannel.getMessages();
+        Assertions.assertEquals(2, bobChannelMessages.size());
 
-        // make sure Bob can verify that the messages were sent by Alice, and make sure he can only encrypt one of them
-        SharkMessage sharkMessage = sharkMessageList.getSharkMessage(posOfBobMsg, true);
-        Assertions.assertNotNull(sharkMessage);
-        Assertions.assertTrue(this.alicePeer.samePeer(sharkMessage.getSender()));
-        Assertions.assertTrue(sharkMessage.encrypted());
-        Assertions.assertTrue(sharkMessage.verified());
-        Assertions.assertArrayEquals(MESSAGE_BYTE, sharkMessage.getContent());
+        // one is for him and can be encrypted - the other one for alice - Bob cannot read it
+        for (int index = 0; index < 2; index++) {
+            SharkMessage sharkMessage = bobChannelMessages.getSharkMessage(index, true);
+            Set<CharSequence> recipients = sharkMessage.getRecipients();
+            // there is just a single recipient
+            Assertions.assertEquals(1, recipients.size());
+            CharSequence recipient = recipients.iterator().next();
+            if (PeerIDHelper.sameID(recipient, this.bobPeer.getPeerID())) {
+                // bob can verify this message
+                Assertions.assertTrue(sharkMessage.verified());
+            } else if (PeerIDHelper.sameID(recipient, this.alicePeer.getPeerID())) {
+                // Bob cannot decrypt Alice' message
+                Assertions.assertFalse(sharkMessage.couldBeDecrypted());
+                // he cannot even verify sender verification
+                Assertions.assertThrows(SharkException.class, () -> sharkMessage.verified());
+            } else {
+                Assertions.fail("unknown recipient, neither Bob nor Alice");
+            }
+        }
 
-        // make sure Bob cannot decipher any information about the encrypted message
-        sharkMessage = sharkMessageList.getSharkMessage(posOfClaraMsg, true);
-        Assertions.assertNotNull(sharkMessage);
-        Assertions.assertFalse(sharkMessage.encrypted());
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::verified);
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::getSender);
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::getRecipients);
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::getCreationTime);
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::getASAPHopsList);
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::getContent);
+        ///////////////////////////////// Encounter Bob - Alice ////////////////////////////////////////////////////
+        this.runEncounter(this.bobPeer, this.alicePeer, true);
 
-        // make sure identity assurance is 10 --> both met directly
-        SharkPKIComponent pki = this.bobMessenger.getSharkPKI();
-        int identityAssurance = pki.getIdentityAssurance(this.alicePeer.getPeerID());
-        Assertions.assertEquals(10, identityAssurance);
+        // Did Alice receive both messages from Clara via Bob?
+        SharkMessengerChannel aliceChannel = this.aliceMessenger.getChannel(URI);
+        SharkMessageList aliceChannelMessages = aliceChannel.getMessages();
+        Assertions.assertEquals(2, aliceChannelMessages.size());
 
-        ///////////////////////////////// Encounter Alice - Clara ////////////////////////////////////////////////////
-        this.runEncounter(this.alicePeer, this.claraPeer, true);
-
-        // Did Clara get the messages?
-        SharkMessengerChannel claraChannel = this.claraMessenger.getChannel(URI);
-        sharkMessageList = claraChannel.getMessages();
-        Assertions.assertEquals(2, sharkMessageList.size());
-        // make sure that Clara can only encrypt one message and remember which it is
-        posOfClaraMsg = this.oneEncryptableOneIsNot(sharkMessageList);
-        posOfBobMsg = 1 - posOfClaraMsg;
-
-        // make sure Clara can not verify that the messages were sent by Alice (they did not meet directly at first),
-        // and make sure she can only encrypt one of them
-        sharkMessage = sharkMessageList.getSharkMessage(posOfClaraMsg, true);
-        Assertions.assertNotNull(sharkMessage);
-        Assertions.assertTrue(this.alicePeer.samePeer(sharkMessage.getSender()));
-        Assertions.assertTrue(sharkMessage.encrypted());
-        Assertions.assertTrue(sharkMessage.verified());
-        Assertions.assertArrayEquals(MESSAGE_BYTE, sharkMessage.getContent());
-
-        // make sure Bob cannot decipher any information about the encrypted message
-        sharkMessage = sharkMessageList.getSharkMessage(posOfBobMsg, true);
-        Assertions.assertNotNull(sharkMessage);
-        Assertions.assertTrue(sharkMessage.encrypted());
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::verified);
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::getSender);
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::getRecipients);
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::getCreationTime);
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::getASAPHopsList);
-        Assertions.assertThrows(ASAPSecurityException.class, sharkMessage::getContent);
-
-        // make sure identity assurance is 5 --> they met through Bob at first
-        pki = this.claraMessenger.getSharkPKI();
-        identityAssurance = pki.getIdentityAssurance(this.alicePeer.getPeerID());
-        Assertions.assertEquals(5, identityAssurance);
+        // one is for him and can be encrypted - the other one for alice - Bob cannot read it
+        for (int index = 0; index < 2; index++) {
+            SharkMessage sharkMessage = aliceChannelMessages.getSharkMessage(index, true);
+            Set<CharSequence> recipients = sharkMessage.getRecipients();
+            // there is just a single recipient
+            Assertions.assertEquals(1, recipients.size());
+            CharSequence recipient = recipients.iterator().next();
+            if (PeerIDHelper.sameID(recipient, this.alicePeer.getPeerID())) {
+                // alice can verify this message because she got a certificate from Bob during their encounter
+                Assertions.assertTrue(sharkMessage.verified());
+            } else if (PeerIDHelper.sameID(recipient, this.bobPeer.getPeerID())) {
+                // Alice cannot decrypt Bobs' message..
+                Assertions.assertFalse(sharkMessage.couldBeDecrypted());
+                // ..not even even verify sender verification
+                Assertions.assertThrows(SharkException.class, () -> sharkMessage.verified());
+            } else {
+                Assertions.fail("unknown recipient, neither Bob nor Alice");
+            }
+        }
     }
-
     /**
      * Alice sends signed B. B encounters C. B can verify, C can not. Like ii) but routed over B.
      */
