@@ -6,7 +6,7 @@ jar -x -f ..\libs\SharkPeer.jar
 jar -x -f ..\libs\SharkPKI.jar
 rmdir /s /q META-INF
 xcopy /S ..\out\production\SharkMessenger\* .
-jar cmvf META-INF/MANIFEST.MF SharkMessenger.jar *
+jar cmvf META-INF/MANIFEST.MF SharkMessengerUI.jar *
 cd ..
-move tempLibBuildFolder\SharkMessenger.jar .
+move tempLibBuildFolder\SharkMessengerUI.jar .
 rmdir /s /q tempLibBuildFolder
