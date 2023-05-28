@@ -6,11 +6,11 @@ import net.sharksystem.asap.ASAPSecurityException;
 import net.sharksystem.asap.crypto.ASAPCryptoAlgorithms;
 import net.sharksystem.asap.crypto.ASAPKeyStore;
 import net.sharksystem.asap.utils.ASAPSerialization;
+import net.sharksystem.asap.utils.DateTimeHelper;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +27,7 @@ public class InMemoSharkMessage implements SharkMessage {
     private boolean verified;
     private boolean encrypted;
     private Set<CharSequence> snRecipients;
-    private Timestamp creationTime;
+    private long creationTime;
     private final List<ASAPHop> hopsList;
 
     /**
@@ -38,7 +38,7 @@ public class InMemoSharkMessage implements SharkMessage {
      * @param encrypted
      */
     private InMemoSharkMessage(byte[] message, CharSequence sender,
-                               Set<CharSequence> snRecipients, Timestamp creationTime,
+                               Set<CharSequence> snRecipients, long creationTime,
                                boolean verified, boolean encrypted, List<ASAPHop> hopsList) {
         this.snContent = message;
         this.snSender = sender;
@@ -125,9 +125,8 @@ public class InMemoSharkMessage implements SharkMessage {
         ///// receiver
         ASAPSerialization.writeCharSequenceSetParameter(receiver, baos);
         ///// timestamp
-        Timestamp creationTime = new Timestamp(System.currentTimeMillis());
-        String timestampString = creationTime.toString();
-        ASAPSerialization.writeCharSequenceParameter(timestampString, baos);
+        long creationTime = System.currentTimeMillis();
+        ASAPSerialization.writeLongParameter(creationTime, baos);
 
         content = baos.toByteArray();
 
@@ -201,7 +200,7 @@ public class InMemoSharkMessage implements SharkMessage {
     }
 
     @Override
-    public Timestamp getCreationTime() throws ASAPSecurityException {
+    public long getCreationTime() throws ASAPSecurityException {
         if(this.encryptedMessagePackage != null) {
             throw new ASAPSecurityException("content could not be encrypted");
         }
@@ -215,8 +214,7 @@ public class InMemoSharkMessage implements SharkMessage {
             throw new ASAPSecurityException("content could not be encrypted");
         }
 
-        Timestamp messageCreationTime = message.getCreationTime();
-        return messageCreationTime.after(this.getCreationTime());
+        return this.getCreationTime() > message.getCreationTime();
     }
 
     @Override
@@ -275,8 +273,7 @@ public class InMemoSharkMessage implements SharkMessage {
         ////// recipients
         Set<CharSequence> snReceivers = ASAPSerialization.readCharSequenceSetParameter(bais);
         ///// timestamp
-        String timestampString = ASAPSerialization.readCharSequenceParameter(bais);
-        Timestamp creationTime = Timestamp.valueOf(timestampString);
+        long creationTime = ASAPSerialization.readLongParameter(bais);
 
         boolean verified = false; // initialize
         if (signature != null) {

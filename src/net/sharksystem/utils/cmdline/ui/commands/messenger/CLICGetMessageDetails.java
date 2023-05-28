@@ -7,12 +7,12 @@ import net.sharksystem.utils.cmdline.ui.*;
 
 import java.util.List;
 
-public class CLICGetHopList extends CLICommand {
+public class CLICGetMessageDetails extends CLICommand {
     private final CLICChannelArgument channel;
     private final CLICIntegerArgument position;
 
-    public CLICGetHopList(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
-                          String identifier, boolean rememberCommand) {
+    public CLICGetMessageDetails(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                                 String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.channel = new CLICChannelArgument();
         this.position = new CLICIntegerArgument();

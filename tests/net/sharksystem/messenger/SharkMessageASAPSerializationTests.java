@@ -152,8 +152,8 @@ public class SharkMessageASAPSerializationTests {
         Assertions.assertFalse(receivedMessage.encrypted());
 
         // check timestamp
-        Timestamp creationTime = receivedMessage.getCreationTime();
-        long diff = now - creationTime.getTime();
+        long creationTime = receivedMessage.getCreationTime();
+        long diff = now - creationTime;
         System.out.println("diff == " + diff);
         // should not be that long
         Assertions.assertTrue(diff < 100);

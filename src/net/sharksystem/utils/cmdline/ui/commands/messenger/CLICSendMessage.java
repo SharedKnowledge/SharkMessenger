@@ -1,7 +1,9 @@
 package net.sharksystem.utils.cmdline.ui.commands.messenger;
 
 import net.sharksystem.SharkException;
+import net.sharksystem.messenger.SharkMessengerChannel;
 import net.sharksystem.messenger.SharkMessengerComponent;
+import net.sharksystem.messenger.SharkMessengerException;
 import net.sharksystem.utils.cmdline.SharkMessengerApp;
 import net.sharksystem.utils.cmdline.SharkMessengerUI;
 import net.sharksystem.utils.cmdline.ui.*;
@@ -9,10 +11,11 @@ import net.sharksystem.utils.cmdline.model.CLIModelInterface;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-public class CLICSendMessage extends CLICommand {
-    private final CLICChannelArgument channel;
+public class CLICSendMessage extends CLICProduceChannelListBefore {
+    private final CLICIntegerArgument channelIndex;
     private final CLICBooleanArgument sign;
     private final CLICBooleanArgument encrypt;
     private final CLICStringArgument message;
@@ -22,7 +25,7 @@ public class CLICSendMessage extends CLICommand {
     public CLICSendMessage(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
                            String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
-        this.channel = new CLICChannelArgument();
+        this.channelIndex = new CLICIntegerArgument();
         this.sign = new CLICBooleanArgument();
         this.encrypt = new CLICBooleanArgument();
         this.message = new CLICStringArgument();
@@ -33,7 +36,7 @@ public class CLICSendMessage extends CLICommand {
     @Override
     public CLICQuestionnaire specifyCommandStructure() {
         return new CLICQuestionnaireBuilder()
-                .addQuestion("Channel URI: ", this.channel)
+                .addQuestion("Index target channel (0..n): ", this.channelIndex)
                 .addQuestion("Sign? ", this.sign)
                 .addQuestion("Encrypt? ", this.encrypt)
                 .addQuestion("Message: ", this.message)
@@ -46,14 +49,14 @@ public class CLICSendMessage extends CLICommand {
         try {
             SharkMessengerComponent messenger = this.getSharkMessengerApp().getMessengerComponent();
 
-            CharSequence channelURI = this.channel.getValue().getURI();
+            int channelIndex = this.channelIndex.getValue();
+            SharkMessengerChannel channel = messenger.getChannel(channelIndex);
             boolean sign = this.sign.getValue();
             boolean encrypt = this.encrypt.getValue();
             byte[] message = this.message.getValue().getBytes();
 
             Set<CharSequence> receivers = this.getAllExistingPeers(this.receivers.getValue(), model);
-            messenger.sendSharkMessage(message, channelURI, receivers, sign, encrypt);
-
+            messenger.sendSharkMessage(message, channel.getURI(), receivers, sign, encrypt);
         } catch (SharkException | IOException e) {
             ui.printError(e.getLocalizedMessage());
         }

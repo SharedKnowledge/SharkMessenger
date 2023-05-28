@@ -80,7 +80,7 @@ public interface SharkMessage {
      * @throws IOException
      * @throws ASAPSecurityException if message could not be encrypted
      */
-    Timestamp getCreationTime() throws ASAPException, ASAPSecurityException, IOException;
+    long getCreationTime() throws ASAPException, ASAPSecurityException, IOException;
 
     /**
      * Compare two message what creation date is earlier. It depends on local clocks. It is a hint not more.

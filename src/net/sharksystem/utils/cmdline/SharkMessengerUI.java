@@ -59,10 +59,15 @@ public class SharkMessengerUI {
         //controller.addCommand(new CLICAddPeer("mkPeer", true));
         //controller.addCommand(new CLICRunEncounter("runEncounter", true));
         //controller.addCommand(new CLICStopEncounter("stopEncounter", true));
-        smUI.addCommand(new CLICSendMessage(sharkMessengerApp, smUI, "sendMsg", true));
-        smUI.addCommand(new CLICGetMessages(sharkMessengerApp, smUI, "messages", true));
-        smUI.addCommand(new CLICGetHopList(sharkMessengerApp, smUI, "hops", true));
-        smUI.addCommand(new CLICCreateChannel(sharkMessengerApp, smUI, "mkCh", true));
+
+        // messages
+        smUI.addCommand(new CLICSendMessage(sharkMessengerApp, smUI, "sendMessage", true));
+        smUI.addCommand(new CLICListMessages(sharkMessengerApp, smUI, "listMessages", true));
+        smUI.addCommand(new CLICGetMessageDetails(sharkMessengerApp, smUI, "getMessageDetails", true));
+
+        // channels
+        smUI.addCommand(new CLICListChannels(sharkMessengerApp, smUI, "lsChannel", true));
+        smUI.addCommand(new CLICCreateChannel(sharkMessengerApp, smUI, "mkChannel", true));
         smUI.addCommand(new CLICSetChannelAge(sharkMessengerApp, smUI, "setChAge", true));
         smUI.addCommand(new CLICRemoveChannel(sharkMessengerApp, smUI, "rmCh", true));
 

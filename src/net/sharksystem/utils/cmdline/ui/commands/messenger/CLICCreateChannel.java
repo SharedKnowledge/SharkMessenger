@@ -3,6 +3,7 @@ package net.sharksystem.utils.cmdline.ui.commands.messenger;
 import net.sharksystem.SharkException;
 import net.sharksystem.SharkPeerFS;
 import net.sharksystem.messenger.SharkMessengerComponent;
+import net.sharksystem.messenger.SharkMessengerException;
 import net.sharksystem.utils.cmdline.SharkMessengerApp;
 import net.sharksystem.utils.cmdline.SharkMessengerUI;
 import net.sharksystem.utils.cmdline.ui.CLICommand;
@@ -31,25 +32,18 @@ public class CLICCreateChannel extends CLICommand {
         return new CLICQuestionnaireBuilder()
                 .addQuestion("Please input the channel uri: ", this.channelUri)
                 .addQuestion("Please set the channel name: ", this.channelName)
-                .addQuestion("Should this channel be created, if a channel with the same uri already exists? ",
-                        this.channelMustNotExist)
                 .build();
     }
 
     @Override
-    public void execute() throws Exception {
+    public void execute() {
         String channelURI = this.channelUri.getValue();
         String channelName = this.channelName.getValue();
 
-        SharkPeerFS peer = model.getPeer();
-
         try {
-            SharkMessengerComponent peerMessenger = (SharkMessengerComponent) peer.getComponent(SharkMessengerComponent.class);
-            boolean mustNotExist = this.channelMustNotExist.getValue();
-            peerMessenger.createChannel(channelURI, channelName, mustNotExist);
-
-        } catch (SharkException | IOException e) {
-            ui.printError(e.getLocalizedMessage());
+            this.getSharkMessengerApp().getMessengerComponent().createChannel(channelURI, channelName, true);
+        } catch (SharkMessengerException | IOException e) {
+            this.printErrorMessage(e.getLocalizedMessage());
         }
     }
 

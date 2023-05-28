@@ -25,10 +25,10 @@ class SharkMessageComparison implements ASAPMessageCompare {
             long creationTimeB = -1;
 
             if(sharkMsgA.couldBeDecrypted()) {
-                creationTimeA = sharkMsgA.getCreationTime().getTime();
+                creationTimeA = sharkMsgA.getCreationTime();
             }
             if(sharkMsgB.couldBeDecrypted()) {
-                creationTimeB = sharkMsgA.getCreationTime().getTime();
+                creationTimeB = sharkMsgA.getCreationTime();
             }
 
             return creationTimeA < creationTimeB;

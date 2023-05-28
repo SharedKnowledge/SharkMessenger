@@ -22,7 +22,7 @@ import net.sharksystem.utils.Log;
 public class SharkMessengerApp {
     private final SharkPeerFS sharkPeerFS;
 
-    private static final CharSequence ROOTFOLDER = "sharkMessenger";
+    private static final CharSequence ROOTFOLDER = "sharkMessengerDataStorage";
     private final SharkMessengerComponent messengerComponent;
     private final SharkPKIComponent pkiComponent;
     private final HubConnectionManager hubConnectionManager;

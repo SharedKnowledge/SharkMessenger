@@ -299,7 +299,7 @@ public class CLI implements CLIInterface, CLIModelStateObserver {
                     sb.append(msg.verified());
                     sb.append(System.lineSeparator());
                     sb.append("# ");
-                    sb.append(msg.getCreationTime().toString());
+                    sb.append(DateTimeHelper.long2ExactTimeString(msg.getCreationTime()));
 
                     this.println(sb.toString());
 

@@ -69,6 +69,7 @@ public abstract class CLICommand {
      * @throws Exception Which might occur when executing the command.
      */
     public void startCommandExecution() throws Exception {
+        this.runBefore();
         CLICQuestionnaire questionnaire = this.specifyCommandStructure();
 //        if(questionnaire != null && !CLIController.getView().letUserFillOutQuestionnaire(questionnaire)) {
         if(questionnaire != null && !this.sharkMessengerUI.letUserFillOutQuestionnaire(questionnaire)) {
@@ -77,6 +78,10 @@ public abstract class CLICommand {
         } else {
             this.execute();
         }
+    }
+
+    protected void runBefore() {
+
     }
 
     /**
@@ -111,5 +116,9 @@ public abstract class CLICommand {
 
     public void setPrintStream(PrintStream printStream) {
         this.printStream = printStream;
+    }
+
+    protected void printErrorMessage(String message) {
+        this.ui.printError(message);
     }
 }

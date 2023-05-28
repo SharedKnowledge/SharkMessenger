@@ -2,12 +2,16 @@ package net.sharksystem.messenger;
 
 import net.sharksystem.SharkException;
 import net.sharksystem.SharkPeerFS;
-import net.sharksystem.asap.*;
+import net.sharksystem.asap.ASAPConnectionHandler;
+import net.sharksystem.asap.ASAPEncounterManager;
+import net.sharksystem.asap.ASAPEncounterManagerImpl;
+import net.sharksystem.asap.EncounterConnectionType;
 import net.sharksystem.asap.apps.TCPServerSocketAcceptor;
 import net.sharksystem.hub.hubside.ASAPTCPHub;
 import net.sharksystem.hub.peerside.HubConnector;
 import net.sharksystem.hub.peerside.NewConnectionListener;
 import net.sharksystem.hub.peerside.SharedTCPChannelConnectorPeerSide;
+import net.sharksystem.messenger.*;
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.pki.SharkPKIComponentFactory;
 import net.sharksystem.utils.fs.FSUtils;
@@ -17,7 +21,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -31,7 +35,7 @@ public class ASAPHubConnectionTest {
     private int hubPort = 6600;
 
     @BeforeEach
-    public void init(){
+    public void init() {
         // get current user dir
         String currentDir = System.getProperty("user.dir");
         TEST_FOLDER = currentDir + "/ASAPHubConnectionTest";
@@ -213,30 +217,26 @@ public class ASAPHubConnectionTest {
         Assertions.assertEquals(1, list.size());
         Assertions.assertEquals("Hi Bob", receivedMessage);
     }
-}
+	
+	class TestConnectionListener implements NewConnectionListener {
+		private ASAPEncounterManager encounterManager;
 
-/**
- * This class implements the interface NewConnectionListener. The instances of this class are used for test purposes.
- */
-class TestConnectionListener implements NewConnectionListener{
+		public TestConnectionListener(ASAPEncounterManager encounterManager){
+			this.encounterManager = encounterManager;
+		}
 
-    private ASAPEncounterManager encounterManager;
-
-    public TestConnectionListener(ASAPEncounterManager encounterManager){
-        this.encounterManager = encounterManager;
-    }
-
-    /**
-     * The method 'notifyPeerConnected' is called after the connection to a target peer was established.
-     * After the connection was established the method 'handleEncounter' of the ASAPEncounterManager is called to
-     * start the message exchange.
-     */
-    @Override
-    public void notifyPeerConnected(CharSequence charSequence, StreamPair streamPair) {
-        try {
-            encounterManager.handleEncounter(streamPair, EncounterConnectionType.INTERNET);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+		/**
+		 * The method 'notifyPeerConnected' is called after the connection to a target peer was established.
+		 * After the connection was established the method 'handleEncounter' of the ASAPEncounterManager is called to
+		 * start the message exchange.
+		 */
+		@Override
+		public void notifyPeerConnected(CharSequence charSequence, StreamPair streamPair) {
+			try {
+				encounterManager.handleEncounter(streamPair, EncounterConnectionType.INTERNET);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
 }
