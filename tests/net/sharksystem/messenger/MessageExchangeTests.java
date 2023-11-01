@@ -7,7 +7,6 @@ import net.sharksystem.SortedMessageFactory;
 import net.sharksystem.asap.ASAPSecurityException;
 import net.sharksystem.asap.utils.PeerIDHelper;
 import net.sharksystem.pki.SharkPKIComponent;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -49,7 +48,7 @@ public class MessageExchangeTests extends TestHelper {
                 + leftPeer.getASAPPeer().getPeerID() + " <--> " + rightPeer.getASAPPeer().getPeerID());
         System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 
-        leftPeer.getASAPTestPeerFS().startEncounter(TestHelper.getPortNumberIncremented(), rightPeer.getASAPTestPeerFS());
+        leftPeer.getASAPTestPeerFS().startEncounter(TestHelper.getPortNumber(), rightPeer.getASAPTestPeerFS());
         // give them moment to exchange data
         Thread.sleep(1000);
         System.out.println("slept a moment");

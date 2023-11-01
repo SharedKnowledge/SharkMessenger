@@ -15,7 +15,7 @@ import java.util.List;
 
 public class SharkMessengerUI {
 
-    public static void main(String[] args) throws SharkException, FileNotFoundException {
+    public static void main(String[] args) throws SharkException, IOException {
         // re-direct asap/shark log messages
         PrintStream asapLogMessages = new PrintStream("asapLogMessages.txt");
         Log.setOutStream(asapLogMessages);

@@ -3,9 +3,9 @@ package net.sharksystem.messenger;
 import net.sharksystem.SharkException;
 import net.sharksystem.SharkPeerFS;
 import net.sharksystem.asap.ASAPConnectionHandler;
+import net.sharksystem.asap.ASAPEncounterConnectionType;
 import net.sharksystem.asap.ASAPEncounterManager;
 import net.sharksystem.asap.ASAPEncounterManagerImpl;
-import net.sharksystem.asap.EncounterConnectionType;
 import net.sharksystem.asap.apps.TCPServerSocketAcceptor;
 import net.sharksystem.hub.hubside.ASAPTCPHub;
 import net.sharksystem.hub.peerside.HubConnector;
@@ -87,8 +87,11 @@ public class ASAPHubConnectionTest {
         ASAPConnectionHandler aliceConnectionHandler = (ASAPConnectionHandler) alice.getASAPPeer();
         ASAPConnectionHandler bobConnectionHandler = (ASAPConnectionHandler) bob.getASAPPeer();
 
-        ASAPEncounterManager aliceEncounterManager = new ASAPEncounterManagerImpl(aliceConnectionHandler);
-        ASAPEncounterManager bobEncounterManager = new ASAPEncounterManagerImpl(bobConnectionHandler);
+        ASAPEncounterManager aliceEncounterManager =
+                new ASAPEncounterManagerImpl(aliceConnectionHandler, alice.getASAPPeer().getPeerID());
+
+        ASAPEncounterManager bobEncounterManager =
+                new ASAPEncounterManagerImpl(bobConnectionHandler, bob.getASAPPeer().getPeerID());
 
         //////////////////////////// set up server socket and handle connection requests
         TCPServerSocketAcceptor aliceTcpServerSocketAcceptor =
@@ -108,7 +111,7 @@ public class ASAPHubConnectionTest {
         // let Alice handle it
         aliceEncounterManager.handleEncounter(
                 StreamPairImpl.getStreamPair(socket.getInputStream(), socket.getOutputStream()),
-                EncounterConnectionType.INTERNET);
+                ASAPEncounterConnectionType.INTERNET);
 
         // give it a moment to run ASAP session and receive message
         Thread.sleep(2000);
@@ -172,8 +175,10 @@ public class ASAPHubConnectionTest {
         ASAPConnectionHandler aliceConnectionHandler = (ASAPConnectionHandler) alice.getASAPPeer();
         ASAPConnectionHandler bobConnectionHandler = (ASAPConnectionHandler) bob.getASAPPeer();
 
-        ASAPEncounterManager aliceEncounterManager = new ASAPEncounterManagerImpl(aliceConnectionHandler);
-        ASAPEncounterManager bobEncounterManager = new ASAPEncounterManagerImpl(bobConnectionHandler);
+        ASAPEncounterManager aliceEncounterManager =
+                new ASAPEncounterManagerImpl(aliceConnectionHandler, alice.getPeerID());
+        ASAPEncounterManager bobEncounterManager =
+                new ASAPEncounterManagerImpl(bobConnectionHandler, bob.getPeerID());
 
         // the TCPServerSocketAcceptor isn't needed here, because the NewConnectionListener of the
         // SharedTCPChannelConnectorPeerSide handles the encounter
@@ -233,7 +238,7 @@ public class ASAPHubConnectionTest {
 		@Override
 		public void notifyPeerConnected(CharSequence charSequence, StreamPair streamPair) {
 			try {
-				encounterManager.handleEncounter(streamPair, EncounterConnectionType.INTERNET);
+				encounterManager.handleEncounter(streamPair, ASAPEncounterConnectionType.INTERNET);
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}

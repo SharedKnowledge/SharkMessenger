@@ -15,6 +15,8 @@ import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.pki.SharkPKIComponentFactory;
 import net.sharksystem.utils.Log;
 
+import java.io.IOException;
+
 /**
  * Proposed and suggested pattern for Shark app. Implement a central entity (could even be a singleton)
  * that provides access to any component that is part of this application
@@ -27,7 +29,7 @@ public class SharkMessengerApp {
     private final SharkPKIComponent pkiComponent;
     private final HubConnectionManager hubConnectionManager;
 
-    SharkMessengerApp(String peerName) throws SharkException {
+    SharkMessengerApp(String peerName) throws SharkException, IOException {
         this.sharkPeerFS = new SharkPeerFS(peerName, ROOTFOLDER + "/" + peerName);
 
         // set up shark components
@@ -63,7 +65,8 @@ public class SharkMessengerApp {
         // this code runs on service side - this peer should be a connection handler
         if (asapPeer instanceof ASAPConnectionHandler) { // TODO: aaaaargs
             // yes it is
-            ASAPEncounterManager encounterManager = new ASAPEncounterManagerImpl((ASAPConnectionHandler) asapPeer);
+            ASAPEncounterManager encounterManager =
+                    new ASAPEncounterManagerImpl((ASAPConnectionHandler) asapPeer, asapPeer.getPeerID());
             this.hubConnectionManager = new HubConnectionManagerImpl(encounterManager, asapPeer);
         } else {
             Log.writeLogErr(this,

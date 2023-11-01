@@ -16,7 +16,7 @@ import static net.sharksystem.messenger.TestConstants.*;
 public class TestHelper {
     private static int testNumber = 0;
     private static int portNumber = 5000;
-    public static int getPortNumberIncremented() {
+    public static int getPortNumber() {
         return TestHelper.portNumber++;
     }
 
