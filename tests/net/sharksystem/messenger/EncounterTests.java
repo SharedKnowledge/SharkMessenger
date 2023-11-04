@@ -21,6 +21,11 @@ public class EncounterTests {
 
         // create encounter manager for alice
         ASAPPeerFS aliceASAPPeerFS = testHelper.alicePeer.getASAPTestPeerFS();
+
+        /*
+         * further information on encounter manager:
+         * https://github.com/SharedKnowledge/ASAPJava/wiki/EncounterManager
+         */
         ASAPEncounterManagerImpl aliceEncounterManager =
                 new ASAPEncounterManagerImpl(aliceASAPPeerFS, aliceASAPPeerFS.getPeerID());
 
@@ -32,7 +37,7 @@ public class EncounterTests {
         int alicePort = TestHelper.getPortNumber(); // in unit test always a good idea to choose a fresh port
 
         // offer a port on alice side - now alice would have an open port.
-        new TCPServerSocketAcceptor(alicePort, aliceEncounterManager);
+        TCPServerSocketAcceptor aliceSocketAcceptor = new TCPServerSocketAcceptor(alicePort, aliceEncounterManager);
 
         ///////////////////////// Bob connects
         Socket connect2Alice = new Socket("localhost", alicePort);
@@ -42,6 +47,9 @@ public class EncounterTests {
                 StreamPairImpl.getStreamPair(
                         connect2Alice.getInputStream(), connect2Alice.getOutputStream(), net.sharksystem.utils.testsupport.TestConstants.ALICE_ID, net.sharksystem.utils.testsupport.TestConstants.ALICE_ID),
                 ASAPEncounterConnectionType.INTERNET);
+
+        // example: socketServerAcceptor can be closed
+        aliceSocketAcceptor.close();
 
         // give it a moment to exchange data
         Thread.sleep(10);
