@@ -1,2 +1,8 @@
 /out
 /playground/
+/.vscode/
+/.idea/
+/sharkMessengerDataStorage/
+/ASAPHubConnectionTest/
+/lib/
+/asapLogMessages.txt
