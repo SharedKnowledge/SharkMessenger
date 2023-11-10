@@ -1,6 +1,7 @@
 package net.sharksystem.cmdline.sharkmessengerUI;
 
 import java.io.PrintStream;
+import java.util.List;
 
 /**
  * Command which can be executed from the command line.
@@ -81,6 +82,32 @@ public abstract class UICommand {
     protected void runBefore() {
 
     }
+
+    /**
+     * Prepares the command for execution and executes it if successfull.
+     * Preparing is the act of extracting the needed parameters from the
+     * argument list and checking if they are valid.
+     * After the preperation is completed, the command is executed immidiatly.
+     * @param arguments needed for execution.
+     * @return true, if preperation was successfull. False if an argument could
+     *          not be prepared correctly.
+     * @throws Exception Any exception that might be thrown during the execution process.
+     */
+    public final boolean initializeExecution(List<String> arguments) throws Exception {
+        if (!handleArguments(arguments)) {
+            return false;
+        }
+        execute();
+        return true; 
+    }
+
+    /**
+     * Extract the arguments from the arguments list and assign them, so that
+     * the command is ready for execution.
+     * @param arguments needed for execution.
+     * @return true, if commands could be assigned correctly, false otherwise.
+     */
+    protected abstract boolean handleArguments(List<String> arguments);
 
     /**
      * This function returns a questionnaire wich the user needs to answer.
