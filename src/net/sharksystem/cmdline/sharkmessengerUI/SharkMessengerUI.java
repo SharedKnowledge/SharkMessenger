@@ -15,6 +15,8 @@ import java.util.List;
 
 public class SharkMessengerUI {
 
+    private boolean isInteractive = false;
+
     public static void main(String[] args) throws SharkException, IOException {
         // re-direct asap/shark log messages
         PrintStream asapLogMessages = new PrintStream("asapLogMessages.txt");
@@ -41,6 +43,8 @@ public class SharkMessengerUI {
         SharkMessengerApp sharkMessengerApp = new SharkMessengerApp(username);
         SharkMessengerUI smUI = new SharkMessengerUI(System.in, System.out, System.err, sharkMessengerApp);
 
+
+        smUI.setFlags(args);
         //CLIModelInterface model = new CLIModel();
 
         // TODO: that's over-engineered. Controller code can be merged into this class - it just UI code
@@ -127,11 +131,34 @@ public class SharkMessengerUI {
                 if (command.rememberCommand()) {
                     this.addCommandToHistory(command.getIdentifier());
                 }
-                command.startCommandExecution();
+
+                if (isInteractive) {
+                    command.startCommandExecution();
+                } else {
+                    command.initializeExecution(cmd);
+                }
             }
         }
         if(!foundCommand){
             this.commandNotFound(commandIdentifier);
+        }
+    }
+
+    //TODO: extract and set flags like -i for interactive mode
+    private void setFlags(String[] args) {
+        for (String argument : args) {
+            argument.strip();
+            final String hyphen = "-";
+
+            if (argument.startsWith(hyphen)) {
+                for (int i = 1; i < argument.length(); i++) {
+                    char flag = argument.charAt(i);
+
+                    switch (flag) {
+                        case 'i' -> this.isInteractive = true;
+                    }
+                }
+            }
         }
     }
 
