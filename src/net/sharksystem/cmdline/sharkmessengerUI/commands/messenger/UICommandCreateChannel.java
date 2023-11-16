@@ -10,6 +10,7 @@ import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaireBuilder;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommandStringArgument;
 
 import java.io.IOException;
+import java.util.List;
 
 public class UICommandCreateChannel extends UICommand {
     private final UICommandStringArgument channelUri;
@@ -49,6 +50,24 @@ public class UICommandCreateChannel extends UICommand {
         StringBuilder sb = new StringBuilder();
         sb.append("Creates a new channel.");
         return sb.toString();
+    }
+    
+     /**
+     * Arguments needed in this order: 
+     * <p>
+     * channelUri as UICommandStringArgument
+     * <p>
+     * channelName as UICommandStringArgument
+     * <p>
+     * channelMustNotExist UICommandBooleanArgument
+     */
+    @Override
+    protected boolean handleArguments(List<String> arguments) {
+        if(arguments.size() < 3) {
+            return false;
+        }
+        boolean isParsable = channelUri.tryParse(arguments.get(0)) && channelName.tryParse(arguments.get(1)) && channelMustNotExist.tryParse(arguments.get(2));
+        return isParsable;
     }
 
 }

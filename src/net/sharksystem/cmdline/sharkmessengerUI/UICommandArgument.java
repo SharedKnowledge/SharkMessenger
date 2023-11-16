@@ -37,7 +37,7 @@ public abstract class UICommandArgument<T> {
      * @param input The user input.
      * @return true, if parsing was possible; false otherwise
      */
-    public boolean tryParse(String input) throws Exception {
+    public boolean tryParse(String input) {
         //if empty string is allowed, the input is always fine.
         //Otherwise, the input can't be "" but must be something else.
         return this.isEmptyStringAllowed || !input.equals("");

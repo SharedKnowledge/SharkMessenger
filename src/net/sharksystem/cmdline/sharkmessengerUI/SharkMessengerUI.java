@@ -11,7 +11,9 @@ import net.sharksystem.cmdline.sharkmessengerUI.commands.general.UICommandShowLo
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SharkMessengerUI {
 
@@ -102,7 +104,7 @@ public class SharkMessengerUI {
         smUI.runCommandLoop();
     }
 
-    private final List<UICommand> commands = new ArrayList<>();
+    private final Map<String,UICommand> commands = new HashMap<>();
     private final List<String> commandStrings = new ArrayList<>();
     private final PrintStream outStream;
     private final PrintStream errStream;
@@ -123,29 +125,25 @@ public class SharkMessengerUI {
         //  place where it's needed. A method performing the action of a command only needs the arguments
         //  specified and not the command identifier
         String commandIdentifier = cmd.remove(0);
-
-        boolean foundCommand = false;
-        for(UICommand command : this.commands) {
-            if (command.getIdentifier().equals(commandIdentifier)) {
-                foundCommand = true;
-                if (command.rememberCommand()) {
-                    this.addCommandToHistory(command.getIdentifier());
-                }
-
-                if (isInteractive) {
-                    command.startCommandExecution();
-                } else {
-                    command.initializeExecution(cmd);
-                }
-            }
-        }
-        if(!foundCommand){
+        if (!commands.containsKey(commandIdentifier)) {
             this.commandNotFound(commandIdentifier);
+            return;
         }
+
+        UICommand command = this.commands.get(commandIdentifier);
+        if (command.rememberCommand()) {
+            this.addCommandToHistory(command.getIdentifier());
+        }
+        
+        if (isInteractive) {
+            command.startCommandExecution();
+        } else {
+            command.initializeExecution(cmd);
+        } 
     }
 
     //TODO: extract and set flags like -i for interactive mode
-    private void setFlags(String[] args) {
+    public void setFlags(String[] args) {
         for (String argument : args) {
             argument.strip();
             final String hyphen = "-";
@@ -166,7 +164,7 @@ public class SharkMessengerUI {
         this.commandStrings.add(commandIdentifier);
     }
 
-    public List<UICommand> getCommands() {
+    public Map<String,UICommand> getCommands() {
         return this.commands;
     }
 
@@ -175,7 +173,7 @@ public class SharkMessengerUI {
     }
 
     public void addCommand(UICommand command) {
-        this.commands.add(command);
+        this.commands.put(command.getIdentifier(), command);
 
         // tell command its print stream
         command.setPrintStream(this.outStream);
@@ -251,14 +249,14 @@ public class SharkMessengerUI {
         sb.append(System.lineSeparator());
 
         int longestCmd = 0;
-        for (UICommand cmd : this.getCommands()) {
+        for (UICommand cmd : this.getCommands().values()) {
             int curLength = cmd.getIdentifier().length();
             if (curLength > longestCmd) {
                 longestCmd = curLength;
             }
         }
 
-        for (UICommand cmd : this.getCommands()) {
+        for (UICommand cmd : this.getCommands().values()) {
             sb.append(cmd.getIdentifier());
             sb.append(" ".repeat(Math.max(0, longestCmd - cmd.getIdentifier().length())));
             sb.append("\t");

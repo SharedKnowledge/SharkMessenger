@@ -1,8 +1,9 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.messenger;
 
+import java.util.List;
+
 import net.sharksystem.cmdline.sharkmessengerUI.*;
 import net.sharksystem.messenger.SharkCommunicationAge;
-import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 
 public class UICommandSetChannelAge extends UICommand {
     private final UICommandChannelArgument channel;
@@ -34,6 +35,22 @@ public class UICommandSetChannelAge extends UICommand {
         StringBuilder sb = new StringBuilder();
         sb.append("Changes channel age.");
         return sb.toString();
+    }
+    
+    /**
+     * Arguments needed in this order: 
+     * <p>
+     * channel as UICommandChannelArgument
+     * <p>
+     * channelAge as UICommandStringArgument
+     */
+    @Override
+    protected boolean handleArguments(List<String> arguments) {
+        if(arguments.size() < 2) {
+            return false;
+        }
+        boolean isParsable = channel.tryParse(arguments.get(0)) && channelAge.tryParse(arguments.get(1));
+        return isParsable;
     }
 
 }

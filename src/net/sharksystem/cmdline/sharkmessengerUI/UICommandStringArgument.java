@@ -14,7 +14,7 @@ public class UICommandStringArgument extends UICommandArgument<String> {
      * @return false, if the input is empty
      */
     @Override
-    public boolean tryParse(String input) throws Exception {
+    public boolean tryParse(String input) {
         if(super.tryParse(input)) {
             this.parsedInput = input;
             return true;

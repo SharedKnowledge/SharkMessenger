@@ -3,9 +3,9 @@ package net.sharksystem.cmdline.sharkmessengerUI.commands.messenger;
 import net.sharksystem.SharkException;
 import net.sharksystem.cmdline.sharkmessengerUI.*;
 import net.sharksystem.messenger.SharkMessageList;
-import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 
 import java.io.IOException;
+import java.util.List;
 
 public class UICommandListMessages extends UICommandProduceChannelListBefore {
     private final UICommandIntegerArgument channelIndex;
@@ -39,5 +39,20 @@ public class UICommandListMessages extends UICommandProduceChannelListBefore {
     @Override
     public String getDescription() {
         return "Returns one or more messages a peer received.";
+    }
+
+    /**
+     * Arguments needed in this order: 
+     * <p>
+     * channelIndex as UICommandIntegerArgument
+     * <p>
+     */
+    @Override
+    protected boolean handleArguments(List<String> arguments) {
+        if(arguments.size() < 1) {
+            return false;
+        }
+        boolean isParsable = channelIndex.tryParse(arguments.get(0));
+        return isParsable;
     }
 }

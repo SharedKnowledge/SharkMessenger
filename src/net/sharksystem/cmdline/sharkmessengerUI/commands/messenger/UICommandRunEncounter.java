@@ -1,7 +1,8 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.messenger;
 
+import java.util.List;
+
 import net.sharksystem.cmdline.sharkmessengerUI.*;
-import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 
 @Deprecated
 public class UICommandRunEncounter extends UICommand {
@@ -58,6 +59,23 @@ public class UICommandRunEncounter extends UICommand {
         StringBuilder sb = new StringBuilder();
         sb.append("Runs an encounter between two peers.");
         return sb.toString();
+    }
+    /**
+     * Arguments needed in this order: 
+     * <p>
+     * peer1 as UICommandKnownPeerArgument
+     * <p>
+     * peer2 as UICommandKnownPeerArgument
+     * <p>
+     * stopExchange as UICommandBooleanArgument
+     */
+    @Override
+    protected boolean handleArguments(List<String> arguments) {
+        if(arguments.size() < 3) {
+            return false;
+        }
+        boolean isParsable = peer1.tryParse(arguments.get(0)) && peer2.tryParse(arguments.get(1)) && stopExchange.tryParse(arguments.get(2));
+        return isParsable;
     }
 
 }

@@ -1,5 +1,6 @@
 package net.sharksystem.cmdline.sharkmessengerUI;
 
+import net.sharksystem.asap.ASAPSecurityException;
 import net.sharksystem.asap.persons.PersonValues;
 
 /**
@@ -16,10 +17,14 @@ public class UICommandKnownPeerArgument extends UICommandArgument<PersonValues> 
      * @return True, if the peer is known; False otherwise.
      */
     @Override
-    public boolean tryParse(String input) throws Exception {
+    public boolean tryParse(String input) {
         super.setEmptyStringAllowed(false);
         if(super.tryParse(input)) {
-            this.parsedInput = this.getSharkMessengerApp().getSharkPKIComponent().getPersonValuesByID(input);
+            try {
+                this.parsedInput = this.getSharkMessengerApp().getSharkPKIComponent().getPersonValuesByID(input);
+            } catch (ASAPSecurityException e) {
+                return false;
+            }
             return true;
         }
         return false;

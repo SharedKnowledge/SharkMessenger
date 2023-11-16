@@ -1,7 +1,8 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.messenger;
 
+import java.util.List;
+
 import net.sharksystem.cmdline.sharkmessengerUI.*;
-import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 
 @Deprecated
 public class UICommandStopEncounter extends UICommand {
@@ -39,5 +40,22 @@ public class UICommandStopEncounter extends UICommand {
         sb.append("Stops an already running encounter.");
         return sb.toString();
     }
+
+    /**
+     * Arguments needed in this order: 
+     * <p>
+     * peer1 as UICommandKnownPeerArgument
+     * <p>
+     * peer2 as UICommandKnownPeerArgument
+     */
+    @Override
+    protected boolean handleArguments(List<String> arguments) {
+        if(arguments.size() < 2) {
+            return false;
+        }
+        boolean isParsable = peer1.tryParse(arguments.get(0)) && peer2.tryParse(arguments.get(1));
+        return isParsable;
+    }
+
 
 }

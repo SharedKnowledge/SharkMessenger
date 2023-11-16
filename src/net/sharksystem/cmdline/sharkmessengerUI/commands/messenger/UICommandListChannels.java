@@ -9,6 +9,7 @@ import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaireBuilder;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommand;
 
 import java.io.IOException;
+import java.util.List;
 
 public class UICommandListChannels extends UICommand {
     /**
@@ -42,5 +43,14 @@ public class UICommandListChannels extends UICommand {
     @Override
     public String getDescription() {
         return "list existing channels";
+    }
+    /**
+     * Arguments needed in this order: 
+     * <p>
+     * none
+     */
+ @Override
+    protected boolean handleArguments(List<String> arguments) {
+       return true;
     }
 }

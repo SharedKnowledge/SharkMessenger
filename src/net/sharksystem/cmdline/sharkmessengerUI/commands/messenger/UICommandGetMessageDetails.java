@@ -2,8 +2,6 @@ package net.sharksystem.cmdline.sharkmessengerUI.commands.messenger;
 
 import net.sharksystem.asap.ASAPHop;
 import net.sharksystem.cmdline.sharkmessengerUI.*;
-import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
-import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 
 import java.util.List;
 
@@ -51,6 +49,22 @@ public class UICommandGetMessageDetails extends UICommand {
         StringBuilder sb = new StringBuilder();
         sb.append("Returns the hops of a message.");
         return sb.toString();
+    }
+
+     /**
+     * Arguments needed in this order: 
+     * <p>
+     * channel as UICommandChannelArgument
+     * <p>
+     * position as UICommandIntegerArgument
+     */
+    @Override
+    protected boolean handleArguments(List<String> arguments) {
+        if(arguments.size() < 2) {
+            return false;
+        }
+        boolean isParsable = channel.tryParse(arguments.get(0)) && position.tryParse(arguments.get(1));
+        return isParsable;
     }
 
 }

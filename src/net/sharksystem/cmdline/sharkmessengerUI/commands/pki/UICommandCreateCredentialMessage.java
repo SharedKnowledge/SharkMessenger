@@ -1,5 +1,7 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.pki;
 
+import java.util.List;
+
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommand;
@@ -26,6 +28,16 @@ public class UICommandCreateCredentialMessage extends UICommand {
         StringBuilder sb = new StringBuilder();
         sb.append("Creates a credential message which can be send to another peer.");
         return sb.toString();
+    }
+
+    /**
+     * Arguments needed in this order: 
+     * <p>
+     * none
+     */
+ @Override
+    protected boolean handleArguments(List<String> arguments) {
+       return true;
     }
 
 }

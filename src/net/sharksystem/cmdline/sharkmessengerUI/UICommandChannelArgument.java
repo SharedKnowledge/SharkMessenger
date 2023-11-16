@@ -15,7 +15,7 @@ public class UICommandChannelArgument extends UICommandArgument<SharkMessengerCh
     }
 
     @Override
-    public boolean tryParse(String input) throws Exception {
+    public boolean tryParse(String input)  {
         super.setEmptyStringAllowed(false);
         if(super.tryParse(input)) {
             try {

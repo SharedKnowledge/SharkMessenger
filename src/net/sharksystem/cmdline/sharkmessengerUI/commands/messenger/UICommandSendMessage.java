@@ -4,11 +4,10 @@ import net.sharksystem.SharkException;
 import net.sharksystem.cmdline.sharkmessengerUI.*;
 import net.sharksystem.messenger.SharkMessengerChannel;
 import net.sharksystem.messenger.SharkMessengerComponent;
-import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
-import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class UICommandSendMessage extends UICommandProduceChannelListBefore {
@@ -73,6 +72,29 @@ public class UICommandSendMessage extends UICommandProduceChannelListBefore {
         StringBuilder sb = new StringBuilder();
         sb.append("Sends a message into a channel.");
         return sb.toString();
+    }
+
+    /**
+     * Arguments needed in this order: 
+     * <p>
+     * channelIndex as UICommandIntegerArgument
+     * <p>
+     * sign as UICommandStringArgument
+     * <p>
+     * encrypt as UICommandBooleanArgument
+     * <p> 
+     * message as UICommandStringArgument
+     * <p>
+     * receivers as UICommandStringArgument
+     */
+    @Override
+    protected boolean handleArguments(List<String> arguments) {
+        if(arguments.size() < 5) {
+            return false;
+        }
+        boolean isParsable = channelIndex.tryParse(arguments.get(0)) && sign.tryParse(arguments.get(1)) && encrypt.tryParse(arguments.get(2)) 
+        &&  message.tryParse(arguments.get(3)) &&  receivers.tryParse(arguments.get(4));
+        return isParsable;
     }
 
 }

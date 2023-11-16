@@ -1,10 +1,10 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.pki;
 
+import java.util.List;
+
 import net.sharksystem.cmdline.sharkmessengerUI.*;
 import net.sharksystem.pki.CredentialMessage;
 import net.sharksystem.pki.SharkCredentialReceivedListener;
-import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
-import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 
 public class UICommandExchangeCertificates extends UICommand implements SharkCredentialReceivedListener {
     private final UICommandKnownPeerArgument subject;
@@ -62,6 +62,18 @@ public class UICommandExchangeCertificates extends UICommand implements SharkCre
 
     @Override
     public void credentialReceived(CredentialMessage credentialMessage) {
-
+    }
+     /**
+     * Arguments needed in this order: 
+     * <p>
+     * subject as UICommandKnownPeerArgument 
+     */
+    @Override
+    protected boolean handleArguments(List<String> arguments) {
+        if(arguments.size() < 1) {
+            return false;
+        }
+        boolean isParsable = subject.tryParse(arguments.get(0));
+        return isParsable;
     }
 }

@@ -1,5 +1,7 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.pki;
 
+import java.util.List;
+
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommand;
@@ -35,6 +37,15 @@ public class UICommandCreateNewKeyPair extends UICommand {
         StringBuilder sb = new StringBuilder();
         sb.append("Creates a new pair of RSA keys.");
         return sb.toString();
+    }
+ /**
+     * Arguments needed in this order: 
+     * <p>
+     * none
+     */
+    @Override
+    protected boolean handleArguments(List<String> arguments) {
+       return true;
     }
 
 }

@@ -1,7 +1,8 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.messenger;
 
+import java.util.List;
+
 import net.sharksystem.cmdline.sharkmessengerUI.*;
-import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 
 public class UICommandRemoveChannel extends UICommand {
 
@@ -41,5 +42,18 @@ public class UICommandRemoveChannel extends UICommand {
         sb.append("Removes a channel.");
         return sb.toString();
     }
-
+ /**
+     * Arguments needed in this order: 
+     * <p>
+     * channel as UICommandChannelArgument
+     * <p>
+     */
+    @Override
+    protected boolean handleArguments(List<String> arguments) {
+        if(arguments.size() < 1) {
+            return false;
+        }
+        boolean isParsable = channel.tryParse(arguments.get(0));
+        return isParsable;
+    }
 }

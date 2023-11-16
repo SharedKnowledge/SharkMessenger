@@ -1,5 +1,7 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.pki;
 
+import java.util.List;
+
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaireBuilder;
@@ -55,6 +57,20 @@ public class UICommandGetCertificatesBySubject extends UICommand {
         StringBuilder sb = new StringBuilder();
         sb.append("Returns all certificates from a specific subject.");
         return sb.toString();
+    }
+
+     /**
+     * Arguments needed in this order: 
+     * <p>
+     * subject as UICommandKnownPeerArgument 
+     */
+    @Override
+    protected boolean handleArguments(List<String> arguments) {
+        if(arguments.size() < 1) {
+            return false;
+        }
+        boolean isParsable = subject.tryParse(arguments.get(0));
+        return isParsable;
     }
 
 }

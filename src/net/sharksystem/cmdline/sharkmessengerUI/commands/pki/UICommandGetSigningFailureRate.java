@@ -1,5 +1,7 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.pki;
 
+import java.util.List;
+
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaireBuilder;
@@ -48,5 +50,19 @@ public class UICommandGetSigningFailureRate extends UICommand {
         sb.append("Returns the signing failure rate of a specific peer.");
         return sb.toString();
     }
+/**
+     * Arguments needed in this order: 
+     * <p>
+     * subject as UICommandKnownPeerArgument
+     */
+    @Override
+    protected boolean handleArguments(List<String> arguments) {
+        if(arguments.size() < 1) {
+            return false;
+        }
+        boolean isParsable = subject.tryParse(arguments.get(0));
+        return isParsable;
+    }
+
 
 }

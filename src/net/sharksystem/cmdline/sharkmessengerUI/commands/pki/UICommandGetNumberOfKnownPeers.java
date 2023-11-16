@@ -1,5 +1,7 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.pki;
 
+import java.util.List;
+
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaire;
@@ -43,6 +45,20 @@ public class UICommandGetNumberOfKnownPeers extends UICommand {
     @Override
     public String getDescription() {
         return "Returns the number of known peers.";
+    }
+
+    /**
+     * Arguments needed in this order: 
+     * <p>
+     * owner as UICommandKnownPeerArgument 
+     */
+    @Override
+    protected boolean handleArguments(List<String> arguments) {
+        if(arguments.size() < 1) {
+            return false;
+        }
+        boolean isParsable = owner.tryParse(arguments.get(0));
+        return isParsable;
     }
 
 }

@@ -9,7 +9,7 @@ public class UICommandBooleanArgument extends UICommandArgument<Boolean> {
     }
 
     @Override
-    public boolean tryParse(String input) throws Exception {
+    public boolean tryParse(String input)  {
         super.setEmptyStringAllowed(false);
         if(super.tryParse(input)) {
             this.parsedInput = Boolean.parseBoolean(input);
