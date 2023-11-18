@@ -31,6 +31,10 @@ public abstract class UICommandArgument<T> {
         return this.parsedInput;
     }
 
+    public void setValue(T value) {
+        this.parsedInput = value;
+    }
+
     /**
      * This function does the parsing and sets the parsed input if parsing was successful.
      * Always call super when overwriting in own class
