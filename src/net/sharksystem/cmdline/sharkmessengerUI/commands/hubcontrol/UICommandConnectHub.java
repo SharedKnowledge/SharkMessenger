@@ -5,6 +5,9 @@ import net.sharksystem.cmdline.sharkmessengerUI.UICommandIntegerArgument;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaire;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaireBuilder;
 import net.sharksystem.hub.peerside.HubConnectorDescription;
+
+import java.util.List;
+
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommand;
 
@@ -43,5 +46,21 @@ public class UICommandConnectHub extends UICommand {
     @Override
     public String getDescription() {
         return "connect to a hub";
+    }
+
+    /**
+     * Arguments needed in this order: 
+     * <p>
+     * hubIndex as UICommandIntegerArgument
+     */
+    @Override
+    protected boolean handleArguments(List<String> arguments) {
+        if (arguments.size() < 1) {
+            return false;
+        }
+
+        boolean isParsable = hubIndex.tryParse(arguments.get(0));
+
+        return isParsable;
     }
 }

@@ -1,6 +1,9 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.general;
 
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
+
+import java.util.List;
+
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommand;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaire;
@@ -32,6 +35,16 @@ public class UICommandShowLog extends UICommand {
         StringBuilder sb = new StringBuilder();
         sb.append("Prints a log messages with all executed commands in the right order.");
         return sb.toString();
+    }
+
+    /**
+     * Arguments needed in this order: 
+     * <p>
+     * none
+     */
+    @Override
+    protected boolean handleArguments(List<String> arguments) {
+        return true;
     }
 
 }

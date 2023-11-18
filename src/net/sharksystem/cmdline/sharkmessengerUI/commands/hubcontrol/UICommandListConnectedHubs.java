@@ -44,4 +44,14 @@ public class UICommandListConnectedHubs extends UICommand {
     public String getDescription() {
         return "list connected hubs";
     }
+
+    /**
+     * Arguments needed in this order: 
+     * <p>
+     * none
+     */
+    @Override
+    protected boolean handleArguments(List<String> arguments) {
+        return true;
+    }
 }

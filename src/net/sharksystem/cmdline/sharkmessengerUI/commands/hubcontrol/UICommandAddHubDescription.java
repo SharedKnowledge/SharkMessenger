@@ -1,9 +1,10 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol;
 
+import java.util.List;
+
 import net.sharksystem.cmdline.sharkmessengerUI.*;
 import net.sharksystem.hub.peerside.HubConnectorDescription;
 import net.sharksystem.hub.peerside.TCPHubConnectorDescriptionImpl;
-import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 
 public class UICommandAddHubDescription extends UICommand {
     private UICommandStringArgument hubHost;
@@ -41,5 +42,27 @@ public class UICommandAddHubDescription extends UICommand {
     @Override
     public String getDescription() {
         return "define a new asap hub by its hostname, port and if it supports multichannel";
+    }
+
+    /**
+     * Arguments needed in this order: 
+     * <p>
+     * hubHost as UICommandAddHubDescription
+     * <p>
+     * hubPort as UICommandIntegerArgument
+     * <p>
+     * multiChannel as UICommandBooleanArgument
+     */
+    @Override
+    protected boolean handleArguments(List<String> arguments) {
+        if (arguments.size() < 3) {
+            return false;
+        }
+
+        boolean isParsable = hubHost.tryParse(arguments.get(0))
+            && hubPort.tryParse(arguments.get(1))
+            && multiChannel.tryParse(arguments.get(2));
+
+        return isParsable;
     }
 }

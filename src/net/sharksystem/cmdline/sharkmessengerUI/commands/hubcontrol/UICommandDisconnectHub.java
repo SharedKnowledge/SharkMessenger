@@ -1,5 +1,7 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol;
 
+import java.util.List;
+
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaire;
@@ -31,5 +33,15 @@ public class UICommandDisconnectHub extends UICommand {
     @Override
     public String getDescription() {
         return null;
+    }
+
+    /**
+     * Arguments needed in this order: 
+     * <p>
+     * none
+     */
+    @Override
+    protected boolean handleArguments(List<String> arguments) {
+        return true;
     }
 }

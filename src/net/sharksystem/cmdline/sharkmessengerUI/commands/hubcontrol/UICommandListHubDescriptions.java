@@ -1,5 +1,7 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol;
 
+import java.util.List;
+
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaire;
@@ -30,5 +32,15 @@ public class UICommandListHubDescriptions extends UICommand {
     @Override
     public String getDescription() {
         return "list known hub information";
+    }
+
+    /**
+     * Arguments needed in this order: 
+     * <p>
+     * none
+     */
+    @Override
+    protected boolean handleArguments(List<String> arguments) {
+        return true;
     }
 }

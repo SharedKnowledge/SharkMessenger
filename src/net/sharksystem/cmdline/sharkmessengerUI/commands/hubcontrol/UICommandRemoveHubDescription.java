@@ -1,8 +1,9 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol;
 
+import java.util.List;
+
 import net.sharksystem.cmdline.sharkmessengerUI.*;
 import net.sharksystem.hub.peerside.HubConnectorDescription;
-import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 
 public class UICommandRemoveHubDescription extends UICommand {
     private UICommandIntegerArgument hubIndex;
@@ -34,5 +35,21 @@ public class UICommandRemoveHubDescription extends UICommand {
     @Override
     public String getDescription() {
         return "remove hub description from list";
+    }
+
+    /**
+     * Arguments needed in this order: 
+     * <p>
+     * hubIndex as UICommandIntegerArgument
+     */
+    @Override
+    protected boolean handleArguments(List<String> arguments) {
+        if (arguments.size() < 1) {
+            return false;
+        }
+
+        boolean isParsable = hubIndex.tryParse(arguments.get(0));
+
+        return isParsable;
     }
 }

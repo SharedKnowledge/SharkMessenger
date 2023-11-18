@@ -79,7 +79,7 @@ public class UICommandSendMessage extends UICommandProduceChannelListBefore {
      * <p>
      * channelIndex as UICommandIntegerArgument
      * <p>
-     * sign as UICommandStringArgument
+     * sign as UICommandBooleanArgument
      * <p>
      * encrypt as UICommandBooleanArgument
      * <p> 

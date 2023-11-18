@@ -1,6 +1,9 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.general;
 
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
+
+import java.util.List;
+
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaireBuilder;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommand;
@@ -59,6 +62,22 @@ public class UICommandSaveLog extends UICommand {
         StringBuilder sb = new StringBuilder();
         sb.append("Saves the current log to a file.");
         return sb.toString();
+    }
+
+    /**
+     * Arguments needed in this order: 
+     * <p>
+     * fileName as UICommandStringArgument
+     */
+    @Override
+    protected boolean handleArguments(List<String> arguments) {
+        if (arguments.size() < 1) {
+            return false;
+        }
+
+        boolean isParsable = fileName.tryParse(arguments.get(0));
+
+        return isParsable;
     }
 
 }
