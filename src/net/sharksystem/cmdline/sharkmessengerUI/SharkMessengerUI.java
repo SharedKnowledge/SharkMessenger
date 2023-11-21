@@ -4,6 +4,10 @@ import net.sharksystem.SharkException;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol.*;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.*;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.*;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.test.UICommandCloseTCP;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.test.UICommandConnectTCP;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.test.UICommandOpenTCP;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.test.UICommandSendConsecutiveMessages;
 import net.sharksystem.utils.Log;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.general.UICommandExit;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.general.UICommandSaveLog;
@@ -97,6 +101,13 @@ public class SharkMessengerUI {
         /*
         smUI.addCommand(new CLICReconnectHubs(sharkMessengerApp, smUI, "reconnectHubs", true));
          */
+
+        // Test
+        // would be nice to organize ui command list (all test commands together)
+        smUI.addCommand(new UICommandOpenTCP(sharkMessengerApp, smUI, "openTCP", false));
+        // closeTCP is probably not an ideal name
+        smUI.addCommand(new UICommandCloseTCP(sharkMessengerApp, smUI, "closeTCP", false));
+        smUI.addCommand(new UICommandConnectTCP(sharkMessengerApp, smUI, "connectTCP", false));
 
         //controller.startCLI();
 
@@ -240,6 +251,7 @@ public class SharkMessengerUI {
         return this.errStream;
     }
 
+    // would be nice to organize command list (group test commands)
     private void printUsage() {
         StringBuilder sb = new StringBuilder();
 
