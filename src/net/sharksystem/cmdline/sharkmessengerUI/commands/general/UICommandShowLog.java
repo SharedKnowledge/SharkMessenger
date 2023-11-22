@@ -2,6 +2,7 @@ package net.sharksystem.cmdline.sharkmessengerUI.commands.general;
 
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 
+import java.sql.SQLOutput;
 import java.util.List;
 
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
@@ -10,6 +11,7 @@ import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaire;
 
 /**
  * Command for displaying the log history to the user.
+ * Format: Command followed by parameters (space separated)
  */
 public class UICommandShowLog extends UICommand {
 
@@ -25,9 +27,13 @@ public class UICommandShowLog extends UICommand {
 
     @Override
     public void execute() throws Exception {
-        this.printTODOReimplement();
-
-//        ui.printInfo(model.getCommandHistory());
+        List<String> commandHistory = this.getSharkMessengerUI().getCommandHistory();
+        StringBuilder sb = new StringBuilder();
+        for (String command : commandHistory) {
+            sb.append(command);
+            sb.append(System.lineSeparator());
+        }
+        getSharkMessengerUI().getOutStream().println(sb);
     }
 
     @Override

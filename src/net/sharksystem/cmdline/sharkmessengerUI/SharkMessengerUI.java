@@ -7,7 +7,6 @@ import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.*;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.test.UICommandCloseTCP;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.test.UICommandConnectTCP;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.test.UICommandOpenTCP;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.test.UICommandSendConsecutiveMessages;
 import net.sharksystem.utils.Log;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.general.UICommandExit;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.general.UICommandSaveLog;
@@ -104,10 +103,10 @@ public class SharkMessengerUI {
 
         // Test
         // would be nice to organize ui command list (all test commands together)
-        smUI.addCommand(new UICommandOpenTCP(sharkMessengerApp, smUI, "openTCP", false));
+        smUI.addCommand(new UICommandOpenTCP(sharkMessengerApp, smUI, "openTCP", true));
         // closeTCP is probably not an ideal name
-        smUI.addCommand(new UICommandCloseTCP(sharkMessengerApp, smUI, "closeTCP", false));
-        smUI.addCommand(new UICommandConnectTCP(sharkMessengerApp, smUI, "connectTCP", false));
+        smUI.addCommand(new UICommandCloseTCP(sharkMessengerApp, smUI, "closeTCP", true));
+        smUI.addCommand(new UICommandConnectTCP(sharkMessengerApp, smUI, "connectTCP", true));
 
         //controller.startCLI();
 
@@ -116,7 +115,7 @@ public class SharkMessengerUI {
     }
 
     private final Map<String,UICommand> commands = new HashMap<>();
-    private final List<String> commandStrings = new ArrayList<>();
+    private final List<String> commandParameterStrings = new ArrayList<>();
     private final PrintStream outStream;
     private final PrintStream errStream;
     private final SharkMessengerApp sharkMessengerApp;
@@ -143,7 +142,14 @@ public class SharkMessengerUI {
 
         UICommand command = this.commands.get(commandIdentifier);
         if (command.rememberCommand()) {
-            this.addCommandToHistory(command.getIdentifier());
+            StringBuilder sb = new StringBuilder();
+            sb.append(command.getIdentifier());
+            // append parameter
+            for (String parameter : cmd) {
+                sb.append(" ");
+                sb.append(parameter);
+            }
+            this.addCommandToHistory(sb.toString());
         }
         
         if (isInteractive) {
@@ -164,7 +170,8 @@ public class SharkMessengerUI {
                     char flag = argument.charAt(i);
 
                     switch (flag) {
-                        case 'i' -> this.isInteractive = true;
+                        case 'i':
+                            this.isInteractive = true;
                     }
                 }
             }
@@ -172,7 +179,11 @@ public class SharkMessengerUI {
     }
 
     public void addCommandToHistory(String commandIdentifier) {
-        this.commandStrings.add(commandIdentifier);
+        this.commandParameterStrings.add(commandIdentifier);
+    }
+
+    public List<String> getCommandHistory(){
+        return this.commandParameterStrings;
     }
 
     public Map<String,UICommand> getCommands() {

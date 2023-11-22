@@ -1,7 +1,11 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.general;
 
+import com.sun.source.tree.PackageTree;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
@@ -12,6 +16,7 @@ import net.sharksystem.cmdline.sharkmessengerUI.UICommandStringArgument;
 
 /**
  * Command for saving the log in a file.
+ * Format: Command followed by parameters (space separated)
  */
 public class UICommandSaveLog extends UICommand {
 
@@ -32,29 +37,21 @@ public class UICommandSaveLog extends UICommand {
 
     @Override
     public void execute() throws Exception {
-        this.printTODOReimplement();
-        /*
-        String fileName = this.fileName.getValue();
-        File file = new File(fileName);
+        File file = new File(this.fileName.getValue());
         if (file.createNewFile()) {
             try {
-                PrintWriter pw = new PrintWriter(fileName);
-                List<String> log = model.getCommandHistoryList();
-
-                for (String s : log) {
-                    pw.println(s);
+                List<String> commandHistory = this.getSharkMessengerUI().getCommandHistory();
+                PrintWriter pw = new PrintWriter(file);
+                for (String command : commandHistory) {
+                    pw.println(command);
                 }
-
-                pw.println("exit");
                 pw.close();
-
-            } catch (FileNotFoundException e) {
-                ui.printError("Couldn't write to or create file " + fileName);
+            } catch (IOException e) {
+                getSharkMessengerUI().printError("Couldn't write to or create file" + fileName);
             }
         } else {
-            ui.printError("Specified file name already exists!");
+            getSharkMessengerUI().printError("Won't write to already existing file");
         }
-         */
     }
 
     @Override
