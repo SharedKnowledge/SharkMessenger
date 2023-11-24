@@ -1,9 +1,6 @@
 package net.sharksystem.cmdline.sharkmessengerUI;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.*;
 
 import net.sharksystem.SharkException;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.general.*;
@@ -38,8 +35,16 @@ public class TestUI {
         System.out.println("Startup your messenger instance");
 
         SharkMessengerApp sharkMessengerApp = new SharkMessengerApp(username);
-        SharkMessengerUI smUI = new SharkMessengerUI(System.in, System.out, System.err, sharkMessengerApp);
+        SharkMessengerUI smUI;
 
+        // Instantiate SharkMessengerUI with or without a batch file for testing
+        if (args.length != 0) {
+            String filename = args[0];
+            File file = new File(filename);
+            smUI = new SharkMessengerUI(file, System.in, System.out, System.err, sharkMessengerApp);
+        } else {
+            smUI = new SharkMessengerUI("", System.in, System.out, System.err, sharkMessengerApp);
+        }
 
         smUI.setFlags(args);
         //CLIModelInterface model = new CLIModel();

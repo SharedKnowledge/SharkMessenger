@@ -60,7 +60,7 @@ public class ProductionUI {
         System.out.println("Startup your messenger instance");
 
         SharkMessengerApp sharkMessengerApp = new SharkMessengerApp(username);
-        SharkMessengerUI smUI = new SharkMessengerUI(System.in, System.out, System.err, sharkMessengerApp);
+        SharkMessengerUI smUI = new SharkMessengerUI("", System.in, System.out, System.err, sharkMessengerApp);
 
 
         smUI.setFlags(args);

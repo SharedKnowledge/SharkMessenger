@@ -1,28 +1,44 @@
 package net.sharksystem.cmdline.sharkmessengerUI;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SharkMessengerUI {
 
-    private final Map<String,UICommand> commands = new HashMap<>();
+    private final Map<String, UICommand> commands = new HashMap<>();
     private final List<String> commandParameterStrings = new ArrayList<>();
     private final PrintStream outStream;
     private final PrintStream errStream;
     private final SharkMessengerApp sharkMessengerApp;
     private final BufferedReader bufferedReader;
-    
     private boolean isInteractive = false;
+    private List<String> parsedCommands = new ArrayList<>();
 
-    public SharkMessengerUI(InputStream is, PrintStream out, PrintStream err, SharkMessengerApp sharkMessengerApp) {
+    /**
+     * Use for string input in unittests or no input
+     */
+    public SharkMessengerUI(String batchCommands, InputStream is, PrintStream out, PrintStream err,
+                            SharkMessengerApp sharkMessengerApp) {
+        this.parsedCommands.addAll(Arrays.asList(batchCommands.split(System.lineSeparator())));
         this.outStream = out;
         this.errStream = err;
         this.sharkMessengerApp = sharkMessengerApp;
         this.bufferedReader = new BufferedReader(new InputStreamReader(is));
+
     }
+
+    /**
+     * Use for text file as batch input
+     *
+     * @throws FileNotFoundException
+     */
+    public SharkMessengerUI(File file, InputStream is, PrintStream out, PrintStream err,
+                            SharkMessengerApp sharkMessengerApp) throws FileNotFoundException {
+        this(new BufferedReader(new InputStreamReader(new FileInputStream(file)))
+                .lines().reduce("", (a, b) -> a + System.lineSeparator() + b), is, out, err, sharkMessengerApp
+        );
+    }
+
 
     public void handleUserInput(String input) throws Exception {
         List<String> cmd = optimizeUserInputString(input);
@@ -47,12 +63,12 @@ public class SharkMessengerUI {
             }
             this.addCommandToHistory(sb.toString());
         }
-        
+
         if (isInteractive) {
             command.startCommandExecution();
         } else {
             command.initializeExecution(cmd);
-        } 
+        }
     }
 
     //TODO: extract and set flags like -i for interactive mode
@@ -74,15 +90,19 @@ public class SharkMessengerUI {
         }
     }
 
+    public List<String> getParsedCommands() {
+        return this.parsedCommands;
+    }
+
     public void addCommandToHistory(String commandIdentifier) {
         this.commandParameterStrings.add(commandIdentifier);
     }
 
-    public List<String> getCommandHistory(){
+    public List<String> getCommandHistory() {
         return this.commandParameterStrings;
     }
 
-    public Map<String,UICommand> getCommands() {
+    public Map<String, UICommand> getCommands() {
         return this.commands;
     }
 
