@@ -40,9 +40,9 @@ public class UICommandSetChannelAge extends UICommand {
     /**
      * Arguments needed in this order: 
      * <p>
-     * channel as UICommandChannelArgument
+     * @param channel as Channel
      * <p>
-     * channelAge as UICommandStringArgument
+     * @param channelAge as String
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {

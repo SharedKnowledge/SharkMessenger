@@ -61,7 +61,7 @@ public class UICommandGetCertificatesByIssuer extends UICommand {
      /**
      * Arguments needed in this order: 
      * <p>
-     * issuer as UICommandKnownPeerArgument 
+     * @param issuer as KnownPeer
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {

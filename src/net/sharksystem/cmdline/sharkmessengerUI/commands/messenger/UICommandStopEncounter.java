@@ -44,9 +44,9 @@ public class UICommandStopEncounter extends UICommand {
     /**
      * Arguments needed in this order: 
      * <p>
-     * peer1 as UICommandKnownPeerArgument
+     * @param peer1 as KnownPeer
      * <p>
-     * peer2 as UICommandKnownPeerArgument
+     * @param peer2 as KnownPeer
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {

@@ -63,12 +63,12 @@ public class UICommandRunEncounter extends UICommand {
     /**
      * Arguments needed in this order: 
      * <p>
-     * peer1 as UICommandKnownPeerArgument
+     * @param peer1 as KnownPeer
      * <p>
-     * peer2 as UICommandKnownPeerArgument
+     * @param peer2 as KnownPeer
      * <p>
-     * stopExchange as UICommandBooleanArgument
-     */
+     * @param stopExchange as boolean
+    */
     @Override
     protected boolean handleArguments(List<String> arguments) {
         if(arguments.size() < 3) {

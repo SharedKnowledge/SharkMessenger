@@ -47,11 +47,11 @@ public class UICommandAddHubDescription extends UICommand {
     /**
      * Arguments needed in this order: 
      * <p>
-     * hubHost as UICommandAddHubDescription
+     * @param hubHost as AddHubDescription
      * <p>
-     * hubPort as UICommandIntegerArgument
+     * @param hubPort as integer
      * <p>
-     * multiChannel as UICommandBooleanArgument
+     * @param multiChannel as boolean
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {

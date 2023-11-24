@@ -45,7 +45,7 @@ public class UICommandRemoveChannel extends UICommand {
  /**
      * Arguments needed in this order: 
      * <p>
-     * channel as UICommandChannelArgument
+     * @param channel as Channel
      * <p>
      */
     @Override

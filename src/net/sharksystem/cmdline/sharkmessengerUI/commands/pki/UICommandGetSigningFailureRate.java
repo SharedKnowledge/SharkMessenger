@@ -53,7 +53,7 @@ public class UICommandGetSigningFailureRate extends UICommand {
 /**
      * Arguments needed in this order: 
      * <p>
-     * subject as UICommandKnownPeerArgument
+     * @param subject as KnownPeer
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {

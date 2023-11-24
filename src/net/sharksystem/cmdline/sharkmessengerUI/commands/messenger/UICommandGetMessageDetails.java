@@ -54,9 +54,9 @@ public class UICommandGetMessageDetails extends UICommand {
      /**
      * Arguments needed in this order: 
      * <p>
-     * channel as UICommandChannelArgument
+     * @param channel as Channel
      * <p>
-     * position as UICommandIntegerArgument
+     * @param position as integer
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
