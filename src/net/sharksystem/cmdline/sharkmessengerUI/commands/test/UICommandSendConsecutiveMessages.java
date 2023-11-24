@@ -1,28 +1,26 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.test;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
+import net.sharksystem.cmdline.sharkmessengerUI.TestManager;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommand;
-import net.sharksystem.cmdline.sharkmessengerUI.UICommandBooleanArgument;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommandIntegerArgument;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommandLongArgument;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaire;
-import net.sharksystem.cmdline.sharkmessengerUI.UICommandStringArgument;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandSendMessage;
 
 /**
  * This Command is for testing if messages were send correctly.
- * It send out a specified amount of messages.
- * The content of these is identifier and a timestamp.
+ * It sends out a specified amount of messages.
+ * The content of these is an identifier and a timestamp.
  */
 public class UICommandSendConsecutiveMessages extends UICommand{
     private final UICommandIntegerArgument amountMessages;
     private final UICommandLongArgument delayInMillis;
-
+    
     private List<String> argsForSendMessage;
 
     public UICommandSendConsecutiveMessages(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
@@ -54,7 +52,7 @@ public class UICommandSendConsecutiveMessages extends UICommand{
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
-        if (arguments.size() < 7) {
+        if (arguments.size() < 6) {
             return false;
         }
 
@@ -87,9 +85,22 @@ public class UICommandSendConsecutiveMessages extends UICommand{
     protected void execute() throws Exception {
         UICommand sendCommand = new UICommandSendMessage(getSharkMessengerApp(),
                 getSharkMessengerUI(), getIdentifier(), false);
-        
+
+        TestManager tm = TestManager.getInstance();        
+        String users = this.argsForSendMessage.get(4);
+
         for (int i = 0; i < this.amountMessages.getValue(); i++) {
-            this.argsForSendMessage.set(3, "ID: " + i + System.lineSeparator() + "Time: " + System.currentTimeMillis());
+            StringBuilder sb = new StringBuilder();
+            sb.append("ID:\t");
+            sb.append(tm.sendNextMessage(users));
+            sb.append("\t");
+            sb.append(users);
+            sb.append(System.lineSeparator());
+            sb.append("Time:\t");
+            sb.append(System.currentTimeMillis());
+
+            this.argsForSendMessage.set(3, sb.toString());
+
             sendCommand.initializeExecution(this.argsForSendMessage);
             Thread.sleep(this.delayInMillis.getValue());
         }
