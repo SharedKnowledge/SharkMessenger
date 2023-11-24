@@ -77,15 +77,15 @@ public class UICommandSendMessage extends UICommandProduceChannelListBefore {
     /**
      * Arguments needed in this order: 
      * <p>
-     * channelIndex as UICommandIntegerArgument
+     * @param channelIndex as Integer
      * <p>
-     * sign as UICommandBooleanArgument
+     * @param sign as boolean
      * <p>
-     * encrypt as UICommandBooleanArgument
+     * @param encrypt as boolean
      * <p> 
-     * message as UICommandStringArgument
+     * @param message as String
      * <p>
-     * receivers as UICommandStringArgument
+     * @param receivers as String
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {

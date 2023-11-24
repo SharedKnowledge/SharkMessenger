@@ -64,7 +64,7 @@ public class UICommandSaveLog extends UICommand {
     /**
      * Arguments needed in this order: 
      * <p>
-     * fileName as UICommandStringArgument
+     * @param fileName as String
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {

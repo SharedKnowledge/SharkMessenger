@@ -44,7 +44,7 @@ public class UICommandListMessages extends UICommandProduceChannelListBefore {
     /**
      * Arguments needed in this order: 
      * <p>
-     * channelIndex as UICommandIntegerArgument
+     * @param channelIndex as integer
      * <p>
      */
     @Override

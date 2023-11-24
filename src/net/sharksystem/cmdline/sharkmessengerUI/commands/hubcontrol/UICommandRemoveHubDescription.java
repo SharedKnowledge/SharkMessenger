@@ -40,7 +40,7 @@ public class UICommandRemoveHubDescription extends UICommand {
     /**
      * Arguments needed in this order: 
      * <p>
-     * hubIndex as UICommandIntegerArgument
+     * @param hubIndex as integer
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {

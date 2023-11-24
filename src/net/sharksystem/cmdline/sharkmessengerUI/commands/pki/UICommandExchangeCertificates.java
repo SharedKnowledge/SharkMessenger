@@ -63,10 +63,10 @@ public class UICommandExchangeCertificates extends UICommand implements SharkCre
     @Override
     public void credentialReceived(CredentialMessage credentialMessage) {
     }
-     /**
+    /**
      * Arguments needed in this order: 
      * <p>
-     * subject as UICommandKnownPeerArgument 
+     * @param subject as KnownPeer
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {

@@ -54,7 +54,7 @@ public class UICommandGetOwnerInfo extends UICommand {
     /**
      * Arguments needed in this order: 
      * <p>
-     * peer as UICommandKnownPeerArgument 
+     * @param peer as KnownPeer
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {

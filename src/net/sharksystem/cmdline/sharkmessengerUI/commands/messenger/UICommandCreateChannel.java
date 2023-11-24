@@ -55,11 +55,11 @@ public class UICommandCreateChannel extends UICommand {
      /**
      * Arguments needed in this order: 
      * <p>
-     * channelUri as UICommandStringArgument
+     * @param channelUri as String
      * <p>
-     * channelName as UICommandStringArgument
+     * @param channelName as String
      * <p>
-     * channelMustNotExist UICommandBooleanArgument
+     * @param channelMustNotExist boolean
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {

@@ -50,7 +50,7 @@ public class UICommandGetNumberOfKnownPeers extends UICommand {
     /**
      * Arguments needed in this order: 
      * <p>
-     * owner as UICommandKnownPeerArgument 
+     * @param owner as KnownPeer
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {

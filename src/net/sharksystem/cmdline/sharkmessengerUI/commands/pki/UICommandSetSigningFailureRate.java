@@ -55,11 +55,10 @@ public class UICommandSetSigningFailureRate extends UICommand {
     }
 
     /**
-     * Arguments needed in this order: 
+     * Put the needed parameters in a list in following order:
      * <p>
-     * subject as UICommandKnownPeerArgument
-     * <p>
-     * failureRate as UICommandIntegerArgument
+     * @param subject as KnownPeer.
+     * @param failureRate as integer.
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
