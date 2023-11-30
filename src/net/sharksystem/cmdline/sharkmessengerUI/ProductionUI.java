@@ -62,8 +62,6 @@ public class ProductionUI {
         SharkMessengerApp sharkMessengerApp = new SharkMessengerApp(username);
         SharkMessengerUI smUI = new SharkMessengerUI("", System.in, System.out, System.err, sharkMessengerApp);
 
-
-        smUI.setFlags(args);
         //CLIModelInterface model = new CLIModel();
 
         // TODO: that's over-engineered. Controller code can be merged into this class - it just UI code

@@ -5,13 +5,14 @@ import java.util.*;
 
 public class SharkMessengerUI {
 
+    private static boolean isInteractive = false;
+
     private final Map<String, UICommand> commands = new HashMap<>();
     private final List<String> commandParameterStrings = new ArrayList<>();
     private final PrintStream outStream;
     private final PrintStream errStream;
     private final SharkMessengerApp sharkMessengerApp;
     private final BufferedReader bufferedReader;
-    private boolean isInteractive = false;
     private List<String> parsedCommands = new ArrayList<>();
 
     /**
@@ -38,7 +39,6 @@ public class SharkMessengerUI {
                 .lines().reduce("", (a, b) -> a + System.lineSeparator() + b), is, out, err, sharkMessengerApp
         );
     }
-
 
     public void handleUserInput(String input) throws Exception {
         List<String> cmd = optimizeUserInputString(input);
@@ -71,8 +71,17 @@ public class SharkMessengerUI {
         }
     }
 
-    //TODO: extract and set flags like -i for interactive mode
-    public void setFlags(String[] args) {
+    /**
+     * Sets the specified flags for the application.
+     * It searches the given String arguments for a hyphen
+     * and uses the following characters as flags.
+     * <p>
+     * Available flags:
+     * <p>
+     * <pre>-i   interactive mode, uses the questionaire.</pre>
+     * @param args
+     */
+    public static void setFlags(String[] args) {
         for (String argument : args) {
             argument.strip();
             final String hyphen = "-";
@@ -82,8 +91,7 @@ public class SharkMessengerUI {
                     char flag = argument.charAt(i);
 
                     switch (flag) {
-                        case 'i':
-                            this.isInteractive = true;
+                        case 'i' -> isInteractive = true;
                     }
                 }
             }
