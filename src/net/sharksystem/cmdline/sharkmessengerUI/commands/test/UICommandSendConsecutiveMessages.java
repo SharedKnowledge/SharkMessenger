@@ -5,7 +5,6 @@ import java.util.List;
 
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
-import net.sharksystem.cmdline.sharkmessengerUI.TestManager;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommand;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommandIntegerArgument;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommandLongArgument;

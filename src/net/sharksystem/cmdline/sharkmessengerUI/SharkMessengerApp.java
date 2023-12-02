@@ -33,7 +33,7 @@ public class SharkMessengerApp {
     private final ASAPEncounterManager encounterManager;
     private Map<Integer, TCPServerSocketAcceptor> openSockets = new HashMap<>();
 
-    SharkMessengerApp(String peerName) throws SharkException, IOException {
+    public SharkMessengerApp(String peerName) throws SharkException, IOException {
         this.sharkPeerFS = new SharkPeerFS(peerName, ROOTFOLDER + "/" + peerName);
 
         // set up shark components

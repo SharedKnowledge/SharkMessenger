@@ -91,7 +91,8 @@ public class SharkMessengerUI {
                     char flag = argument.charAt(i);
 
                     switch (flag) {
-                        case 'i' -> isInteractive = true;
+                        case 'i':
+                            isInteractive = true;
                     }
                 }
             }

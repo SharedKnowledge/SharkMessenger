@@ -1,4 +1,4 @@
-package net.sharksystem.cmdline.sharkmessengerUI;
+package net.sharksystem.cmdline.sharkmessengerUI.commands.test;
 
 import java.util.HashMap;
 import java.util.Map;
