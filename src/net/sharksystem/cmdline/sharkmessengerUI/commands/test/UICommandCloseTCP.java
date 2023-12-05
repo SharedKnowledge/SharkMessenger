@@ -25,12 +25,6 @@ public class UICommandCloseTCP extends UICommand {
             return false;
         }
         boolean isParsable = this.portNumber.tryParse(arguments.get(0));
-        // maybe checks not necessary ... just wait for IO Exception from SocketFactory
-        // check if in range of valide portnumbers (figure out not reserved numbers)
-        if (this.portNumber.getValue() < 1 || this.portNumber.getValue() >= 65535) {
-            this.printErrorMessage("Argument is not a valid port number");
-            return false;
-        }
         return isParsable;
     }
 

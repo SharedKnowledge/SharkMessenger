@@ -115,13 +115,14 @@ public class UITest {
 
     @Test
     public void reconstructIncomingChunkStorageBug() throws Exception {
-        String cmdLogAlice =
-                "openTCP 8889\n" +
-                "mkChannel test://t1 channel1 false\n" +
+        String cmdLogAlice = "openTCP 8889" +
+                System.lineSeparator() +
+                "mkChannel test://t1 channel1 false" +
+                System.lineSeparator() +
                 "sendMessage 0 false false hi_bob bob";
 
-        String cmdLogBob =
-                "connectTCP 8889 localhost\n" +
+        String cmdLogBob = "connectTCP 8889 localhost" +
+                System.lineSeparator() +
                 "mkChannel test://t1 channel1 false";
 
         SharkMessengerUI smUIAlice = this.initializeSharkMessengerUI(ALICE, cmdLogAlice);

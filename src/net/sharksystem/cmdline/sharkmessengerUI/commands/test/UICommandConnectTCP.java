@@ -30,13 +30,6 @@ public class UICommandConnectTCP extends UICommand {
         }
         boolean isParsable = this.portNumber.tryParse(arguments.get(0))
                 && this.hostName.tryParse(arguments.get(1));
-        // maybe checks not necessary ... just wait for IO Exception from SocketFactory
-        // check if in range of valide portnumbers
-        if (this.portNumber.getValue() < 1 || this.portNumber.getValue() >= 65535) {
-            this.printErrorMessage("Argument is not a valid port number");
-            return false;
-        }
-        // check for valide hostname ?
         return isParsable;
     }
 
