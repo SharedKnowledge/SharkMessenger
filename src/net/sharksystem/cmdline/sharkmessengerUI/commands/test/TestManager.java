@@ -14,7 +14,7 @@ public class TestManager {
         return instance;
     }
 
-    private Map<String, Integer> sentMessages = new HashMap<>();
+    private final Map<String, Integer> sentMessages = new HashMap<>();
 
     private TestManager() {}
 
@@ -26,5 +26,13 @@ public class TestManager {
 
     public int getMessageCount(String username) {
         return this.sentMessages.get(username);
+    }
+
+    public void resetManager() {
+        if (instance == null) {
+            return;
+        }
+
+        this.sentMessages.clear();
     }
 }

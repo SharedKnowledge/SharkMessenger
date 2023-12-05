@@ -107,8 +107,7 @@ public class UICommandSendConsecutiveMessages extends UICommand{
 
     @Override
     public String getDescription() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getDescription'");
+        return "Send a specified amount of messages";
     }
     
 }
