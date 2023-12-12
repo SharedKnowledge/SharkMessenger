@@ -31,12 +31,13 @@ import net.sharksystem.cmdline.sharkmessengerUI.commands.test.UICommandCloseTCP;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.test.UICommandConnectTCP;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.test.UICommandExecuteCommands;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.test.UICommandOpenTCP;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.test.UICommandSendTestMessage;
 import net.sharksystem.utils.fs.FSUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
+import java.io.*;
 
 /**
  * Test class for easily reconstruct bugs found in interactive use of the SharkMessenger command line UI.
@@ -48,14 +49,15 @@ import java.io.IOException;
  * For Szenarios where the correct alternating sequence of command execution of each peer is required the execution of
  * each command with the sharkMessengerUI.handleUserInput(command) might be the better solution.
  */
-public class UITest {
+public class UITests {
 
     // It is probably better to place data storage directory inside playground directory but the sharkPeerFS class
     // doesn't allow to change that directory.
     private static final String TEST_DATA_STORAGE = "sharkMessengerDataStorage";
+    private static final String EXECUTE_BATCH_AT_ONCE = "executeCommands false";
     private static final String ALICE = "alice";
     private static final String BOB = "bob";
-    private static final String EXECUTE_BATCH_AT_ONCE = "executeCommands false";
+    private static final String TEST_CHANNEL = "test://t1";
 
     private SharkMessengerUI initializeSharkMessengerUI(String peerName, String batchCommands)
             throws SharkException, IOException {
@@ -104,14 +106,20 @@ public class UITest {
         smUI.addCommand(new UICommandCloseTCP(sharkMessengerApp, smUI, "closeTCP", true));
         smUI.addCommand(new UICommandConnectTCP(sharkMessengerApp, smUI, "connectTCP", true));
         smUI.addCommand(new UICommandExecuteCommands(sharkMessengerApp, smUI, "executeCommands", false));
+        smUI.addCommand(new UICommandSendTestMessage(sharkMessengerApp, smUI, "sendMessageTest", true));
 
         return smUI;
     }
 
     @BeforeEach
     public void resetStorageFolder() {
+        // delete test dir if already exists
         FSUtils.removeFolder(TEST_DATA_STORAGE);
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                         REPRODUCE BUGS WITH UI COMMAND LOG                                     //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Test
     public void reconstructIncomingChunkStorageBug() throws Exception {
@@ -155,6 +163,87 @@ public class UITest {
         smUIAlice.handleUserInput(cmdAlice5th);
 
         Thread.sleep(1000);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                             TEST TOOL FUNCTIONALITY                                            //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Verification files are used to control the test result in distributed tests. Each Peer outputs two files, one
+     * with all information about all sent messages and one with all information about received messages. This test
+     * checks whether those files are produced correctly.
+     *
+     * Send ten test messages from alice to bob and check if verification files are produced correctly.
+     * Transmitted alice - received bob:
+     *      The verificationTest_tx_alice.csv and verificationTest_rx_bob.csv must contain 11 entries.
+     *      The verification files must be identical.
+     *      The Entries must contain 1 header line and 10 lines with information about the exchanged messages with
+     *       consecutive ID's from 0 to 9.
+     * Transmitted bob - received alice:
+     *      The verificationTest_rx_alice.csv and verificationTest_tx_bob.csv must only contain the header.
+     * TODO: implement verification file creation
+     */
+    @Test
+    public void produceVerificationFiles() throws Exception {
+
+        // SETUP
+        // csv files
+        String testID = "verificationTest";
+        // TODO: adapt path when verification files have been implemented
+        String verPath = "";
+        String txAlice = verPath + testID + "_" + "tx" + "_" + ALICE + ".csv";
+        String rxAlice = verPath + testID + "_" + "rx" + "_" + ALICE + ".csv";
+        String txBob = verPath + testID + "_" + "tx" + "_" + BOB + ".csv";
+        String rxBob = verPath + testID + "_" + "rx" + "_" + BOB + ".csv";
+        String csv_header = "sender,receiver,uri,id";
+        String csvEntry = ALICE + "," + BOB + "," + TEST_CHANNEL;
+        // commands
+        int amountMessages = 10;
+        String aliceOpenTCP = "openTCP 6666";
+        String bobConnect2Alice = "connectTCP 6666 localhost";
+        String makeChannel = "mkChannel " + TEST_CHANNEL + " channel1 false";
+        String aliceSendTenMessages = "sendMessageTest " + amountMessages + " 0 0 false false hi_bob " + BOB;
+        String makeVerificationFiles = "saveTestResults " + testID;
+        // ui instances
+        SharkMessengerUI smUIAlice = this.initializeSharkMessengerUI(ALICE, "");
+        SharkMessengerUI smUIBob = this.initializeSharkMessengerUI(BOB, "");
+
+        //TEST
+        // message exchange
+        smUIAlice.handleUserInput(aliceOpenTCP);
+        smUIBob.handleUserInput(bobConnect2Alice);
+        smUIAlice.handleUserInput(makeChannel);
+        smUIBob.handleUserInput(makeChannel);
+        smUIAlice.handleUserInput(aliceSendTenMessages);
+        // give peers time to do their thing
+        Thread.sleep(5000);
+        // make verification files
+        smUIAlice.handleUserInput(makeVerificationFiles);
+        smUIBob.handleUserInput(makeVerificationFiles);
+
+        // VERIFICATION
+        // tx alice - rx bob
+        BufferedReader brAlice = new BufferedReader(new InputStreamReader(new FileInputStream(txAlice)));
+        BufferedReader brBob = new BufferedReader(new InputStreamReader(new FileInputStream(rxBob)));
+        // check header
+        Assertions.assertEquals(brAlice.readLine(), csv_header);
+        Assertions.assertEquals(brBob.readLine(), csv_header);
+        // check entries
+        for (int i = 0; i < amountMessages ; i++) {
+            Assertions.assertEquals( csvEntry + "," + i, brAlice.readLine());
+            Assertions.assertEquals( csvEntry + "," + i, brBob.readLine());
+        }
+        // tx bob - rx alice
+        brAlice = new BufferedReader(new InputStreamReader(new FileInputStream(rxAlice)));
+        brBob = new BufferedReader(new InputStreamReader(new FileInputStream(txBob)));
+        // check header
+        Assertions.assertEquals(brAlice.readLine(), csv_header);
+        Assertions.assertEquals(brBob.readLine(), csv_header);
+        // check EOF
+        Assertions.assertNull(brAlice.readLine());
+        Assertions.assertNull(brBob.readLine());
+
     }
 
 }

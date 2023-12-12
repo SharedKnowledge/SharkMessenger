@@ -16,14 +16,14 @@ import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandSend
  * It sends out a specified amount of messages.
  * The content of these is an identifier and a timestamp.
  */
-public class UICommandSendConsecutiveMessages extends UICommand{
+public class UICommandSendTestMessage extends UICommand{
     private final UICommandIntegerArgument amountMessages;
     private final UICommandLongArgument delayInMillis;
     
     private List<String> argsForSendMessage;
 
-    public UICommandSendConsecutiveMessages(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
-            String identifier, boolean rememberCommand) {
+    public UICommandSendTestMessage(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                                    String identifier, boolean rememberCommand) {
 
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
 
