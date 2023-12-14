@@ -10,20 +10,21 @@ import net.sharksystem.cmdline.sharkmessengerUI.UICommandIntegerArgument;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommandLongArgument;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaire;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandSendMessage;
+import net.sharksystem.messenger.SharkMessengerComponent;
 
 /**
  * This Command is for testing if messages were send correctly.
  * It sends out a specified amount of messages.
  * The content of these is an identifier and a timestamp.
  */
-public class UICommandSendTestMessage extends UICommand{
+public class UICommandSendTestMessage extends UICommand {
     private final UICommandIntegerArgument amountMessages;
     private final UICommandLongArgument delayInMillis;
-    
+
     private List<String> argsForSendMessage;
 
     public UICommandSendTestMessage(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
-                                    String identifier, boolean rememberCommand) {
+            String identifier, boolean rememberCommand) {
 
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
 
@@ -34,34 +35,37 @@ public class UICommandSendTestMessage extends UICommand{
     /**
      * Put the needed parameters in a list in following order:
      * <p>
+     * 
      * @param amountMessages as integer.
-     * The amount of messages to send.
-     * Negative values will equal to an amount of 0.
-     * @param delayInMillis as long.
-     * The delay before sending the next message in milliseconds.
-     * Negative values will equal to a delay of 0.
-     * @param channelIndex as integer.
-     * Index of the channel the message is send to.
-     * @param sign as boolean.
-     * Determines, if the message will be signed.
-     * @param encrypt as boolean.
-     * Determines, if the message will be encrypted.
-     * @param receivers as String.
-     * The receivers of the message seperated by a comma ','.
+     *                       The amount of messages to send.
+     *                       Negative values will equal to an amount of 0.
+     * @param delayInMillis  as long.
+     *                       The delay before sending the next message in
+     *                       milliseconds.
+     *                       Negative values will equal to a delay of 0.
+     * @param channelIndex   as integer.
+     *                       Index of the channel the message is send to.
+     * @param sign           as boolean.
+     *                       Determines, if the message will be signed.
+     * @param encrypt        as boolean.
+     *                       Determines, if the message will be encrypted.
+     * @param message        as String.
+     *                       The message to be send. 
+     * @param receivers      as String.
+     *                       The receivers of the message seperated by a comma ','.
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
-        if (arguments.size() < 6) {
+        if (arguments.size() < 7) {
             return false;
         }
 
         boolean isParsable = amountMessages.tryParse(arguments.get(0))
-            && delayInMillis.tryParse(arguments.get(1));
+                && delayInMillis.tryParse(arguments.get(1));
 
         this.argsForSendMessage = new ArrayList<>(arguments);
         this.argsForSendMessage.remove(0);
         this.argsForSendMessage.remove(0);
-        this.argsForSendMessage.add(3, "");
 
         if (amountMessages.getValue() < 0) {
             amountMessages.setValue(0);
@@ -85,20 +89,20 @@ public class UICommandSendTestMessage extends UICommand{
         UICommand sendCommand = new UICommandSendMessage(getSharkMessengerApp(),
                 getSharkMessengerUI(), getIdentifier(), false);
 
-        TestManager tm = TestManager.getInstance();        
-        String users = this.argsForSendMessage.get(4);
-
+        TestManager tm = TestManager.getInstance();   
+        SharkMessengerComponent messenger = this.getSharkMessengerApp().getMessengerComponent();
+        String channelUri = messenger.getChannel(this.argsForSendMessage.get(0));   
+        String sender = this.getSharkMessengerApp().getSharkPeer().getPeerID();
+        String content = this.argsForSendMessage.get(3);
+        String receivers = this.argsForSendMessage.get(4);
         for (int i = 0; i < this.amountMessages.getValue(); i++) {
             StringBuilder sb = new StringBuilder();
-            sb.append("ID:\t");
-            sb.append(tm.sendNextMessage(users));
-            sb.append("\t");
-            sb.append(users);
-            sb.append(System.lineSeparator());
-            sb.append("Time:\t");
+            sb.append(tm.sendNextMessage(receivers,channelUri,content));
+            sb.append(",");
             sb.append(System.currentTimeMillis());
-
-            this.argsForSendMessage.set(3, sb.toString());
+            sb.append(",");
+            sb.append(content);
+            this.argsForSendMessage.set(3, sb.toString()); 
 
             sendCommand.initializeExecution(this.argsForSendMessage);
             Thread.sleep(this.delayInMillis.getValue());
@@ -109,5 +113,5 @@ public class UICommandSendTestMessage extends UICommand{
     public String getDescription() {
         return "Send a specified amount of messages";
     }
-    
+
 }

@@ -196,7 +196,7 @@ public class UITests {
         String rxAlice = verPath + testID + "_" + "rx" + "_" + ALICE + ".csv";
         String txBob = verPath + testID + "_" + "tx" + "_" + BOB + ".csv";
         String rxBob = verPath + testID + "_" + "rx" + "_" + BOB + ".csv";
-        String csv_header = "sender,receiver,uri,id";
+        String csv_header = "sender,receiver,uri,id"; 
         String csvEntry = ALICE + "," + BOB + "," + TEST_CHANNEL;
         // commands
         int amountMessages = 10;
