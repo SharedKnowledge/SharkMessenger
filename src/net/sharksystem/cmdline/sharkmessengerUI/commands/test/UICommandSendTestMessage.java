@@ -89,10 +89,10 @@ public class UICommandSendTestMessage extends UICommand {
         UICommand sendCommand = new UICommandSendMessage(getSharkMessengerApp(),
                 getSharkMessengerUI(), getIdentifier(), false);
 
-        TestManager tm = TestManager.getInstance();   
+        SentMessageCounter tm = SentMessageCounter.getInstance();
         SharkMessengerComponent messenger = this.getSharkMessengerApp().getMessengerComponent();
-        String channelUri = messenger.getChannel(this.argsForSendMessage.get(0));   
-        String sender = this.getSharkMessengerApp().getSharkPeer().getPeerID();
+        int channelID = Integer.parseInt(argsForSendMessage.get(0));
+        String channelUri = messenger.getChannel(channelID).getURI().toString();
         String content = this.argsForSendMessage.get(3);
         String receivers = this.argsForSendMessage.get(4);
         for (int i = 0; i < this.amountMessages.getValue(); i++) {

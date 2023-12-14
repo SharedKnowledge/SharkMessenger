@@ -27,11 +27,7 @@ import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandGetNumberO
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandGetOwnerInfo;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandGetSigningFailureRate;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandSetSigningFailureRate;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.test.UICommandCloseTCP;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.test.UICommandConnectTCP;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.test.UICommandExecuteCommands;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.test.UICommandOpenTCP;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.test.UICommandSendTestMessage;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.test.*;
 import net.sharksystem.utils.fs.FSUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -107,6 +103,7 @@ public class UITests {
         smUI.addCommand(new UICommandConnectTCP(sharkMessengerApp, smUI, "connectTCP", true));
         smUI.addCommand(new UICommandExecuteCommands(sharkMessengerApp, smUI, "executeCommands", false));
         smUI.addCommand(new UICommandSendTestMessage(sharkMessengerApp, smUI, "sendMessageTest", true));
+        smUI.addCommand(new UICommandSaveTestResults(sharkMessengerApp,smUI,"saveTestResults",true));
 
         return smUI;
     }
@@ -196,7 +193,7 @@ public class UITests {
         String rxAlice = verPath + testID + "_" + "rx" + "_" + ALICE + ".csv";
         String txBob = verPath + testID + "_" + "tx" + "_" + BOB + ".csv";
         String rxBob = verPath + testID + "_" + "rx" + "_" + BOB + ".csv";
-        String csv_header = "sender,receiver,uri,id"; 
+        String csv_header = "sender,receiver,uri,id";
         String csvEntry = ALICE + "," + BOB + "," + TEST_CHANNEL;
         // commands
         int amountMessages = 10;
@@ -227,8 +224,8 @@ public class UITests {
         BufferedReader brAlice = new BufferedReader(new InputStreamReader(new FileInputStream(txAlice)));
         BufferedReader brBob = new BufferedReader(new InputStreamReader(new FileInputStream(rxBob)));
         // check header
-        Assertions.assertEquals(brAlice.readLine(), csv_header);
-        Assertions.assertEquals(brBob.readLine(), csv_header);
+        Assertions.assertEquals(csv_header,brAlice.readLine());
+        Assertions.assertEquals(csv_header,brBob.readLine());
         // check entries
         for (int i = 0; i < amountMessages ; i++) {
             Assertions.assertEquals( csvEntry + "," + i, brAlice.readLine());
@@ -238,8 +235,8 @@ public class UITests {
         brAlice = new BufferedReader(new InputStreamReader(new FileInputStream(rxAlice)));
         brBob = new BufferedReader(new InputStreamReader(new FileInputStream(txBob)));
         // check header
-        Assertions.assertEquals(brAlice.readLine(), csv_header);
-        Assertions.assertEquals(brBob.readLine(), csv_header);
+        Assertions.assertEquals(csv_header,brAlice.readLine());
+        Assertions.assertEquals(csv_header,brBob.readLine());
         // check EOF
         Assertions.assertNull(brAlice.readLine());
         Assertions.assertNull(brBob.readLine());

@@ -103,7 +103,7 @@ public class TestUI {
         smUI.addCommand(new UICommandCloseTCP(sharkMessengerApp, smUI, "closeTCP", true));
         smUI.addCommand(new UICommandConnectTCP(sharkMessengerApp, smUI, "connectTCP", true));
         smUI.addCommand(new UICommandSendTestMessage(sharkMessengerApp, smUI, "sendMessageTest", true));
-        smUI.addCommand(new UICommandResetTestManager(sharkMessengerApp, smUI, "resetTM", true));
+        smUI.addCommand(new UICommandResetMessageCounter(sharkMessengerApp, smUI, "resetTM", true));
 
         //controller.startCLI();
 
