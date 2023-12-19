@@ -9,10 +9,12 @@ import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 import net.sharksystem.SharkException;
+import net.sharksystem.asap.ASAPSecurityException;
 import net.sharksystem.cmdline.sharkmessengerUI.*;
 import net.sharksystem.messenger.SharkMessage;
 import net.sharksystem.messenger.SharkMessageList;
 import net.sharksystem.messenger.SharkMessengerComponent;
+import net.sharksystem.messenger.SharkMessengerException;
 
 
 public class UICommandSaveTestResults extends UICommand {
@@ -34,7 +36,7 @@ public class UICommandSaveTestResults extends UICommand {
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
-        if (arguments.size() < 1) {
+        if (arguments.isEmpty()) {
             return false;
         }
         return this.testID.tryParse(arguments.get(0));
@@ -51,20 +53,25 @@ public class UICommandSaveTestResults extends UICommand {
         writeReceivedMessagesInFile(testID.getValue() + "_rx_"+ peerName+".csv");
         writeSentMessagesInFile(testID.getValue() + "_tx_"+ peerName+".csv");
     }
+
+    // TODO: need two msgCounter for unit tests
     private void writeSentMessagesInFile(String pathName) throws IOException {
         Path path = Paths.get(pathName);
         List<String> messages = SentMessageCounter.getInstance().getMessageData();
         Files.write(path, "sender,receiver,uri,id".getBytes());
         for (String message : messages) {
-            Files.write(path,(System.lineSeparator() +peerName + "," + message).getBytes(), StandardOpenOption.APPEND);
+            Files.write(path,(System.lineSeparator() + peerName + "," + message).getBytes(), StandardOpenOption.APPEND);
         }
 
     }
-    private void writeReceivedMessagesInFile(String pathName) throws Exception {
+    private void writeReceivedMessagesInFile(String pathName)
+            throws IOException, SharkMessengerException, ASAPSecurityException {
+
         Path path = Paths.get(pathName);
         SharkMessengerComponent messenger = super.getSharkMessengerApp().getMessengerComponent();
         List<CharSequence> uris = messenger.getChannelUris();
 
+        // TODO: filter for messages with receiver equals this peer
         Files.write(path, "sender,receiver,uri,id".getBytes());
         for (CharSequence uri : uris) {
             SharkMessageList messages = messenger.getChannel(uri).getMessages();
@@ -86,7 +93,7 @@ public class UICommandSaveTestResults extends UICommand {
     }
     private String getIDFromContent(byte[] content) {
        String contentString = new String(content, StandardCharsets.UTF_8);
-       return contentString.split(",")[0];
+       return contentString.split(System.lineSeparator())[0];
     }
     @Override
     public String getDescription() {
