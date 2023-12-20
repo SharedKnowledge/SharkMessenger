@@ -3,6 +3,7 @@ package net.sharksystem.cmdline.sharkmessengerUI.commands.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sharksystem.SharkException;
 import net.sharksystem.cmdline.sharkmessengerUI.*;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandSendMessage;
 import net.sharksystem.messenger.SharkMessengerComponent;
@@ -21,23 +22,28 @@ public class UICommandSendTestMessage extends UICommand {
     private final UICommandBooleanArgument encrypt;
     private final UICommandStringArgument message;
     private final UICommandStringArgument receivers;
+    private final String peerName;
 
     public UICommandSendTestMessage(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
-            String identifier, boolean rememberCommand) {
-
+                                    String identifier, boolean rememberCommand) throws SharkException {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
 
         // additional parameters for tests
         this.repetitions = new UICommandIntegerArgument(sharkMessengerApp);
         this.delayInMillis = new UICommandLongArgument(sharkMessengerApp);
+
         // standard send message command parameters
         this.channelIndex = new UICommandIntegerArgument(sharkMessengerApp);
         this.sign = new UICommandBooleanArgument(sharkMessengerApp);
         this.encrypt = new UICommandBooleanArgument(sharkMessengerApp);
         this.message = new UICommandStringArgument(sharkMessengerApp);
         this.receivers = new UICommandStringArgument(sharkMessengerApp);
+
         // allow broadcast msg
         this.receivers.setEmptyStringAllowed(true);
+
+        // used for getting the right instance of the SentMessageCounter
+        this.peerName = this.getSharkMessengerApp().getSharkPeer().getPeerID().toString();
     }
 
     /**
@@ -58,29 +64,23 @@ public class UICommandSendTestMessage extends UICommand {
             return false;
         }
 
-        boolean isParsable = repetitions.tryParse(arguments.get(0))
-                && delayInMillis.tryParse(arguments.get(1))
-                && channelIndex.tryParse(arguments.get(2))
-                && sign.tryParse(arguments.get(3))
-                && encrypt.tryParse(arguments.get(4))
-                && message.tryParse(arguments.get(5))
-                && receivers.tryParse(arguments.get(6));
+        boolean isParsable = this.repetitions.tryParse(arguments.get(0))
+                && this.delayInMillis.tryParse(arguments.get(1))
+                && this.channelIndex.tryParse(arguments.get(2))
+                && this.sign.tryParse(arguments.get(3))
+                && this.encrypt.tryParse(arguments.get(4))
+                && this.message.tryParse(arguments.get(5))
+                && this.receivers.tryParse(arguments.get(6));
 
-        if (repetitions.getValue() < 0) {
-            repetitions.setValue(0);
+        if (this.repetitions.getValue() < 0) {
+            this.repetitions.setValue(0);
         }
 
-        if (delayInMillis.getValue() < 0) {
-            delayInMillis.setValue(0L);
+        if (this.delayInMillis.getValue() < 0) {
+            this.delayInMillis.setValue(0L);
         }
 
         return isParsable;
-    }
-
-    @Override
-    protected UICommandQuestionnaire specifyCommandStructure() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'specifyCommandStructure'");
     }
 
     @Override
@@ -89,7 +89,7 @@ public class UICommandSendTestMessage extends UICommand {
                 getSharkMessengerUI(), getIdentifier(), false);
 
         // messageCounter provides message IDs
-        SentMessageCounter messageCounter = SentMessageCounter.getInstance();
+        SentMessageCounter messageCounter = SentMessageCounter.getInstance(this.peerName);
 
         // prepare argument list for sendMessage command
         List<String> arguments = new ArrayList<>();
@@ -99,7 +99,7 @@ public class UICommandSendTestMessage extends UICommand {
         arguments.add(this.receivers.getValue());
 
         // information for the messageCounter
-        SharkMessengerComponent messenger = this.getSharkMessengerApp().getMessengerComponent();
+        SharkMessengerComponent messenger = getSharkMessengerApp().getMessengerComponent();
         String channelUri = messenger.getChannel(this.channelIndex.getValue()).getURI().toString();
         String content = this.message.getValue();
         String receivers = this.receivers.getValue();
@@ -108,7 +108,7 @@ public class UICommandSendTestMessage extends UICommand {
             Thread.sleep(this.delayInMillis.getValue());
 
             // add ID to the message and put it into the argument list for the sendMessage command
-            int msgID = messageCounter.sendNextMessage(receivers, channelUri, content);
+            int msgID = messageCounter.nextMessage(receivers, channelUri, content);
             String msg = msgID
                     + System.lineSeparator()
                     + this.message.getValue();
@@ -119,8 +119,14 @@ public class UICommandSendTestMessage extends UICommand {
     }
 
     @Override
+    protected UICommandQuestionnaire specifyCommandStructure() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'specifyCommandStructure'");
+    }
+
+    @Override
     public String getDescription() {
-        return "Send a specified amount of messages";
+        return "Send a specified amount of test messages with a specified delay.";
     }
 
 }

@@ -34,6 +34,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Test class for easily reconstruct bugs found in interactive use of the SharkMessenger command line UI.
@@ -179,7 +181,6 @@ public class UITests {
      *       consecutive ID's from 0 to 9.
      * Transmitted bob - received alice:
      *      The verificationTest_rx_alice.csv and verificationTest_tx_bob.csv must only contain the header.
-     * TODO: implement verification file creation
      */
     @Test
     public void produceVerificationFiles() throws Exception {
@@ -214,7 +215,7 @@ public class UITests {
         smUIBob.handleUserInput(makeChannel);
         smUIAlice.handleUserInput(aliceSendTenMessages);
         // give peers time to do their thing
-        Thread.sleep(5000);
+        Thread.sleep(2000);
         // make verification files
         smUIAlice.handleUserInput(makeVerificationFiles);
         smUIBob.handleUserInput(makeVerificationFiles);
@@ -227,7 +228,7 @@ public class UITests {
         Assertions.assertEquals(csv_header,brAlice.readLine());
         Assertions.assertEquals(csv_header,brBob.readLine());
         // check entries
-        for (int i = 0; i < amountMessages ; i++) {
+        for (int i = 1; i <= amountMessages ; i++) {
             Assertions.assertEquals( csvEntry + "," + i, brAlice.readLine());
             Assertions.assertEquals( csvEntry + "," + i, brBob.readLine());
         }
