@@ -96,6 +96,7 @@ public class UICommandSendTestMessage extends UICommand {
         arguments.add(this.channelIndex.getValue().toString());
         arguments.add(this.sign.getValue().toString());
         arguments.add(this.encrypt.getValue().toString());
+        arguments.add("");
         arguments.add(this.receivers.getValue());
 
         // information for the messageCounter
@@ -112,7 +113,7 @@ public class UICommandSendTestMessage extends UICommand {
             String msg = msgID
                     + System.lineSeparator()
                     + this.message.getValue();
-            arguments.add(3, msg);
+            arguments.set(3, msg);
 
             sendCommand.initializeExecution(arguments);
         }

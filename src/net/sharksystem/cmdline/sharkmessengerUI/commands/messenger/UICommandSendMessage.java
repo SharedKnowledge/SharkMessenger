@@ -52,6 +52,7 @@ public class UICommandSendMessage extends UICommandProduceChannelListBefore {
             byte[] message = this.message.getValue().getBytes();
 
             Set<CharSequence> receivers = this.getAllExistingPeers(this.receivers.getValue());
+
             messenger.sendSharkMessage(message, channel.getURI(), receivers, sign, encrypt);
         } catch (SharkException | IOException e) {
             this.printErrorMessage(e.getLocalizedMessage());
@@ -62,7 +63,7 @@ public class UICommandSendMessage extends UICommandProduceChannelListBefore {
         Set<CharSequence> peers = new HashSet<>();
         String[] stringPeers = s.split(",");
         for (String peerName : stringPeers) {
-            //TODO: Don't know how to save other peers yet
+            peers.add(peerName);
         }
         return peers.size() > 0 ? peers : null;
     }

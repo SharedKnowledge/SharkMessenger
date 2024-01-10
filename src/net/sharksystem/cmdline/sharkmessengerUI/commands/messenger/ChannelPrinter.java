@@ -58,7 +58,7 @@ public class ChannelPrinter {
         if(messages.size() < 1) ps.print("no messages");
         else {
             for (int i = 0; i < messages.size(); i++) {
-                ps.println("#" + i++);
+                ps.println("#" + i);
                 ps.println("--------------------------------------------------------------------------------");
                 SharkMessage message = messages.getSharkMessage(i, true);
                 ChannelPrinter.printMessageDetails(ps, message);

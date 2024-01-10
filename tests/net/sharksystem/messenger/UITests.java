@@ -34,8 +34,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Test class for easily reconstruct bugs found in interactive use of the SharkMessenger command line UI.
@@ -43,7 +41,7 @@ import java.util.Map;
  * test szenario.
  * Those Commands can bet passed to the initializeSharkMessengerUI method as parameter to create a UI
  * Object with the required behaviour for each peer.
- *
+ * <p>
  * For Szenarios where the correct alternating sequence of command execution of each peer is required the execution of
  * each command with the sharkMessengerUI.handleUserInput(command) might be the better solution.
  */
@@ -94,7 +92,7 @@ public class UITests {
 
         // Hub control
         smUI.addCommand(new UICommandListHubDescriptions(sharkMessengerApp, smUI, "lsHubDescr", true));
-        smUI.addCommand(new UICommandAddHubDescription(sharkMessengerApp, smUI,"addHubDescr", true));
+        smUI.addCommand(new UICommandAddHubDescription(sharkMessengerApp, smUI, "addHubDescr", true));
         smUI.addCommand(new UICommandRemoveHubDescription(sharkMessengerApp, smUI, "rmHubDescr", true));
         smUI.addCommand(new UICommandListConnectedHubs(sharkMessengerApp, smUI, "lsHubs", true));
         smUI.addCommand(new UICommandConnectHub(sharkMessengerApp, smUI, "connectHub", true));
@@ -105,7 +103,7 @@ public class UITests {
         smUI.addCommand(new UICommandConnectTCP(sharkMessengerApp, smUI, "connectTCP", true));
         smUI.addCommand(new UICommandExecuteCommands(sharkMessengerApp, smUI, "executeCommands", false));
         smUI.addCommand(new UICommandSendTestMessage(sharkMessengerApp, smUI, "sendMessageTest", true));
-        smUI.addCommand(new UICommandSaveTestResults(sharkMessengerApp,smUI,"saveTestResults",true));
+        smUI.addCommand(new UICommandSaveTestResults(sharkMessengerApp, smUI, "saveTestResults", true));
 
         return smUI;
     }
@@ -172,15 +170,15 @@ public class UITests {
      * Verification files are used to control the test result in distributed tests. Each Peer outputs two files, one
      * with all information about all sent messages and one with all information about received messages. This test
      * checks whether those files are produced correctly.
-     *
+     * <p>
      * Send ten test messages from alice to bob and check if verification files are produced correctly.
      * Transmitted alice - received bob:
-     *      The verificationTest_tx_alice.csv and verificationTest_rx_bob.csv must contain 11 entries.
-     *      The verification files must be identical.
-     *      The Entries must contain 1 header line and 10 lines with information about the exchanged messages with
-     *       consecutive ID's from 0 to 9.
+     * The verificationTest_tx_alice.csv and verificationTest_rx_bob.csv must contain 11 entries.
+     * The verification files must be identical.
+     * The Entries must contain 1 header line and 10 lines with information about the exchanged messages with
+     * consecutive ID's from 0 to 9.
      * Transmitted bob - received alice:
-     *      The verificationTest_rx_alice.csv and verificationTest_tx_bob.csv must only contain the header.
+     * The verificationTest_rx_alice.csv and verificationTest_tx_bob.csv must only contain the header.
      */
     @Test
     public void produceVerificationFiles() throws Exception {
@@ -225,19 +223,19 @@ public class UITests {
         BufferedReader brAlice = new BufferedReader(new InputStreamReader(new FileInputStream(txAlice)));
         BufferedReader brBob = new BufferedReader(new InputStreamReader(new FileInputStream(rxBob)));
         // check header
-        Assertions.assertEquals(csv_header,brAlice.readLine());
-        Assertions.assertEquals(csv_header,brBob.readLine());
+        Assertions.assertEquals(csv_header, brAlice.readLine());
+        Assertions.assertEquals(csv_header, brBob.readLine());
         // check entries
-        for (int i = 1; i <= amountMessages ; i++) {
-            Assertions.assertEquals( csvEntry + "," + i, brAlice.readLine());
-            Assertions.assertEquals( csvEntry + "," + i, brBob.readLine());
+        for (int i = 1; i <= amountMessages; i++) {
+            Assertions.assertEquals(csvEntry + "," + i, brAlice.readLine());
+            Assertions.assertEquals(csvEntry + "," + i, brBob.readLine());
         }
         // tx bob - rx alice
         brAlice = new BufferedReader(new InputStreamReader(new FileInputStream(rxAlice)));
         brBob = new BufferedReader(new InputStreamReader(new FileInputStream(txBob)));
         // check header
-        Assertions.assertEquals(csv_header,brAlice.readLine());
-        Assertions.assertEquals(csv_header,brBob.readLine());
+        Assertions.assertEquals(csv_header, brAlice.readLine());
+        Assertions.assertEquals(csv_header, brBob.readLine());
         // check EOF
         Assertions.assertNull(brAlice.readLine());
         Assertions.assertNull(brBob.readLine());
