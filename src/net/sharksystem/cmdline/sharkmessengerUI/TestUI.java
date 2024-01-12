@@ -37,6 +37,11 @@ public class TestUI {
         SharkMessengerApp sharkMessengerApp = new SharkMessengerApp(username);
         SharkMessengerUI smUI;
 
+
+        // add test received listener
+        sharkMessengerApp.getMessengerComponent().addSharkMessagesReceivedListener(
+                new TestMessageReceivedListener(sharkMessengerApp));
+
         // Instantiate SharkMessengerUI with or without a batch file for testing
         if (args.length != 0) {
             String filename = args[0];
