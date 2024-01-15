@@ -73,9 +73,10 @@ public class UICommandSaveTestResults extends UICommand {
 
         SharkMessengerComponent messenger = super.getSharkMessengerApp().getMessengerComponent();
         List<CharSequence> uris = messenger.getChannelUris();
-
+        TestMessageReceivedListener listener = TestMessageReceivedListener.getInstance();
         for (CharSequence uri : uris) {
             SharkMessageList messageList = messenger.getChannel(uri).getMessages();
+            Files.write(path, ("Listener : Total messages for "+ uri +": "+ listener.getMessageCount(uri)).getBytes());
             for (int i = 0; i < messageList.size(); i++) {
                 SharkMessage message = messageList.getSharkMessage(i, true);
                 int messageID = Integer.parseInt(getIDFromContent(message.getContent()));
@@ -93,7 +94,7 @@ public class UICommandSaveTestResults extends UICommand {
                     sb.append(",");
                     sb.append(message.getCreationTime());
                     sb.append(",");
-                    sb.append(TestMessageReceivedListener.getInstance().getReceivedTime(uri, messageID));
+                    sb.append(listener.getReceivedTime(uri, messageID));
                     Files.write(path, sb.toString().getBytes(), StandardOpenOption.APPEND);
                     // TODO: for tests with more than two peers and messages with more recipients or broadcasts this
                     //  format might not work for verification since every combination of recipients would need an own

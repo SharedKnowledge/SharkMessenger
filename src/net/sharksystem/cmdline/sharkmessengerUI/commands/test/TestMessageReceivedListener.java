@@ -7,6 +7,7 @@ import net.sharksystem.messenger.SharkMessageList;
 import net.sharksystem.messenger.SharkMessengerException;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,5 +59,16 @@ public class TestMessageReceivedListener implements SharkMessagesReceivedListene
     }
     public long getReceivedTime(CharSequence uri, int messageID){
         return receivedMessages.get(uri).get(messageID);
+    }
+    public int getMessageCount(CharSequence uri){
+        if(!receivedMessages.containsKey(uri)){
+            return 0;
+        }
+        return receivedMessages.get(uri).size();
+    }
+    public int getMessageCount(){
+        return receivedMessages.entrySet().stream()
+        .map(x-> x.getValue().size())
+        .reduce(0, Integer::sum);
     }
 }
