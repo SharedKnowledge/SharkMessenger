@@ -69,7 +69,7 @@ public class UICommandSaveTestResults extends UICommand {
             throws IOException, SharkMessengerException, ASAPSecurityException {
 
         Path path = Paths.get(pathName);
-        Files.write(path, "sender,receiver,uri,id".getBytes());
+        Files.write(path, "sender,receiver,uri,id,creationTime,receivedTime".getBytes());
 
         SharkMessengerComponent messenger = super.getSharkMessengerApp().getMessengerComponent();
         List<CharSequence> uris = messenger.getChannelUris();
@@ -78,6 +78,7 @@ public class UICommandSaveTestResults extends UICommand {
             SharkMessageList messageList = messenger.getChannel(uri).getMessages();
             for (int i = 0; i < messageList.size(); i++) {
                 SharkMessage message = messageList.getSharkMessage(i, true);
+                int messageID = Integer.parseInt(getIDFromContent(message.getContent()));
                 // write only messages where this peer is a recipient
                 if (message.getRecipients().contains(this.peerName)) {
                     StringBuilder sb = new StringBuilder();
@@ -88,7 +89,11 @@ public class UICommandSaveTestResults extends UICommand {
                     sb.append(",");
                     sb.append(uri);
                     sb.append(",");
-                    sb.append(getIDFromContent(message.getContent()));
+                    sb.append(messageID);
+                    sb.append(",");
+                    sb.append(message.getCreationTime());
+                    sb.append(",");
+                    sb.append(TestMessageReceivedListener.getInstance().getReceivedTime(uri, messageID));
                     Files.write(path, sb.toString().getBytes(), StandardOpenOption.APPEND);
                     // TODO: for tests with more than two peers and messages with more recipients or broadcasts this
                     //  format might not work for verification since every combination of recipients would need an own
