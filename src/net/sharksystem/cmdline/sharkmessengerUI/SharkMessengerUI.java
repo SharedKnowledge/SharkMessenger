@@ -3,6 +3,8 @@ package net.sharksystem.cmdline.sharkmessengerUI;
 import java.io.*;
 import java.util.*;
 
+import net.sharksystem.utils.Log;
+
 public class SharkMessengerUI {
 
     private static boolean isInteractive = false;
@@ -67,7 +69,11 @@ public class SharkMessengerUI {
         if (isInteractive) {
             command.startCommandExecution();
         } else {
-            command.initializeExecution(cmd);
+            boolean initializedExecution = command.initializeExecution(cmd);
+            if(!initializedExecution){
+                Log.writeLogErr(this,
+                    "Couldn't extract the needed parameters from argument list - or they are not valid.");
+            }
         }
     }
 

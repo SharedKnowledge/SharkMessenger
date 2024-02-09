@@ -1,5 +1,6 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.test;
 
+import net.sharksystem.asap.ASAPSecurityException;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.messenger.SharkMessagesReceivedListener;
 import net.sharksystem.messenger.SharkMessage;
@@ -35,11 +36,11 @@ public class TestMessageReceivedListener implements SharkMessagesReceivedListene
         if (receivedMessages.containsKey(uri)){
             messageCounter = receivedMessages.get(uri).size();
         }else{
-            receivedMessages.put(uri, new HashMap<>())
+            receivedMessages.put(uri, new HashMap<>());
         }
         try {
             SharkMessageList messages = this.sharkMessengerApp.getMessengerComponent().getChannel(uri).getMessages();
-            int newMessagesCounter = messages.size()- messageCounter;
+            //int newMessagesCounter = messages.size()- messageCounter;
             long currentTime = System.currentTimeMillis();
             for (int i = messages.size()-1; i >= messageCounter; i--){
                 SharkMessage message = messages.getSharkMessage(i, false);
@@ -50,6 +51,12 @@ public class TestMessageReceivedListener implements SharkMessagesReceivedListene
             // save received msg with timestamp
         } catch (SharkMessengerException | IOException e) {
             System.out.println("TODO: exception in MessageReceivedListener:" + e.getLocalizedMessage());
+        } catch (NumberFormatException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (ASAPSecurityException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 
