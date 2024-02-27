@@ -22,7 +22,7 @@ public class SharkMessengerUI {
      */
     public SharkMessengerUI(String batchCommands, InputStream is, PrintStream out, PrintStream err,
                             SharkMessengerApp sharkMessengerApp) {
-        this.parsedCommands.addAll(Arrays.asList(batchCommands.split(System.lineSeparator())));
+        this.parsedCommands.addAll(Arrays.asList(batchCommands.trim().split(System.lineSeparator())));
         this.outStream = out;
         this.errStream = err;
         this.sharkMessengerApp = sharkMessengerApp;

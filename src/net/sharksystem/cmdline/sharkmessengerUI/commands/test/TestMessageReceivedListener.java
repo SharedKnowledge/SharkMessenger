@@ -21,6 +21,7 @@ public class TestMessageReceivedListener implements SharkMessagesReceivedListene
     public TestMessageReceivedListener(SharkMessengerApp sharkMessengerApp) {
         this.sharkMessengerApp = sharkMessengerApp;
         this.receivedMessages = new HashMap<>();
+        instance = this;
     }
 
     public static TestMessageReceivedListener getInstance (){
@@ -43,14 +44,14 @@ public class TestMessageReceivedListener implements SharkMessagesReceivedListene
             //int newMessagesCounter = messages.size()- messageCounter;
             long currentTime = System.currentTimeMillis();
             for (int i = messages.size()-1; i >= messageCounter; i--){
-                SharkMessage message = messages.getSharkMessage(i, false);
+                SharkMessage message = messages.getSharkMessage(i, true);
                 int id =  Integer.parseInt(getIDFromContent(message.getContent()));
                 receivedMessages.get(uri).put(id, currentTime);
             }
 
             // save received msg with timestamp
         } catch (SharkMessengerException | IOException e) {
-            System.out.println("TODO: exception in MessageReceivedListener:" + e.getLocalizedMessage());
+            System.out.println("TODO: exception in MessageReceivedListener:" + e.getMessage());
         } catch (NumberFormatException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

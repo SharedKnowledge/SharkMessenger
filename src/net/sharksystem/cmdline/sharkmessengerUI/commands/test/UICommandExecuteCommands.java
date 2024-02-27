@@ -71,6 +71,7 @@ public class UICommandExecuteCommands extends UICommand {
         List<String> commands = smUI.getParsedCommands();
 
         for (String command : commands) {
+            System.out.println("Execute with enter: " + command);
             isr.read();
             smUI.handleUserInput(command);
         }
@@ -78,8 +79,7 @@ public class UICommandExecuteCommands extends UICommand {
 
     @Override
     public String getDescription() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getDescription'");
+        return "Executes a loaded test script.";
     }
     
 }

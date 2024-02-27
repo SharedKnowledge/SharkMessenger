@@ -67,7 +67,6 @@ public class TestUI {
         //controller.addCommand(new CLICStopEncounter("stopEncounter", true));
 
         // messages
-        smUI.addCommand(new UICommandSendMessage(sharkMessengerApp, smUI, "sendMessage", true));
         smUI.addCommand(new UICommandListMessages(sharkMessengerApp, smUI, "listMessages", true));
         smUI.addCommand(new UICommandGetMessageDetails(sharkMessengerApp, smUI, "getMessageDetails", true));
 
@@ -110,6 +109,7 @@ public class TestUI {
         smUI.addCommand(new UICommandSendTestMessage(sharkMessengerApp, smUI, "sendMessageTest", true));
         smUI.addCommand(new UICommandResetMessageCounter(sharkMessengerApp, smUI, "resetTM", true));
         smUI.addCommand(new UICommandSaveTestResults(sharkMessengerApp,smUI,"saveTestResults",true));
+        smUI.addCommand(new UICommandExecuteCommands(sharkMessengerApp, smUI, "exec", false));
 
         //controller.startCLI();
 

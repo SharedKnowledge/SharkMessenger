@@ -9,7 +9,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 import net.sharksystem.SharkException;
-import net.sharksystem.asap.ASAPSecurityException;
+import net.sharksystem.asap.ASAPException;
 import net.sharksystem.cmdline.sharkmessengerUI.*;
 import net.sharksystem.messenger.SharkMessage;
 import net.sharksystem.messenger.SharkMessageList;
@@ -46,7 +46,7 @@ public class UICommandSaveTestResults extends UICommand {
     }
 
     @Override
-    protected void execute() throws ASAPSecurityException, IOException, SharkMessengerException {
+    protected void execute() throws IOException, SharkMessengerException, ASAPException {
         writeSentMessagesToFile(this.testID.getValue() + "_tx_" + peerName + ".csv");
         writeReceivedMessagesToFile(this.testID.getValue() + "_rx_" + peerName + ".csv");
     }
@@ -66,7 +66,7 @@ public class UICommandSaveTestResults extends UICommand {
     }
 
     private void writeReceivedMessagesToFile(String pathName)
-            throws IOException, SharkMessengerException, ASAPSecurityException {
+            throws IOException, SharkMessengerException, ASAPException {
 
         Path path = Paths.get(pathName);
         Files.write(path, "sender,receiver,uri,id,creationTime,receivedTime".getBytes());
@@ -76,7 +76,7 @@ public class UICommandSaveTestResults extends UICommand {
         TestMessageReceivedListener listener = TestMessageReceivedListener.getInstance();
         for (CharSequence uri : uris) {
             SharkMessageList messageList = messenger.getChannel(uri).getMessages();
-            Files.write(path, ("Listener : Total messages for "+ uri +": "+ listener.getMessageCount(uri)).getBytes());
+            Files.write(path, (System.lineSeparator()+"Listener : Total messages for "+ uri +": "+ listener.getMessageCount(uri)).getBytes(), StandardOpenOption.APPEND);
             for (int i = 0; i < messageList.size(); i++) {
                 SharkMessage message = messageList.getSharkMessage(i, true);
                 int messageID = Integer.parseInt(getIDFromContent(message.getContent()));
