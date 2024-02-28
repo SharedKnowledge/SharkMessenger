@@ -38,14 +38,12 @@ public class UICommandCreateNewKeyPair extends UICommand {
         sb.append("Creates a new pair of RSA keys.");
         return sb.toString();
     }
- /**
-     * Arguments needed in this order: 
-     * <p>
-     * none
+
+    /**
+     * This command requires no arguments.
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
        return true;
     }
-
 }

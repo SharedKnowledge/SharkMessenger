@@ -31,6 +31,7 @@ public class UICommandRunEncounter extends UICommand {
 
     @Override
     public void execute() throws Exception {
+        this.printTODOReimplement();
         //ui.printInfo("This command is weak. The encounter is simulated on the local machine over a TCP connection that can't be extended to a larger network.");
 //
         //boolean stopExchange = this.stopExchange.getValue();
@@ -60,22 +61,25 @@ public class UICommandRunEncounter extends UICommand {
         sb.append("Runs an encounter between two peers.");
         return sb.toString();
     }
+
     /**
-     * Arguments needed in this order: 
-     * <p>
-     * @param peer1 as KnownPeer
-     * <p>
-     * @param peer2 as KnownPeer
-     * <p>
-     * @param stopExchange as boolean
-    */
+     * @param arguments in following order:
+     * <ol>
+     *  <li>peer1 - peerID</li>
+     *  <li>peer2 - peerID</li>
+     *  <li>stopExchange - boolean</li>
+     * </ol>
+     */
     @Override
     protected boolean handleArguments(List<String> arguments) {
         if(arguments.size() < 3) {
             return false;
         }
-        boolean isParsable = peer1.tryParse(arguments.get(0)) && peer2.tryParse(arguments.get(1)) && stopExchange.tryParse(arguments.get(2));
+
+        boolean isParsable = peer1.tryParse(arguments.get(0)) 
+                && peer2.tryParse(arguments.get(1)) 
+                && stopExchange.tryParse(arguments.get(2));
+
         return isParsable;
     }
-
 }

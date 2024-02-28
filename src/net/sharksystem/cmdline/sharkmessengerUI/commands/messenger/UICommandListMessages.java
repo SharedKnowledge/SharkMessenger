@@ -7,6 +7,9 @@ import net.sharksystem.messenger.SharkMessageList;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * This command lists all known messages of a channel.
+ */
 public class UICommandListMessages extends UICommandProduceChannelListBefore {
     private final UICommandIntegerArgument channelIndex;
 
@@ -42,16 +45,17 @@ public class UICommandListMessages extends UICommandProduceChannelListBefore {
     }
 
     /**
-     * Arguments needed in this order: 
-     * <p>
-     * @param channelIndex as integer
-     * <p>
+     * @param arguments in following order:
+     * <ol>
+     *  <li>channelIndex - int</li>
+     * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
         if(arguments.size() < 1) {
             return false;
         }
+        
         boolean isParsable = channelIndex.tryParse(arguments.get(0));
         return isParsable;
     }

@@ -4,6 +4,9 @@ import java.util.List;
 
 import net.sharksystem.cmdline.sharkmessengerUI.*;
 
+/**
+ * This command removes a channel from the peers known channels.
+ */
 public class UICommandRemoveChannel extends UICommand {
 
     private final UICommandChannelArgument channel;
@@ -42,17 +45,19 @@ public class UICommandRemoveChannel extends UICommand {
         sb.append("Removes a channel.");
         return sb.toString();
     }
- /**
-     * Arguments needed in this order: 
-     * <p>
-     * @param channel as Channel
-     * <p>
+
+    /**
+     * @param arguments in following order:
+     * <ol>
+     *  <li>channel - channelURI</li>
+     * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
         if(arguments.size() < 1) {
             return false;
         }
+
         boolean isParsable = channel.tryParse(arguments.get(0));
         return isParsable;
     }

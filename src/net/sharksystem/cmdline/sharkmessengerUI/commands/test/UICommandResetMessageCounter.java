@@ -6,8 +6,9 @@ import net.sharksystem.cmdline.sharkmessengerUI.*;
 import java.util.List;
 
 /**
- * This command resets all IDs and information about sent messages to reset the state after saving the results to a file
- * and before the next test run.
+ * This command resets all IDs and information about sent messages. Use this
+ * when running multiple tests without interruptions. But make sure to save
+ * the test results before resetting.
  */
 public class UICommandResetMessageCounter extends UICommand {
     private final String sender;
@@ -28,9 +29,7 @@ public class UICommandResetMessageCounter extends UICommand {
     }
 
     /**
-     * Put the needed parameters in a list in following order:
-     * <p>
-     * none
+     * This command requires no arguments.
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {

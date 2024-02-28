@@ -3,8 +3,10 @@ package net.sharksystem.cmdline.sharkmessengerUI;
 import java.io.*;
 import java.util.*;
 
-import net.sharksystem.utils.Log;
-
+/**
+ * This class contains the UI logic and is the interface between user
+ * and application.
+ */
 public class SharkMessengerUI {
 
     private static boolean isInteractive = false;
@@ -13,7 +15,6 @@ public class SharkMessengerUI {
     private final List<String> commandParameterStrings = new ArrayList<>();
     private final PrintStream outStream;
     private final PrintStream errStream;
-    private final SharkMessengerApp sharkMessengerApp;
     private final BufferedReader bufferedReader;
     private List<String> parsedCommands = new ArrayList<>();
 
@@ -25,9 +26,7 @@ public class SharkMessengerUI {
         this.parsedCommands.addAll(Arrays.asList(batchCommands.trim().split(System.lineSeparator())));
         this.outStream = out;
         this.errStream = err;
-        this.sharkMessengerApp = sharkMessengerApp;
         this.bufferedReader = new BufferedReader(new InputStreamReader(is));
-
     }
 
     /**
@@ -42,13 +41,20 @@ public class SharkMessengerUI {
         );
     }
 
+    /**
+     * Takes user input and executes the given command with its arguments.
+     * The input needs to follow the following scheme:
+     * <command> <argument1> <argument2> ... <argumentN>
+     * <p>
+     * If invalid arguments are provided the command will not execute.
+     * For the needed arguments visit the specific commands description.
+     * @param input the user input String.
+     * @throws Exception if a command encountered a critical error.
+     */
     public void handleUserInput(String input) throws Exception {
         List<String> cmd = optimizeUserInputString(input);
-
-        //the reason for removing the first argument (=command identifier) is that this here is the only
-        //  place where it's needed. A method performing the action of a command only needs the arguments
-        //  specified and not the command identifier
         String commandIdentifier = cmd.remove(0);
+
         if (!commands.containsKey(commandIdentifier)) {
             this.commandNotFound(commandIdentifier);
             return;
@@ -66,17 +72,18 @@ public class SharkMessengerUI {
             this.addCommandToHistory(sb.toString());
         }
 
+        // Interactive mode uses the old Questionaire to obtain its arguments.
         if (isInteractive) {
             command.startCommandExecution();
         } else {
             boolean initializedExecution = command.initializeExecution(cmd);
-            if(!initializedExecution){
-                Log.writeLogErr(this,
-                    "Couldn't extract the needed parameters from argument list - or they are not valid.");
+            if(!initializedExecution) {
+                this.errStream.println("Arguments invalid for command: " + commandIdentifier);
             }
         }
     }
 
+    // TODO: At the moment this is not used and there is no way to set flags.
     /**
      * Sets the specified flags for the application.
      * It searches the given String arguments for a hyphen
@@ -88,10 +95,10 @@ public class SharkMessengerUI {
      * @param args
      */
     public static void setFlags(String[] args) {
+        final String hyphen = "-";
+
         for (String argument : args) {
             argument.strip();
-            final String hyphen = "-";
-
             if (argument.startsWith(hyphen)) {
                 for (int i = 1; i < argument.length(); i++) {
                     char flag = argument.charAt(i);
@@ -146,7 +153,6 @@ public class SharkMessengerUI {
                         userInput = bufferedReader.readLine();
                         if (userInput.equals(UICommandQuestionnaire.EXIT_SEQUENCE)) {
                             this.addCommandToHistory(UICommandQuestionnaire.EXIT_SEQUENCE);
-//                            this.controller.logQuestionAnswer(CLICQuestionnaire.EXIT_SEQUENCE);
                             return false;
                         }
                     } catch (IOException e) {
@@ -174,7 +180,11 @@ public class SharkMessengerUI {
         this.outStream.println("The following command was terminated: " + identifier);
     }
 
-
+    /**
+     * Prints a message for the user to let him know, the command he gave is
+     * not on the list of commands.
+     * @param commandIdentifier
+     */
     public void commandNotFound(String commandIdentifier) {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown command: ");
@@ -221,6 +231,10 @@ public class SharkMessengerUI {
         this.outStream.println(sb.toString());
     }
 
+    /**
+     * Starts the command loop which begins taking user input until stopped by
+     * other means.
+     */
     public void runCommandLoop() {
         boolean running = true;
         while (running) {

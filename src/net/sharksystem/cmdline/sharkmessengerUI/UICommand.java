@@ -92,7 +92,7 @@ public abstract class UICommand {
      * of the needed Command class.
      * @param arguments needed for execution.
      * @return true, if preperation was successfull. False if an argument could
-     *          not be prepared correctly.
+     *         not be prepared correctly.
      * @throws Exception Any exception that might be thrown during the execution process.
      */
     public final boolean initializeExecution(List<String> arguments) throws Exception {

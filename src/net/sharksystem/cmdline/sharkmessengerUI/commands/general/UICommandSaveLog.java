@@ -1,6 +1,5 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.general;
 
-import com.sun.source.tree.PackageTree;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 
 import java.io.File;
@@ -16,7 +15,6 @@ import net.sharksystem.cmdline.sharkmessengerUI.UICommandStringArgument;
 
 /**
  * Command for saving the log in a file.
- * Format: Command followed by parameters (space separated)
  */
 public class UICommandSaveLog extends UICommand {
 
@@ -62,9 +60,10 @@ public class UICommandSaveLog extends UICommand {
     }
 
     /**
-     * Arguments needed in this order: 
-     * <p>
-     * @param fileName as String
+     * @param arguments in following order:
+     * <ol>
+     *  <li>fileName - String</li>
+     * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {

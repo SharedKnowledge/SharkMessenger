@@ -5,6 +5,9 @@ import net.sharksystem.cmdline.sharkmessengerUI.*;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * This command conects to a peer over TCP/IP.
+ */
 public class UICommandConnectTCP extends UICommand {
 
     private final UICommandIntegerArgument portNumber;
@@ -19,17 +22,21 @@ public class UICommandConnectTCP extends UICommand {
     }
 
     /**
-     * Extracts first and second parameters as portNumber and hostName
-     * @param arguments 0:portNumber 1:hostName
-     * @return true if arguments are parsable (and valide?)
+     * @param arguments in following order:
+     * <ol>
+     *  <li>port - int</li>
+     *  <li>host - String</li>
+     * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
         if (arguments.size() < 2) {
             return false;
         }
+
         boolean isParsable = this.portNumber.tryParse(arguments.get(0))
                 && this.hostName.tryParse(arguments.get(1));
+                
         return isParsable;
     }
 

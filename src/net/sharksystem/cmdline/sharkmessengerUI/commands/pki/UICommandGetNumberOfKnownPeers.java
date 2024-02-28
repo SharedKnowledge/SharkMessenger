@@ -48,17 +48,18 @@ public class UICommandGetNumberOfKnownPeers extends UICommand {
     }
 
     /**
-     * Arguments needed in this order: 
-     * <p>
-     * @param owner as KnownPeer
+     * @param arguments in following order:
+     * <ol>
+     *  <li>owner - peerID</li>
+     * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
         if(arguments.size() < 1) {
             return false;
         }
+        
         boolean isParsable = owner.tryParse(arguments.get(0));
         return isParsable;
     }
-
 }

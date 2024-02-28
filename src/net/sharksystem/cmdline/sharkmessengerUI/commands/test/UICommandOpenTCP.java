@@ -5,6 +5,9 @@ import net.sharksystem.cmdline.sharkmessengerUI.*;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * This command opens a port for a peer to connect to over TCP/IP.
+ */
 public class UICommandOpenTCP extends UICommand {
 
     private final UICommandIntegerArgument portNumber;
@@ -17,15 +20,17 @@ public class UICommandOpenTCP extends UICommand {
     }
 
     /**
-     * Extracts the first parameter as portNumber if parseable
-     * @param arguments 0: portNumber.
-     * @return true if argument is parsable (and valide?)
+     * @param arguments in following order:
+     * <ol>
+     *  <li>port - int</li>
+     * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
-        if (arguments.isEmpty()) {
+        if (arguments.size() < 1) {
             return false;
         }
+
         boolean isParsable = this.portNumber.tryParse(arguments.get(0));
         return isParsable;
     }

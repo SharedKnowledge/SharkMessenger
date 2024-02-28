@@ -45,18 +45,19 @@ public class UICommandGetKeysCreationTime extends UICommand {
         return sb.toString();
     }
     
-   /**
-     * Arguments needed in this order: 
-     * <p>
-     * @param peer as KnownPeer
+    /**
+     * @param arguments in following order:
+     * <ol>
+     *  <li>peer - peerID</li>
+     * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
         if(arguments.size() < 1) {
             return false;
         }
+        
         boolean isParsable = peer.tryParse(arguments.get(0));
         return isParsable;
     }
-
 }

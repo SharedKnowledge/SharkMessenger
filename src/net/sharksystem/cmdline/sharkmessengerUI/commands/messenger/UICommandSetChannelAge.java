@@ -38,18 +38,21 @@ public class UICommandSetChannelAge extends UICommand {
     }
     
     /**
-     * Arguments needed in this order: 
-     * <p>
-     * @param channel as Channel
-     * <p>
-     * @param channelAge as String
+     * @param arguments in following order:
+     * <ol>
+     *  <li>channel - channelURI</li>
+     *  <li>channelAge - String</li>
+     * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
         if(arguments.size() < 2) {
             return false;
         }
-        boolean isParsable = channel.tryParse(arguments.get(0)) && channelAge.tryParse(arguments.get(1));
+
+        boolean isParsable = channel.tryParse(arguments.get(0)) 
+                && channelAge.tryParse(arguments.get(1));
+
         return isParsable;
     }
 

@@ -51,19 +51,21 @@ public class UICommandGetMessageDetails extends UICommand {
         return sb.toString();
     }
 
-     /**
-     * Arguments needed in this order: 
-     * <p>
-     * @param channel as Channel
-     * <p>
-     * @param position as integer
+    /**
+     * @param arguments in following order:
+     * <ol>
+     *  <li>channelURI - String</li>
+     *  <li>position - int</li>
+     * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
         if(arguments.size() < 2) {
             return false;
         }
-        boolean isParsable = channel.tryParse(arguments.get(0)) && position.tryParse(arguments.get(1));
+        boolean isParsable = channel.tryParse(arguments.get(0)) 
+                && position.tryParse(arguments.get(1));
+                
         return isParsable;
     }
 

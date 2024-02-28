@@ -10,6 +10,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * This command sends a message into a channel.
+ */
 public class UICommandSendMessage extends UICommandProduceChannelListBefore {
     private final UICommandIntegerArgument channelIndex;
     private final UICommandBooleanArgument sign;
@@ -76,25 +79,27 @@ public class UICommandSendMessage extends UICommandProduceChannelListBefore {
     }
 
     /**
-     * Arguments needed in this order: 
-     * <p>
-     * @param channelIndex as Integer
-     * <p>
-     * @param sign as boolean
-     * <p>
-     * @param encrypt as boolean
-     * <p> 
-     * @param message as String
-     * <p>
-     * @param receivers as String
+     * @param arguments in following order:
+     * <ol>
+     *  <li>channelIndex - int</li>
+     *  <li>sign - boolean</li>
+     *  <li>encrypt - boolean</li>
+     *  <li>message - String</li>
+     *  <li>receivers - String [comma seperated]</li>
+     * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
         if(arguments.size() < 5) {
             return false;
         }
-        boolean isParsable = channelIndex.tryParse(arguments.get(0)) && sign.tryParse(arguments.get(1)) && encrypt.tryParse(arguments.get(2)) 
-        &&  message.tryParse(arguments.get(3)) &&  receivers.tryParse(arguments.get(4));
+
+        boolean isParsable = channelIndex.tryParse(arguments.get(0)) 
+                && sign.tryParse(arguments.get(1)) 
+                && encrypt.tryParse(arguments.get(2)) 
+                && message.tryParse(arguments.get(3)) 
+                && receivers.tryParse(arguments.get(4));
+
         return isParsable;
     }
 

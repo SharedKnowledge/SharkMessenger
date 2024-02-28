@@ -34,13 +34,14 @@ public class UICommandRemoveHubDescription extends UICommand {
 
     @Override
     public String getDescription() {
-        return "remove hub description from list";
+        return "Remove hub description from list.";
     }
 
     /**
-     * Arguments needed in this order: 
-     * <p>
-     * @param hubIndex as integer
+     * @param arguments in following order:
+     * <ol>
+     *  <li>hubIndex - int</li>
+     * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {

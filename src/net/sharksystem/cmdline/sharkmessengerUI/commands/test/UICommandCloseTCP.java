@@ -5,6 +5,9 @@ import net.sharksystem.cmdline.sharkmessengerUI.*;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Close a TCP connection to another peer.
+ */
 public class UICommandCloseTCP extends UICommand {
     private final UICommandIntegerArgument portNumber;
 
@@ -15,15 +18,17 @@ public class UICommandCloseTCP extends UICommand {
     }
 
     /**
-     * Extracts the first parameter as portNumber if parseable
-     * @param arguments 0: portNumber.
-     * @return true if argument is parsable (and valide?)
+     * @param arguments in following order:
+     * <ol>
+     *  <li>port - int</li>
+     * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
-        if (arguments.isEmpty()) {
+        if (arguments.size() < 1) {
             return false;
         }
+
         boolean isParsable = this.portNumber.tryParse(arguments.get(0));
         return isParsable;
     }
@@ -46,7 +51,7 @@ public class UICommandCloseTCP extends UICommand {
     @Override
     public String getDescription() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Closes a specified open port - except no more new connections to be established");
+        sb.append("Closes a specified open port - except no more new connections to be established.");
         // append hint for how to use
         return sb.toString();
     }

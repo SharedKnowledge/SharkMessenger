@@ -11,7 +11,7 @@ public class SentMessageCounter {
     private final List<MessageData> sentMessageData = new ArrayList<>();
 
     /**
-     * Singleton like excess to a SentMessageCounter instance bound to a CharacterSequence. This mechanism is necessary 
+     * Singleton like access to a SentMessageCounter instance bound to a CharacterSequence. This mechanism is necessary 
      * for correctly working unit tests on verification files because every peer needs his own Counter.
      * @param peerName
      * @return Instance of the Counter for a specific peer.

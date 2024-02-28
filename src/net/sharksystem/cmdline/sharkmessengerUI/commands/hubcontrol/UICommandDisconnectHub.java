@@ -27,7 +27,7 @@ public class UICommandDisconnectHub extends UICommand {
 
     @Override
     protected void execute() throws Exception {
-
+        this.printTODOReimplement();
     }
 
     @Override
@@ -36,9 +36,7 @@ public class UICommandDisconnectHub extends UICommand {
     }
 
     /**
-     * Arguments needed in this order: 
-     * <p>
-     * none
+     * This command requires no arguments.
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {

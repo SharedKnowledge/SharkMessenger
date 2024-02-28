@@ -35,14 +35,18 @@ import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandGetSigning
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandSetSigningFailureRate;
 import net.sharksystem.utils.Log;
 
+/**
+ * This class is the entry point for the application.
+ * Only commands a user should be able to execute are used below.
+ */
 public class ProductionUI {
     public static void main(String[] args) throws SharkException, IOException {
-        // re-direct asap/shark log messages
+        // Re-direct asap/shark log messages.
         PrintStream asapLogMessages = new PrintStream("asapLogMessages.txt");
         Log.setOutStream(asapLogMessages);
         Log.setErrStream(asapLogMessages);
 
-        // figure out user name
+        // Figure out user name, needed for peer initialization.
         System.out.println("Welcome to SharkMessenger version 0.1");
         String username = "";
         do {
@@ -62,34 +66,21 @@ public class ProductionUI {
         SharkMessengerApp sharkMessengerApp = new SharkMessengerApp(username);
         SharkMessengerUI smUI = new SharkMessengerUI("", System.in, System.out, System.err, sharkMessengerApp);
 
-        //CLIModelInterface model = new CLIModel();
-
-        // TODO: that's over-engineered. Controller code can be merged into this class - it just UI code
-        // we use stdout to publish information
-        //CLIControllerInterface smUI = new CLIController(System.out, sharkMessengerApp.getCLIModel());
-
-        //General
+        // General
         smUI.addCommand(new UICommandSaveLog(sharkMessengerApp, smUI, "saveLog", false));
         smUI.addCommand(new UICommandShowLog(sharkMessengerApp, smUI, "showLog", false));
         smUI.addCommand(new UICommandExit(sharkMessengerApp, smUI, "exit", false));
 
-        //Messenger
-        //controller.addCommand(new CLICAddPeer("mkPeer", true));
-        //controller.addCommand(new CLICRunEncounter("runEncounter", true));
-        //controller.addCommand(new CLICStopEncounter("stopEncounter", true));
-
-        // messages
+        // Messenger
         smUI.addCommand(new UICommandSendMessage(sharkMessengerApp, smUI, "sendMessage", true));
-        smUI.addCommand(new UICommandListMessages(sharkMessengerApp, smUI, "listMessages", true));
+        smUI.addCommand(new UICommandListMessages(sharkMessengerApp, smUI, "lsMessages", true));
         smUI.addCommand(new UICommandGetMessageDetails(sharkMessengerApp, smUI, "getMessageDetails", true));
-
-        // channels
         smUI.addCommand(new UICommandListChannels(sharkMessengerApp, smUI, "lsChannel", true));
         smUI.addCommand(new UICommandCreateChannel(sharkMessengerApp, smUI, "mkChannel", true));
-        smUI.addCommand(new UICommandSetChannelAge(sharkMessengerApp, smUI, "setChAge", true));
-        smUI.addCommand(new UICommandRemoveChannel(sharkMessengerApp, smUI, "rmCh", true));
+        smUI.addCommand(new UICommandSetChannelAge(sharkMessengerApp, smUI, "setChannelAge", true));
+        smUI.addCommand(new UICommandRemoveChannel(sharkMessengerApp, smUI, "rmChannel", true));
 
-        //PKI
+        // PKI
         smUI.addCommand(new UICommandGetOwnerInfo(sharkMessengerApp, smUI, "ownerInfo", true));
         smUI.addCommand(new UICommandGetNumberOfKnownPeers(sharkMessengerApp, smUI, "numPeers", true));
         smUI.addCommand(new UICommandCreateNewKeyPair(sharkMessengerApp, smUI, "mkKeys", true));
@@ -109,11 +100,7 @@ public class ProductionUI {
         smUI.addCommand(new UICommandRemoveHubDescription(sharkMessengerApp, smUI, "rmHubDescr", true));
         smUI.addCommand(new UICommandListConnectedHubs(sharkMessengerApp, smUI, "lsHubs", true));
         smUI.addCommand(new UICommandConnectHub(sharkMessengerApp, smUI, "connectHub", true));
-        /*
-        smUI.addCommand(new CLICReconnectHubs(sharkMessengerApp, smUI, "reconnectHubs", true));
-         */
 
-        //controller.startCLI();
 
         smUI.printUsage();
         smUI.runCommandLoop();

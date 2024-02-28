@@ -20,7 +20,7 @@ public class UICommandCreateCredentialMessage extends UICommand {
 
     @Override
     public void execute() throws Exception {
-
+        this.printTODOReimplement();
     }
 
     @Override
@@ -31,13 +31,10 @@ public class UICommandCreateCredentialMessage extends UICommand {
     }
 
     /**
-     * Arguments needed in this order: 
-     * <p>
-     * none
+     * This command requires no arguments.
      */
- @Override
+    @Override
     protected boolean handleArguments(List<String> arguments) {
        return true;
     }
-
 }

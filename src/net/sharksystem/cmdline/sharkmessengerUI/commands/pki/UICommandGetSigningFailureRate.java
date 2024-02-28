@@ -50,19 +50,20 @@ public class UICommandGetSigningFailureRate extends UICommand {
         sb.append("Returns the signing failure rate of a specific peer.");
         return sb.toString();
     }
-/**
-     * Arguments needed in this order: 
-     * <p>
-     * @param subject as KnownPeer
+
+    /**
+     * @param arguments in following order:
+     * <ol>
+     *  <li>subject - peerID</li>
+     * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
         if(arguments.size() < 1) {
             return false;
         }
+
         boolean isParsable = subject.tryParse(arguments.get(0));
         return isParsable;
     }
-
-
 }

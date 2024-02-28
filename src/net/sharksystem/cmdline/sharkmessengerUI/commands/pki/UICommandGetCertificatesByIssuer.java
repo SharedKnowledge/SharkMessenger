@@ -58,18 +58,19 @@ public class UICommandGetCertificatesByIssuer extends UICommand {
         return sb.toString();
     }
 
-     /**
-     * Arguments needed in this order: 
-     * <p>
-     * @param issuer as KnownPeer
+    /**
+     * @param arguments in following order:
+     * <ol>
+     *  <li>issuer - peerID</li>
+     * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
         if(arguments.size() < 1) {
             return false;
         }
+        
         boolean isParsable = issuer.tryParse(arguments.get(0));
         return isParsable;
     }
-
 }

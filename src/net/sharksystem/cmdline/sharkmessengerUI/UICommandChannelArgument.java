@@ -6,7 +6,7 @@ import net.sharksystem.messenger.SharkMessengerChannel;
 import java.io.IOException;
 
 /**
- * Predefined argument for a SharkMessangerChannel retrieved through its uri and a peer
+ * Predefined argument for a SharkMessengerChannel retrieved through its uri and a peer
  */
 public class UICommandChannelArgument extends UICommandArgument<SharkMessengerChannel> {
 

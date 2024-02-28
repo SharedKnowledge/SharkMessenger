@@ -41,17 +41,16 @@ public class UICommandAddHubDescription extends UICommand {
 
     @Override
     public String getDescription() {
-        return "define a new asap hub by its hostname, port and if it supports multichannel";
+        return "Define a new asap hub by its hostname, port and if it supports multichannel.";
     }
 
     /**
-     * Arguments needed in this order: 
-     * <p>
-     * @param hubHost as AddHubDescription
-     * <p>
-     * @param hubPort as integer
-     * <p>
-     * @param multiChannel as boolean
+     * @param arguments in following order:
+     * <ol>
+     *  <li>hubHost - String</li>
+     *  <li>hubPort - int</li>
+     *  <li>multiChannel - boolean</li>
+     * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {

@@ -9,7 +9,7 @@ import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaireBuilder;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommand;
 
 /**
- * list stored hub description. This command has no parameters
+ * List stored hub description.
  */
 public class UICommandListHubDescriptions extends UICommand {
     public UICommandListHubDescriptions(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
@@ -19,7 +19,6 @@ public class UICommandListHubDescriptions extends UICommand {
 
     @Override
     protected UICommandQuestionnaire specifyCommandStructure() {
-        // no parameter
         return new UICommandQuestionnaireBuilder().build();
     }
 
@@ -31,13 +30,11 @@ public class UICommandListHubDescriptions extends UICommand {
 
     @Override
     public String getDescription() {
-        return "list known hub information";
+        return "List known hub information.";
     }
 
     /**
-     * Arguments needed in this order: 
-     * <p>
-     * none
+     * This command requires no arguments.
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {

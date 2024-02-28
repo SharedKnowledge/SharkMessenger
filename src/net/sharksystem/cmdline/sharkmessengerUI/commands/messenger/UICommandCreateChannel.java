@@ -12,6 +12,9 @@ import net.sharksystem.cmdline.sharkmessengerUI.UICommandStringArgument;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Create a channel for writing messages to it.
+ */
 public class UICommandCreateChannel extends UICommand {
     private final UICommandStringArgument channelUri;
     private final UICommandStringArgument channelName;
@@ -52,21 +55,23 @@ public class UICommandCreateChannel extends UICommand {
         return sb.toString();
     }
     
-     /**
-     * Arguments needed in this order: 
-     * <p>
-     * @param channelUri as String
-     * <p>
-     * @param channelName as String
-     * <p>
-     * @param channelMustNotExist boolean
+    /**
+     * @param arguments in following order:
+     * <ol>
+     *  <li>channelUri - String</li>
+     *  <li>channelName - String</li>
+     *  <li>channelMustNotExist - boolean</li>
+     * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
         if(arguments.size() < 3) {
             return false;
         }
-        boolean isParsable = channelUri.tryParse(arguments.get(0)) && channelName.tryParse(arguments.get(1)) && channelMustNotExist.tryParse(arguments.get(2));
+        boolean isParsable = channelUri.tryParse(arguments.get(0))
+                && channelName.tryParse(arguments.get(1))
+                && channelMustNotExist.tryParse(arguments.get(2));
+
         return isParsable;
     }
 

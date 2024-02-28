@@ -2,7 +2,6 @@ package net.sharksystem.cmdline.sharkmessengerUI.commands.general;
 
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 
-import java.sql.SQLOutput;
 import java.util.List;
 
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
@@ -11,7 +10,6 @@ import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaire;
 
 /**
  * Command for displaying the log history to the user.
- * Format: Command followed by parameters (space separated)
  */
 public class UICommandShowLog extends UICommand {
 
@@ -39,14 +37,12 @@ public class UICommandShowLog extends UICommand {
     @Override
     public String getDescription() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Prints a log messages with all executed commands in the right order.");
+        sb.append("Prints a log message with all executed commands in the right order.");
         return sb.toString();
     }
 
     /**
-     * Arguments needed in this order: 
-     * <p>
-     * none
+     * This command requires no arguments.
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {

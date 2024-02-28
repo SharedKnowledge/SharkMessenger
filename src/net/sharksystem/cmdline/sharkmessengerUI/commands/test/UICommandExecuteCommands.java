@@ -1,6 +1,5 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.test;
 
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
@@ -27,12 +26,12 @@ public class UICommandExecuteCommands extends UICommand {
     }
 
     /**
-     * Put the needed parameters in a list in following order:
-     * <p>
-     * @param inSteps as boolean.
-     * If this is true, every other command execution
-     * waits for the user to press Enter before performing
-     * the next command.
+     * @param arguments in following order:
+     * <ol>
+     *  <li>inSteps - boolean [If true, every other command execution
+     *                         waits for the user to press Enter before
+     *                         performing the next command.]</li>
+     * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
@@ -40,7 +39,8 @@ public class UICommandExecuteCommands extends UICommand {
             return false;
         }
 
-        return this.inSteps.tryParse(arguments.get(0));
+        boolean isParsable = this.inSteps.tryParse(arguments.get(0));
+        return isParsable;
     }
 
     @Override

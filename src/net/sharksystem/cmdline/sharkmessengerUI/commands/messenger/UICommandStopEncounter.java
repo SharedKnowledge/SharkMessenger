@@ -27,6 +27,7 @@ public class UICommandStopEncounter extends UICommand {
 
     @Override
     public void execute() throws Exception {
+        this.printTODOReimplement();
         //try {
             //this.peer1.getValue().getASAPTestPeerFS().stopEncounter(this.peer2.getValue().getASAPTestPeerFS());
         //} catch (SharkException | IOException e) {
@@ -42,20 +43,20 @@ public class UICommandStopEncounter extends UICommand {
     }
 
     /**
-     * Arguments needed in this order: 
-     * <p>
-     * @param peer1 as KnownPeer
-     * <p>
-     * @param peer2 as KnownPeer
+     * @param arguments in following order:
+     * <ol>
+     *  <li>peer1 - peerID</li>
+     *  <li>peer2 - peerID</li>
+     * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
         if(arguments.size() < 2) {
             return false;
         }
-        boolean isParsable = peer1.tryParse(arguments.get(0)) && peer2.tryParse(arguments.get(1));
+        boolean isParsable = peer1.tryParse(arguments.get(0)) 
+                && peer2.tryParse(arguments.get(1));
+
         return isParsable;
     }
-
-
 }

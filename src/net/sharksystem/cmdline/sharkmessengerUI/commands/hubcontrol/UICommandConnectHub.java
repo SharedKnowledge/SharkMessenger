@@ -45,13 +45,14 @@ public class UICommandConnectHub extends UICommand {
 
     @Override
     public String getDescription() {
-        return "connect to a hub";
+        return "Connect to a hub.";
     }
 
     /**
-     * Arguments needed in this order: 
-     * <p>
-     * @param hubIndex as integer
+     * @param arguments in following order:
+     * <ol>
+     *  <li>hubIndex - int</li>
+     * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {

@@ -9,10 +9,12 @@ import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandSend
 import net.sharksystem.messenger.SharkMessengerComponent;
 
 /**
- * This command is for batch test purposes. It adds a test run specific ID to each message and has two additional
- * parameters:
- * repetitions - defines how often the message will be sent
- * delayInMillis - defines how much time will pass until a message is sent
+ * This command is for batch test purposes. It adds a test run specific ID to
+ * each message and has two additional parameters:
+ * <ul>
+ *  <li>repetitions - defines how often the message will be sent</li>
+ *  <li>delayInMillis - defines how much time will pass until a message is sent</li>
+ * </ul>
  */
 public class UICommandSendTestMessage extends UICommand {
     private final UICommandIntegerArgument repetitions;
@@ -47,16 +49,17 @@ public class UICommandSendTestMessage extends UICommand {
     }
 
     /**
-     * Prepares the command with parsing the arguments.
+     * Prepares the command by parsing the arguments.
      * @param arguments in following order:
-     *                  0 repetitions
-     *                  1 delay
-     *                  2 channel index
-     *                  3 sign
-     *                  4 encrypt
-     *                  5 message
-     *                  6 receivers
-     * @return True if the arguments are parsable.
+     * <ol>
+     *  <li>repetitions - int</li>
+     *  <li>delayInMillis - int</li>
+     *  <li>channelIndex - int</li>
+     *  <li>sign - boolean</li>
+     *  <li>encrypt - boolean</li>
+     *  <li>message - String</li>
+     *  <li>receivers - String [comma seperated]</li>
+     * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {

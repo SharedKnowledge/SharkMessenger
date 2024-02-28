@@ -55,18 +55,21 @@ public class UICommandSetSigningFailureRate extends UICommand {
     }
 
     /**
-     * Put the needed parameters in a list in following order:
-     * <p>
-     * @param subject as KnownPeer.
-     * @param failureRate as integer.
+     * @param arguments in following order:
+     * <ol>
+     *  <li>subject - peerID</li>
+     *  <li>failureRate - int</li>
+     * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
         if(arguments.size() < 2) {
             return false;
         }
-        boolean isParsable = subject.tryParse(arguments.get(0)) && failureRate.tryParse(arguments.get(1));
+
+        boolean isParsable = subject.tryParse(arguments.get(0)) 
+                && failureRate.tryParse(arguments.get(1));
+
         return isParsable;
     }
-
 }

@@ -9,7 +9,7 @@ import net.sharksystem.cmdline.sharkmessengerUI.UICommand;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaire;
 
 /**
- * Command for terminating the messanger
+ * Command for terminating the messenger.
  */
 public class UICommandExit extends UICommand {
 
@@ -33,14 +33,12 @@ public class UICommandExit extends UICommand {
     @Override
     public String getDescription() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Terminates the messanger.");
+        sb.append("Terminates the messenger.");
         return sb.toString();
     }
 
     /**
-     * Arguments needed in this order: 
-     * <p>
-     * none
+     * This command requires no arguments.
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {

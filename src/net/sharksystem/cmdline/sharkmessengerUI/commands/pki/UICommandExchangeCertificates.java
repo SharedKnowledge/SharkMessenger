@@ -24,6 +24,7 @@ public class UICommandExchangeCertificates extends UICommand implements SharkCre
 
     @Override
     public void execute() throws Exception {
+        this.printTODOReimplement();
         //try {
             //SharkPKIComponent pki = model.getPKIComponent();
 
@@ -62,17 +63,21 @@ public class UICommandExchangeCertificates extends UICommand implements SharkCre
 
     @Override
     public void credentialReceived(CredentialMessage credentialMessage) {
+        this.printTODOReimplement();
     }
+
     /**
-     * Arguments needed in this order: 
-     * <p>
-     * @param subject as KnownPeer
+     * @param arguments in following order:
+     * <ol>
+     *  <li>subject - peerID</li>
+     * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
         if(arguments.size() < 1) {
             return false;
         }
+
         boolean isParsable = subject.tryParse(arguments.get(0));
         return isParsable;
     }

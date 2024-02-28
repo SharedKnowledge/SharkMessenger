@@ -11,6 +11,9 @@ import net.sharksystem.cmdline.sharkmessengerUI.UICommand;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * This command lists all known channels for the peer.
+ */
 public class UICommandListChannels extends UICommand {
     /**
      * Creates a command object.
@@ -42,14 +45,13 @@ public class UICommandListChannels extends UICommand {
 
     @Override
     public String getDescription() {
-        return "list existing channels";
+        return "List existing channels.";
     }
+    
     /**
-     * Arguments needed in this order: 
-     * <p>
-     * none
+     * This command requires no arguments.
      */
- @Override
+    @Override
     protected boolean handleArguments(List<String> arguments) {
        return true;
     }
