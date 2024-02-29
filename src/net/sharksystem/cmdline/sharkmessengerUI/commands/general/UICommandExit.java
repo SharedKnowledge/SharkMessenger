@@ -26,7 +26,7 @@ public class UICommandExit extends UICommand {
 
     @Override
     public void execute() throws Exception {
-        this.getPrintStream().println("TODO reimplement");
+        this.printTODOReimplement();
     }
 
 
