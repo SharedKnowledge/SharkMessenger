@@ -133,7 +133,7 @@ public class ReproduceAndDebug {
         SharkMessengerUI smUIAlice = this.initializeSharkMessengerUI(ALICE, cmdLogAlice);
         SharkMessengerUI smUIBob = this.initializeSharkMessengerUI(BOB, cmdLogBob);
 
-        // The Command execution is not alternating as in the original szenario but the chunk storage problem still can
+        // The Command execution is not alternating as in the original scenario but the chunk storage problem still can
         // be reconstructed.
         smUIAlice.handleUserInput(EXECUTE_BATCH_AT_ONCE);
         smUIBob.handleUserInput(EXECUTE_BATCH_AT_ONCE);
@@ -149,6 +149,49 @@ public class ReproduceAndDebug {
         String cmdAlice3rd = "mkChannel test://t1 channel1 false";
         String cmdBob4th = "mkChannel test://t1 channel1 false";
         String cmdAlice5th = "sendMessage 0 false false hi_bob bob";
+
+        SharkMessengerUI smUIAlice = this.initializeSharkMessengerUI(ALICE, "");
+        SharkMessengerUI smUIBob = this.initializeSharkMessengerUI(BOB, "");
+
+        smUIAlice.handleUserInput(cmdAlice1st);
+        smUIBob.handleUserInput(cmdBob2nd);
+        smUIAlice.handleUserInput(cmdAlice3rd);
+        smUIBob.handleUserInput(cmdBob4th);
+        smUIAlice.handleUserInput(cmdAlice5th);
+
+        Thread.sleep(1000);
+    }
+
+    /**
+     * Distributed tests (on Windows) showed that an exception in the ASAPMementoFS is thrown when around 15 messages
+     * and more are sent without delay in between. The exception is thrown for each further sent Message starting from
+     * around the 15th message. See the exception below.
+     * With a delay somewhere between 30ms and 50ms the problem disappears.
+     * (30ms it occurs, 50ms it didn't occur even with 500 messages)
+     *
+     * This test reproduces the problem close to the breaking point (25 messages with 30ms delay).
+     *
+     * Exception in thread "Thread-47" java.lang.NullPointerException: Cannot invoke "String.length()" because "str" is null
+     *         at java.base/java.io.DataOutputStream.writeUTF(DataOutputStream.java:360)
+     *         at java.base/java.io.DataOutputStream.writeUTF(DataOutputStream.java:334)
+     * DefaultSecurityAdministrator: ok
+     *         at net.sharksystem.asap.engine.ASAPMementoFS.save(ASAPMementoFS.java:53)
+     *         at net.sharksystem.asap.engine.ASAPEngineFS.getASAPEngineFS(ASAPEngineFS.java:179)
+     *         at net.sharksystem.asap.engine.ASAPEngineFS.getASAPEngineFS(ASAPEngineFS.java:110)
+     *         at net.sharksystem.asap.engine.ASAPEngineFS.getExistingASAPEngineFS(ASAPEngineFS.java:70)
+     *         at net.sharksystem.asap.utils.ASAPLogHelper.getMessagesByChunkReceivedInfos(ASAPLogHelper.java:22)
+     *         at net.sharksystem.asap.ASAPPeerFS.chunkStored(ASAPPeerFS.java:105)
+     *         at net.sharksystem.asap.engine.ASAPEngine.handleASAPAssimilate(ASAPEngine.java:474)
+     *         at net.sharksystem.asap.protocol.ASAPPersistentConnection$ASAPPDUExecutor.run(ASAPPersistentConnection.java:430)
+     *
+     */
+    @Test
+    public void reconstructThreadBugFromTests060324() throws Exception {
+        String cmdAlice1st = "openTCP 8889";
+        String cmdBob2nd = "connectTCP 8889 localhost";
+        String cmdAlice3rd = "mkChannel test://t1 channel1 false";
+        String cmdBob4th = "mkChannel test://t1 channel1 false";
+        String cmdAlice5th = "sendMessageTest 25 30 0 false false hi_bob bob";
 
         SharkMessengerUI smUIAlice = this.initializeSharkMessengerUI(ALICE, "");
         SharkMessengerUI smUIBob = this.initializeSharkMessengerUI(BOB, "");
