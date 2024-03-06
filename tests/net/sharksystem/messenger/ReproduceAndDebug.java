@@ -45,7 +45,7 @@ import java.io.*;
  * For Szenarios where the correct alternating sequence of command execution of each peer is required the execution of
  * each command with the sharkMessengerUI.handleUserInput(command) might be the better solution.
  */
-public class UITests {
+public class ReproduceAndDebug {
 
     // It is probably better to place data storage directory inside playground directory but the sharkPeerFS class
     // doesn't allow to change that directory.
