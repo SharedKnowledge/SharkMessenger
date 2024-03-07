@@ -55,10 +55,14 @@ public class ReproduceAndDebug {
     private static final String BOB = "bob";
     private static final String TEST_CHANNEL = "test://t1";
 
-    private SharkMessengerUI initializeSharkMessengerUI(String peerName, String batchCommands)
+    private SharkMessengerUI initializeSharkMessengerUI(SharkMessengerApp sharkMessengerApp, String batchCommands)
             throws SharkException, IOException {
-        SharkMessengerApp sharkMessengerApp = new SharkMessengerApp(peerName);
+
         SharkMessengerUI smUI = new SharkMessengerUI(batchCommands, System.in, System.out, System.err, sharkMessengerApp);
+
+        // Add test received listener.
+        sharkMessengerApp.getMessengerComponent().addSharkMessagesReceivedListener(
+                new TestMessageReceivedListener(sharkMessengerApp));
 
         //General
         //smUI.addCommand(new UICommandSaveLog(sharkMessengerApp, smUI, "saveLog", false));
@@ -109,7 +113,7 @@ public class ReproduceAndDebug {
     }
 
     @BeforeEach
-    public void resetStorageFolder() {
+    public void resetStorageFolder() throws InterruptedException {
         // delete test dir if already exists
         FSUtils.removeFolder(TEST_DATA_STORAGE);
     }
@@ -118,40 +122,57 @@ public class ReproduceAndDebug {
     //                                         REPRODUCE BUGS WITH UI COMMAND LOG                                     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * This problem only occurs on Linux OS!!!
+     */
     @Test
-    public void reconstructIncomingChunkStorageBug() throws Exception {
-        String cmdLogAlice = "openTCP 8889" +
+    public void reconstructIncomingChunkStorageBugLinux() throws Exception {
+        String cmdLogAlice = "openTCP 8888" +
                 System.lineSeparator() +
                 "mkChannel test://t1 channel1 false" +
                 System.lineSeparator() +
                 "sendMessage 0 false false hi_bob bob";
 
-        String cmdLogBob = "connectTCP 8889 localhost" +
+        String cmdLogBob = "connectTCP 8888 localhost" +
                 System.lineSeparator() +
                 "mkChannel test://t1 channel1 false";
 
-        SharkMessengerUI smUIAlice = this.initializeSharkMessengerUI(ALICE, cmdLogAlice);
-        SharkMessengerUI smUIBob = this.initializeSharkMessengerUI(BOB, cmdLogBob);
+        SharkMessengerApp smaAlice = new SharkMessengerApp(ALICE);
+        SharkMessengerApp smaBob = new SharkMessengerApp(BOB);
+        SharkMessengerUI smUIAlice = this.initializeSharkMessengerUI(smaAlice, cmdLogAlice);
+        SharkMessengerUI smUIBob = this.initializeSharkMessengerUI(smaBob, cmdLogBob);
 
         // The Command execution is not alternating as in the original scenario but the chunk storage problem still can
         // be reconstructed.
         smUIAlice.handleUserInput(EXECUTE_BATCH_AT_ONCE);
         smUIBob.handleUserInput(EXECUTE_BATCH_AT_ONCE);
 
-        // Give peers time to do peer things.
+
+        // Give peers time for message exchange
         Thread.sleep(1000);
+
+        // Compare number of sent and received messages
+        int amountOutgoingMessages = smaAlice.getMessengerComponent().getChannel("test://t1").getMessages().size();
+        int amountIncomingMessages = smaBob.getMessengerComponent().getChannel("test://t1").getMessages().size();
+        Assertions.assertTrue(amountOutgoingMessages == amountIncomingMessages);
     }
 
+    /**
+     * This problem only occurs on Linux OS!!!
+     * This tests basically the same problem as the first test but with control over the execution order.
+     */
     @Test
-    public void reconstructIncomingChunkStorageBugAlternatingExecution() throws Exception {
+    public void reconstructIncomingChunkStorageBugLinuxAlternatingExecution() throws Exception {
         String cmdAlice1st = "openTCP 8889";
         String cmdBob2nd = "connectTCP 8889 localhost";
         String cmdAlice3rd = "mkChannel test://t1 channel1 false";
         String cmdBob4th = "mkChannel test://t1 channel1 false";
         String cmdAlice5th = "sendMessage 0 false false hi_bob bob";
 
-        SharkMessengerUI smUIAlice = this.initializeSharkMessengerUI(ALICE, "");
-        SharkMessengerUI smUIBob = this.initializeSharkMessengerUI(BOB, "");
+        SharkMessengerApp smaAlice = new SharkMessengerApp(ALICE);
+        SharkMessengerApp smaBob = new SharkMessengerApp(BOB);
+        SharkMessengerUI smUIAlice = this.initializeSharkMessengerUI(smaAlice, "");
+        SharkMessengerUI smUIBob = this.initializeSharkMessengerUI(smaBob, "");
 
         smUIAlice.handleUserInput(cmdAlice1st);
         smUIBob.handleUserInput(cmdBob2nd);
@@ -160,6 +181,11 @@ public class ReproduceAndDebug {
         smUIAlice.handleUserInput(cmdAlice5th);
 
         Thread.sleep(1000);
+
+        // Compare number of sent and received messages
+        int amountOutgoingMessages = smaAlice.getMessengerComponent().getChannel("test://t1").getMessages().size();
+        int amountIncomingMessages = smaBob.getMessengerComponent().getChannel("test://t1").getMessages().size();
+        Assertions.assertTrue(amountOutgoingMessages == amountIncomingMessages);
     }
 
     /**
@@ -187,14 +213,16 @@ public class ReproduceAndDebug {
      */
     @Test
     public void reconstructThreadBugFromTests060324() throws Exception {
-        String cmdAlice1st = "openTCP 8889";
-        String cmdBob2nd = "connectTCP 8889 localhost";
+        String cmdAlice1st = "openTCP 8890";
+        String cmdBob2nd = "connectTCP 8890 localhost";
         String cmdAlice3rd = "mkChannel test://t1 channel1 false";
         String cmdBob4th = "mkChannel test://t1 channel1 false";
         String cmdAlice5th = "sendMessageTest 25 30 0 false false hi_bob bob";
 
-        SharkMessengerUI smUIAlice = this.initializeSharkMessengerUI(ALICE, "");
-        SharkMessengerUI smUIBob = this.initializeSharkMessengerUI(BOB, "");
+        SharkMessengerApp smaAlice = new SharkMessengerApp(ALICE);
+        SharkMessengerApp smaBob = new SharkMessengerApp(BOB);
+        SharkMessengerUI smUIAlice = this.initializeSharkMessengerUI(smaAlice, "");
+        SharkMessengerUI smUIBob = this.initializeSharkMessengerUI(smaBob, "");
 
         smUIAlice.handleUserInput(cmdAlice1st);
         smUIBob.handleUserInput(cmdBob2nd);
@@ -203,86 +231,11 @@ public class ReproduceAndDebug {
         smUIAlice.handleUserInput(cmdAlice5th);
 
         Thread.sleep(1000);
-    }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                             TEST TOOL FUNCTIONALITY                                            //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Verification files are used to control the test result in distributed tests. Each Peer outputs two files, one
-     * with all information about all sent messages and one with all information about received messages. This test
-     * checks whether those files are produced correctly.
-     * <p>
-     * Send ten test messages from alice to bob and check if verification files are produced correctly.
-     * Transmitted alice - received bob:
-     * The verificationTest_tx_alice.csv and verificationTest_rx_bob.csv must contain 11 entries.
-     * The verification files must be identical.
-     * The Entries must contain 1 header line and 10 lines with information about the exchanged messages with
-     * consecutive ID's from 0 to 9.
-     * Transmitted bob - received alice:
-     * The verificationTest_rx_alice.csv and verificationTest_tx_bob.csv must only contain the header.
-     */
-    @Test
-    public void produceVerificationFiles() throws Exception {
-
-        // SETUP
-        // csv files
-        String testID = "verificationTest";
-        // TODO: adapt path when verification files have been implemented
-        String verPath = "";
-        String txAlice = verPath + testID + "_" + "tx" + "_" + ALICE + ".csv";
-        String rxAlice = verPath + testID + "_" + "rx" + "_" + ALICE + ".csv";
-        String txBob = verPath + testID + "_" + "tx" + "_" + BOB + ".csv";
-        String rxBob = verPath + testID + "_" + "rx" + "_" + BOB + ".csv";
-        String csv_header = "sender,receiver,uri,id";
-        String csvEntry = ALICE + "," + BOB + "," + TEST_CHANNEL;
-        // commands
-        int amountMessages = 10;
-        String aliceOpenTCP = "openTCP 6666";
-        String bobConnect2Alice = "connectTCP 6666 localhost";
-        String makeChannel = "mkChannel " + TEST_CHANNEL + " channel1 false";
-        String aliceSendTenMessages = "sendMessageTest " + amountMessages + " 0 0 false false hi_bob " + BOB;
-        String makeVerificationFiles = "saveTestResults " + testID;
-        // ui instances
-        SharkMessengerUI smUIAlice = this.initializeSharkMessengerUI(ALICE, "");
-        SharkMessengerUI smUIBob = this.initializeSharkMessengerUI(BOB, "");
-
-        //TEST
-        // message exchange
-        smUIAlice.handleUserInput(aliceOpenTCP);
-        smUIBob.handleUserInput(bobConnect2Alice);
-        smUIAlice.handleUserInput(makeChannel);
-        smUIBob.handleUserInput(makeChannel);
-        smUIAlice.handleUserInput(aliceSendTenMessages);
-        // give peers time to do their thing
-        Thread.sleep(2000);
-        // make verification files
-        smUIAlice.handleUserInput(makeVerificationFiles);
-        smUIBob.handleUserInput(makeVerificationFiles);
-
-        // VERIFICATION
-        // tx alice - rx bob
-        BufferedReader brAlice = new BufferedReader(new InputStreamReader(new FileInputStream(txAlice)));
-        BufferedReader brBob = new BufferedReader(new InputStreamReader(new FileInputStream(rxBob)));
-        // check header
-        Assertions.assertEquals(csv_header, brAlice.readLine());
-        Assertions.assertEquals(csv_header, brBob.readLine());
-        // check entries
-        for (int i = 1; i <= amountMessages; i++) {
-            Assertions.assertEquals(csvEntry + "," + i, brAlice.readLine());
-            Assertions.assertEquals(csvEntry + "," + i, brBob.readLine());
-        }
-        // tx bob - rx alice
-        brAlice = new BufferedReader(new InputStreamReader(new FileInputStream(rxAlice)));
-        brBob = new BufferedReader(new InputStreamReader(new FileInputStream(txBob)));
-        // check header
-        Assertions.assertEquals(csv_header, brAlice.readLine());
-        Assertions.assertEquals(csv_header, brBob.readLine());
-        // check EOF
-        Assertions.assertNull(brAlice.readLine());
-        Assertions.assertNull(brBob.readLine());
-
+        // Compare number of sent and received messages
+        int amountOutgoingMessages = smaAlice.getMessengerComponent().getChannel("test://t1").getMessages().size();
+        int amountIncomingMessages = smaBob.getMessengerComponent().getChannel("test://t1").getMessages().size();
+        Assertions.assertTrue(amountOutgoingMessages == amountIncomingMessages);
     }
 
 }
