@@ -1,4 +1,4 @@
-package net.sharksystem.cmdline.sharkmessengerUI.commands.test;
+package net.sharksystem.cmdline.sharkmessengerUI.commands.tcp;
 
 import net.sharksystem.cmdline.sharkmessengerUI.*;
 
@@ -6,14 +6,12 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * This command opens a port for a peer to connect to over TCP/IP.
+ * Close a TCP connection to another peer.
  */
-public class UICommandOpenTCP extends UICommand {
-
+public class UICommandCloseTCP extends UICommand {
     private final UICommandIntegerArgument portNumber;
 
-    public UICommandOpenTCP(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
-                            String identifier, boolean rememberCommand) {
+    public UICommandCloseTCP(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI, String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
 
         this.portNumber = new UICommandIntegerArgument(sharkMessengerApp);
@@ -44,7 +42,7 @@ public class UICommandOpenTCP extends UICommand {
     @Override
     protected void execute() throws Exception {
         try {
-            this.getSharkMessengerApp().openTCPConnection(this.portNumber.getValue());
+            this.getSharkMessengerApp().closeTCPConnection(this.portNumber.getValue());
         } catch (IOException e) {
             this.printErrorMessage(e.getLocalizedMessage());
         }
@@ -53,7 +51,7 @@ public class UICommandOpenTCP extends UICommand {
     @Override
     public String getDescription() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Open new port for establishing TCP connections with.");
+        sb.append("Closes a specified open port - except no more new connections to be established.");
         // append hint for how to use
         return sb.toString();
     }

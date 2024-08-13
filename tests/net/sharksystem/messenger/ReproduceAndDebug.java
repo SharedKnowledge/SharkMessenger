@@ -27,8 +27,13 @@ import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandGetNumberO
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandGetOwnerInfo;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandGetSigningFailureRate;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandSetSigningFailureRate;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.tcp.UICommandCloseTCP;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.tcp.UICommandConnectTCP;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.tcp.UICommandOpenTCP;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.test.*;
-import net.sharksystem.utils.fs.FSUtils;
+import net.sharksystem.fs.ExtraData;
+import net.sharksystem.fs.ExtraDataFS;
+import net.sharksystem.fs.FSUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,6 +59,24 @@ public class ReproduceAndDebug {
     private static final String ALICE = "alice";
     private static final String BOB = "bob";
     private static final String TEST_CHANNEL = "test://t1";
+
+    private ExtraData aliceSettings;
+
+    private ExtraData getAliceSettings() throws SharkException, IOException {
+        if(this.aliceSettings == null) {
+            this.aliceSettings = new ExtraDataFS(TEST_DATA_STORAGE + "/" + ALICE + "Settings");
+        }
+
+        return this.aliceSettings;
+    }
+
+    private ExtraData getBobSettings() throws SharkException, IOException {
+        if(this.aliceSettings == null) {
+            this.aliceSettings = new ExtraDataFS(TEST_DATA_STORAGE + "/" + BOB + "Settings");
+        }
+
+        return this.aliceSettings;
+    }
 
     private SharkMessengerUI initializeSharkMessengerUI(SharkMessengerApp sharkMessengerApp, String batchCommands)
             throws SharkException, IOException {
@@ -137,8 +160,8 @@ public class ReproduceAndDebug {
                 System.lineSeparator() +
                 "mkChannel test://t1 channel1 false";
 
-        SharkMessengerApp smaAlice = new SharkMessengerApp(ALICE);
-        SharkMessengerApp smaBob = new SharkMessengerApp(BOB);
+        SharkMessengerApp smaAlice = new SharkMessengerApp(ALICE, getAliceSettings());
+        SharkMessengerApp smaBob = new SharkMessengerApp(BOB, getBobSettings());
         SharkMessengerUI smUIAlice = this.initializeSharkMessengerUI(smaAlice, cmdLogAlice);
         SharkMessengerUI smUIBob = this.initializeSharkMessengerUI(smaBob, cmdLogBob);
 
@@ -169,8 +192,8 @@ public class ReproduceAndDebug {
         String cmdBob4th = "mkChannel test://t1 channel1 false";
         String cmdAlice5th = "sendMessage 0 false false hi_bob bob";
 
-        SharkMessengerApp smaAlice = new SharkMessengerApp(ALICE);
-        SharkMessengerApp smaBob = new SharkMessengerApp(BOB);
+        SharkMessengerApp smaAlice = new SharkMessengerApp(ALICE, getAliceSettings());
+        SharkMessengerApp smaBob = new SharkMessengerApp(BOB, getBobSettings());
         SharkMessengerUI smUIAlice = this.initializeSharkMessengerUI(smaAlice, "");
         SharkMessengerUI smUIBob = this.initializeSharkMessengerUI(smaBob, "");
 
@@ -219,8 +242,8 @@ public class ReproduceAndDebug {
         String cmdBob4th = "mkChannel test://t1 channel1 false";
         String cmdAlice5th = "sendMessageTest 25 30 0 false false hi_bob bob";
 
-        SharkMessengerApp smaAlice = new SharkMessengerApp(ALICE);
-        SharkMessengerApp smaBob = new SharkMessengerApp(BOB);
+        SharkMessengerApp smaAlice = new SharkMessengerApp(ALICE, getAliceSettings());
+        SharkMessengerApp smaBob = new SharkMessengerApp(BOB, getBobSettings());
         SharkMessengerUI smUIAlice = this.initializeSharkMessengerUI(smaAlice, "");
         SharkMessengerUI smUIBob = this.initializeSharkMessengerUI(smaBob, "");
 

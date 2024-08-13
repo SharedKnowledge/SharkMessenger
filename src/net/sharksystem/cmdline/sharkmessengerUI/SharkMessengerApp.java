@@ -5,6 +5,8 @@ import net.sharksystem.SharkPeer;
 import net.sharksystem.SharkPeerFS;
 import net.sharksystem.asap.*;
 import net.sharksystem.asap.apps.TCPServerSocketAcceptor;
+import net.sharksystem.fs.ExtraData;
+import net.sharksystem.fs.FSUtils;
 import net.sharksystem.hub.HubConnectionManager;
 import net.sharksystem.hub.HubConnectionManagerImpl;
 import net.sharksystem.messenger.SharkMessengerComponent;
@@ -17,6 +19,7 @@ import net.sharksystem.utils.streams.StreamPairImpl;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -26,15 +29,19 @@ import java.util.Map;
 public class SharkMessengerApp {
     private final SharkPeerFS sharkPeerFS;
 
-    private static final CharSequence ROOTFOLDER = "sharkMessengerDataStorage";
+    //private static final CharSequence ROOTFOLDER = "sharkMessengerDataStorage";
     private final SharkMessengerComponent messengerComponent;
     private final SharkPKIComponent pkiComponent;
     private final HubConnectionManager hubConnectionManager;
     private final ASAPEncounterManager encounterManager;
+    private final String peerDataFolderName;
+    private final ExtraData settings;
     private Map<Integer, TCPServerSocketAcceptor> openSockets = new HashMap<>();
 
-    public SharkMessengerApp(String peerName) throws SharkException, IOException {
-        this.sharkPeerFS = new SharkPeerFS(peerName, ROOTFOLDER + "/" + peerName);
+    public SharkMessengerApp(String peerName, ExtraData settings) throws SharkException, IOException {
+        this.peerDataFolderName = "./" + peerName;
+        this.settings = settings;
+        this.sharkPeerFS = new SharkPeerFS(peerName, this.peerDataFolderName);
 
         // set up shark components
 
@@ -94,8 +101,13 @@ public class SharkMessengerApp {
         return this.pkiComponent;
     }
 
+    public void destroyAllData() throws SharkException, IOException {
+        FSUtils.removeFolder(this.peerDataFolderName);
+        this.settings.removeAll();
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////////
-    //                               TCP connection for batch tests                            //
+    //                                    direct TCP connections                               //
     /////////////////////////////////////////////////////////////////////////////////////////////
 
     public void openTCPConnection(int portNumber) throws IOException {
@@ -105,7 +117,13 @@ public class SharkMessengerApp {
         Log.writeLog(this, "Socket open to connect on port: " + portNumber);
     }
 
-    public void connectOverTCP(String host, int portNumber) throws IOException {
+    public void connectTCP(String host, int portNumber) throws IOException {
+        if(host.equalsIgnoreCase("127.0.0.1") || host.equalsIgnoreCase("localhost")) {
+            if(this.openSockets.keySet().contains(portNumber)) {
+                System.err.println("attempt to establish a connection to same process/peer refused");
+                return;
+            }
+        }
         Socket socket = new Socket(host, portNumber);
         this.encounterManager.handleEncounter(StreamPairImpl.getStreamPair(
                 socket.getInputStream(), socket.getOutputStream()), ASAPEncounterConnectionType.INTERNET);
@@ -117,4 +135,7 @@ public class SharkMessengerApp {
         Log.writeLog(this, "Socket closed on port: " + portNumber);
     }
 
+    public Iterator<Integer> getOpenSockets() {
+        return this.openSockets.keySet().iterator();
+    }
 }

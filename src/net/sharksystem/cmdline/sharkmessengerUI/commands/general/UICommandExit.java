@@ -26,7 +26,8 @@ public class UICommandExit extends UICommand {
 
     @Override
     public void execute() throws Exception {
-        this.printTODOReimplement();
+        //this.printTODOReimplement();
+        System.exit(1);
     }
 
 

@@ -1,4 +1,4 @@
-package net.sharksystem.cmdline.sharkmessengerUI.commands.test;
+package net.sharksystem.cmdline.sharkmessengerUI.commands.tcp;
 
 import net.sharksystem.cmdline.sharkmessengerUI.*;
 
@@ -6,37 +6,36 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * This command conects to a peer over TCP/IP.
+ * This command opens a port for a peer to connect to over TCP/IP.
  */
-public class UICommandConnectTCP extends UICommand {
+public class UICommandOpenTCP extends UICommand {
 
     private final UICommandIntegerArgument portNumber;
 
-    private final UICommandStringArgument hostName;
-
-    public UICommandConnectTCP(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI, String identifier, boolean rememberCommand) {
+    public UICommandOpenTCP(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                            String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
 
         this.portNumber = new UICommandIntegerArgument(sharkMessengerApp);
-        this.hostName = new UICommandStringArgument(sharkMessengerApp);
     }
 
     /**
      * @param arguments in following order:
      * <ol>
      *  <li>port - int</li>
-     *  <li>host - String</li>
      * </ol>
      */
     @Override
     protected boolean handleArguments(List<String> arguments) {
-        if (arguments.size() < 2) {
+        if (arguments.size() < 1) {
+            System.err.println("port number required");
             return false;
         }
 
-        boolean isParsable = this.portNumber.tryParse(arguments.get(0))
-                && this.hostName.tryParse(arguments.get(1));
-                
+        boolean isParsable = this.portNumber.tryParse(arguments.get(0));
+        if(!isParsable) {
+            System.err.println("failed to parse port number: " + arguments.get(0));
+        }
         return isParsable;
     }
 
@@ -49,7 +48,7 @@ public class UICommandConnectTCP extends UICommand {
     @Override
     protected void execute() throws Exception {
         try {
-            this.getSharkMessengerApp().connectOverTCP(this.hostName.getValue(), this.portNumber.getValue());
+            this.getSharkMessengerApp().openTCPConnection(this.portNumber.getValue());
         } catch (IOException e) {
             this.printErrorMessage(e.getLocalizedMessage());
         }
@@ -58,7 +57,7 @@ public class UICommandConnectTCP extends UICommand {
     @Override
     public String getDescription() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Connect to a host on given port number.");
+        sb.append("Open new port for establishing TCP connections with.");
         // append hint for how to use
         return sb.toString();
     }
