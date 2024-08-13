@@ -1,4 +1,9 @@
-package net.sharksystem.cmdline.sharkmessengerUI;
+package net.sharksystem.cmdline.sharkmessengerUI.commands.tcp;
+
+import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
+import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
+import net.sharksystem.cmdline.sharkmessengerUI.UICommand;
+import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaire;
 
 import java.util.Iterator;
 import java.util.List;

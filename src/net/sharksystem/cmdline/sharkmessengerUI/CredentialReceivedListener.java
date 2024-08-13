@@ -10,6 +10,7 @@ public class CredentialReceivedListener extends SharkMessengerAppListener implem
 
     @Override
     public void credentialReceived(CredentialMessage credentialMessage) {
-        // TODO
+        // credential message received
+        sharkMessengerApp.addPendingCredentialMessage(credentialMessage);
     }
 }

@@ -11,16 +11,14 @@ import net.sharksystem.hub.HubConnectionManager;
 import net.sharksystem.hub.HubConnectionManagerImpl;
 import net.sharksystem.messenger.SharkMessengerComponent;
 import net.sharksystem.messenger.SharkMessengerComponentFactory;
-import net.sharksystem.pki.SharkPKIComponent;
-import net.sharksystem.pki.SharkPKIComponentFactory;
+import net.sharksystem.pki.*;
 import net.sharksystem.utils.Log;
 import net.sharksystem.utils.streams.StreamPairImpl;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Proposed and suggested pattern for Shark app. Implement a central entity (could even be a singleton)
@@ -34,9 +32,12 @@ public class SharkMessengerApp {
     private final SharkPKIComponent pkiComponent;
     private final HubConnectionManager hubConnectionManager;
     private final ASAPEncounterManager encounterManager;
+    private final ASAPEncounterManagerAdmin encounterManagerAdmin;
     private final String peerDataFolderName;
     private final ExtraData settings;
     private Map<Integer, TCPServerSocketAcceptor> openSockets = new HashMap<>();
+    private PrintStream outStream;
+    private PrintStream errStream;
 
     public SharkMessengerApp(String peerName, ExtraData settings) throws SharkException, IOException {
         this.peerDataFolderName = "./" + peerName;
@@ -70,13 +71,21 @@ public class SharkMessengerApp {
         this.pkiComponent = (SharkPKIComponent) this.sharkPeerFS.getComponent(SharkPKIComponent.class);
         this.pkiComponent.setSharkCredentialReceivedListener(new CredentialReceivedListener(this));
 
+        //System.out.println("Fill PKI with example data - for testing purposes");
+        //HelperPKITests.fillWithExampleData(this.pkiComponent);
+
         //////////////////////// setup hub connection management
         // TODO: that's still a design flaw. We need something that extracts a connection handler from a peer. Do we?
         ASAPPeer asapPeer = this.sharkPeerFS.getASAPPeer();
         // this code runs on service side - this peer should be a connection handler
         if (asapPeer instanceof ASAPConnectionHandler) { // TODO: aaaaargs
             // yes it is
-            this.encounterManager = new ASAPEncounterManagerImpl((ASAPConnectionHandler) asapPeer, asapPeer.getPeerID());
+            ASAPEncounterManagerImpl asapEncounterManager =
+                    new ASAPEncounterManagerImpl((ASAPConnectionHandler) asapPeer, asapPeer.getPeerID());
+            // same object - different roles
+            this.encounterManager = asapEncounterManager;
+            this.encounterManagerAdmin = asapEncounterManager;
+
             this.hubConnectionManager = new HubConnectionManagerImpl(encounterManager, asapPeer);
         } else {
             Log.writeLogErr(this,
@@ -137,5 +146,37 @@ public class SharkMessengerApp {
 
     public Iterator<Integer> getOpenSockets() {
         return this.openSockets.keySet().iterator();
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    //                                    encounter management                                 //
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+    public ASAPEncounterManagerAdmin getEncounterManagerAdmin() {
+        return this.encounterManagerAdmin;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    //                                    credential management                                //
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+    List<CredentialMessage> pendingCredentialMessages = new ArrayList<>();
+    public void addPendingCredentialMessage(CredentialMessage credentialMessage) {
+        this.pendingCredentialMessages.add(credentialMessage);
+        Log.writeLog(this, "credentialMessage received");
+        this.tellUI("credential message received .. please handle pending messages asap");
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    //                                    communicate with UI                                  //
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+    public void setUIStreams(PrintStream outStream, PrintStream errStream) {
+        this.outStream = outStream;
+        this.errStream = errStream;
+    }
+
+    private void tellUI(String message) {
+        this.outStream.println(message);
     }
 }

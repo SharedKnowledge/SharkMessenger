@@ -55,7 +55,7 @@ public class UICommandGetCertificatesBySubject extends UICommand {
     @Override
     public String getDescription() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Returns all certificates from a specific subject.");
+        sb.append("Returns all certificates by a specified subject.");
         return sb.toString();
     }
 
@@ -68,10 +68,15 @@ public class UICommandGetCertificatesBySubject extends UICommand {
     @Override
     protected boolean handleArguments(List<String> arguments) {
         if(arguments.size() < 1) {
+            System.err.println("subject missing - name of the peer for whom that certificate was issued");
             return false;
         }
-        
+
+
         boolean isParsable = subject.tryParse(arguments.get(0));
+        if(!isParsable) {
+            System.err.println("problems parsing subject - name of the peer for whom that certificate was issued");
+        }
         return isParsable;
     }
 }

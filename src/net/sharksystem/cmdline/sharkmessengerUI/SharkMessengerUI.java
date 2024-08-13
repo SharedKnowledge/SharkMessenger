@@ -9,6 +9,7 @@ import java.util.*;
  */
 public class SharkMessengerUI {
 
+    private static final String UNDERLINE = "---------\n";
     private static boolean isInteractive = false;
 
     private final Map<String, UICommand> commands = new HashMap<>();
@@ -27,6 +28,7 @@ public class SharkMessengerUI {
         this.outStream = out;
         this.errStream = err;
         this.bufferedReader = new BufferedReader(new InputStreamReader(is));
+        sharkMessengerApp.setUIStreams(this.outStream, this.errStream);
     }
 
     /**
@@ -128,6 +130,40 @@ public class SharkMessengerUI {
         return this.commands;
     }
 
+    private Map<String, List<UICommand>> commandsByGroup = null;
+
+    public List<UICommand> getCommands(String group) {
+        return this.commandsByGroup.get(group);
+    }
+
+    public Set<String> getCommandGroups() {
+        return this.getCommandsByGroup().keySet();
+    }
+
+    private Map<String, List<UICommand>> getCommandsByGroup() {
+        if(this.commandsByGroup == null) {
+            this.commandsByGroup = new HashMap<>();
+            // get all unsorted command
+            Collection<UICommand> commands = this.getCommands().values();
+            for(UICommand command : commands) {
+                String groupName = command.getClass().getPackageName();
+                // extract last package name
+                int lastDot = groupName.lastIndexOf('.');
+                groupName = groupName.substring(lastDot+1);
+
+                List<UICommand> commandList = this.commandsByGroup.get(groupName);
+
+                if(commandList == null) {
+                    // new group
+                    commandList = new ArrayList<>();
+                    this.commandsByGroup.put(groupName, commandList);
+                }
+                commandList.add(command);
+            }
+        }
+        return this.commandsByGroup;
+    }
+
     public void logQuestionAnswer(String userInput) {
         this.addCommandToHistory(userInput);
     }
@@ -211,20 +247,31 @@ public class SharkMessengerUI {
         sb.append(System.lineSeparator());
         sb.append("COMMANDS:");
         sb.append(System.lineSeparator());
+        sb.append(System.lineSeparator());
 
-        int longestCmd = 0;
-        for (UICommand cmd : this.getCommands().values()) {
-            int curLength = cmd.getIdentifier().length();
-            if (curLength > longestCmd) {
-                longestCmd = curLength;
+        Set<String> commandGroups = this.getCommandGroups();
+        for(String commandGroup : commandGroups) {
+            sb.append(commandGroup);
+            sb.append(System.lineSeparator());
+            sb.append(UNDERLINE);
+
+            // calc length for a pretty layout
+            int longestCmd = 0;
+            for (UICommand cmd : this.getCommands().values()) {
+                int curLength = cmd.getIdentifier().length();
+                if (curLength > longestCmd) {
+                    longestCmd = curLength;
+                }
             }
-        }
 
-        for (UICommand cmd : this.getCommands().values()) {
-            sb.append(cmd.getIdentifier());
-            sb.append(" ".repeat(Math.max(0, longestCmd - cmd.getIdentifier().length())));
-            sb.append("\t");
-            sb.append(cmd.getDescription());
+            // produce output
+            for (UICommand cmd : this.getCommands(commandGroup)) {
+                sb.append(cmd.getIdentifier());
+                sb.append(" ".repeat(Math.max(0, longestCmd - cmd.getIdentifier().length())));
+                sb.append("\t");
+                sb.append(cmd.getDescription());
+                sb.append(System.lineSeparator());
+            }
             sb.append(System.lineSeparator());
         }
 
