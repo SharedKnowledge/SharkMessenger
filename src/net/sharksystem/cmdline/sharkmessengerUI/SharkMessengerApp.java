@@ -35,6 +35,7 @@ public class SharkMessengerApp {
     private final ASAPEncounterManagerAdmin encounterManagerAdmin;
     private final String peerDataFolderName;
     private final ExtraData settings;
+    private final String peerName;
     private Map<Integer, TCPServerSocketAcceptor> openSockets = new HashMap<>();
     private PrintStream outStream;
     private PrintStream errStream;
@@ -43,6 +44,7 @@ public class SharkMessengerApp {
         this.peerDataFolderName = "./" + peerName;
         this.settings = settings;
         this.sharkPeerFS = new SharkPeerFS(peerName, this.peerDataFolderName);
+        this.peerName = peerName;
 
         // set up shark components
 
@@ -115,13 +117,17 @@ public class SharkMessengerApp {
         this.settings.removeAll();
     }
 
+    public String getPeerName() {
+        return this.peerName;
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////////
     //                                    direct TCP connections                               //
     /////////////////////////////////////////////////////////////////////////////////////////////
 
     public void openTCPConnection(int portNumber) throws IOException {
         TCPServerSocketAcceptor tcpServerSocketAcceptor =
-                new TCPServerSocketAcceptor(portNumber, this.encounterManager);
+                new TCPServerSocketAcceptor(portNumber, this.encounterManager, true);
         this.openSockets.put(portNumber, tcpServerSocketAcceptor);
         Log.writeLog(this, "Socket open to connect on port: " + portNumber);
     }
@@ -160,11 +166,47 @@ public class SharkMessengerApp {
     //                                    credential management                                //
     /////////////////////////////////////////////////////////////////////////////////////////////
 
-    List<CredentialMessage> pendingCredentialMessages = new ArrayList<>();
+    private List<CredentialMessage> pendingCredentialMessages = new ArrayList<>();
     public void addPendingCredentialMessage(CredentialMessage credentialMessage) {
         this.pendingCredentialMessages.add(credentialMessage);
         Log.writeLog(this, "credentialMessage received");
         this.tellUI("credential message received .. please handle pending messages asap");
+    }
+
+    public List<CredentialMessage> getPendingCredentialMessages() {
+        return this.pendingCredentialMessages;
+    }
+
+
+    public void actionOnPendingCredentialMessageOnIndex(int index, boolean accept)
+            throws ASAPSecurityException, IOException {
+        if (index < 1) {
+            this.tellUI("\nminimal index is 1");
+            return;
+        }
+        if(this.pendingCredentialMessages.size() < index) {
+            this.tellUI("\nindex " + index + " exceeds maximum of " + this.pendingCredentialMessages.size());
+            return;
+        }
+        // we are in the range
+        index--; // adjust to internal counting .. we start with 0 as any normal person ;)
+        CredentialMessage actionedCredential = this.pendingCredentialMessages.remove(index);
+        if(accept) {
+            this.getSharkPKIComponent().acceptAndSignCredential(actionedCredential);
+            this.tellUI("\ncredential message accepted: \n" + PKIHelper.credentialMessage2String(actionedCredential));
+        } else {
+            this.tellUI("\ncredential message refused: \n" + PKIHelper.credentialMessage2String(actionedCredential));
+        }
+
+        this.tellUI("\nnote - indices of pending credential message has changed. Produce a new list before further actions.");
+    }
+
+    public void refusePendingCredentialMessageOnIndex(int index) throws ASAPSecurityException, IOException {
+        this.actionOnPendingCredentialMessageOnIndex(index, false);
+    }
+
+    public void acceptPendingCredentialMessageOnIndex(int index) throws ASAPSecurityException, IOException {
+        this.actionOnPendingCredentialMessageOnIndex(index, true);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -176,7 +218,11 @@ public class SharkMessengerApp {
         this.errStream = errStream;
     }
 
-    private void tellUI(String message) {
+    public void tellUI(String message) {
         this.outStream.println(message);
+    }
+
+    public void tellUIError(String message) {
+        this.errStream.println(message);
     }
 }

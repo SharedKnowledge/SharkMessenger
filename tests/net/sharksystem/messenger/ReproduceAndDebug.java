@@ -18,8 +18,7 @@ import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandSetC
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandCreateCredentialMessage;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandCreateNewKeyPair;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandExchangeCertificates;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandGetCertificatesByIssuer;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandGetCertificatesBySubject;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandShowCertificatesBySubject;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandGetCertificationPath;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandGetIdentityAssurance;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandGetKeysCreationTime;
@@ -108,8 +107,7 @@ public class ReproduceAndDebug {
         smUI.addCommand(new UICommandGetNumberOfKnownPeers(sharkMessengerApp, smUI, "numPeers", true));
         smUI.addCommand(new UICommandCreateNewKeyPair(sharkMessengerApp, smUI, "mkKeys", true));
         smUI.addCommand(new UICommandGetKeysCreationTime(sharkMessengerApp, smUI, "keysTime", true));
-        smUI.addCommand(new UICommandGetCertificatesByIssuer(sharkMessengerApp, smUI, "certByIssuer", true));
-        smUI.addCommand(new UICommandGetCertificatesBySubject(sharkMessengerApp, smUI, "certBySubject", true));
+        smUI.addCommand(new UICommandShowCertificatesBySubject(sharkMessengerApp, smUI, "certBySubject", true));
         smUI.addCommand(new UICommandGetIdentityAssurance(sharkMessengerApp, smUI, "ia", true));
         smUI.addCommand(new UICommandGetSigningFailureRate(sharkMessengerApp, smUI, "getSF", true));
         smUI.addCommand(new UICommandSetSigningFailureRate(sharkMessengerApp, smUI, "setSF", true));

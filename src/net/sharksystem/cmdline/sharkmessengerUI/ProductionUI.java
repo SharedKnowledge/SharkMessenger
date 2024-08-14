@@ -125,11 +125,12 @@ public class ProductionUI {
         smUI.addCommand(new UICommandRemoveChannel(sharkMessengerApp, smUI, "rmChannel", true));
 
         // PKI
-        //smUI.addCommand(new UICommandShowCertificateSubjects(sharkMessengerApp, smUI, "showSubjects", true));
-        smUI.addCommand(new UICommandShowCertificatesByIssuer(sharkMessengerApp, smUI, "showCertsByIssuer", true));
-        //smUI.addCommand(new UICommandGetCertificatesByIssuer(sharkMessengerApp, smUI, "showIssuers", true));
-        smUI.addCommand(new UICommandGetCertificatesByIssuer(sharkMessengerApp, smUI, "certByIssuer", true));
-        smUI.addCommand(new UICommandGetCertificatesBySubject(sharkMessengerApp, smUI, "certBySubject", true));
+        smUI.addCommand(new UICommandShowCertificatesByIssuer(sharkMessengerApp, smUI, "certByIssuer", true));
+        smUI.addCommand(new UICommandShowCertificatesBySubject(sharkMessengerApp, smUI, "certBySubject", true));
+        smUI.addCommand(new UICommandShowPendingCredentials(sharkMessengerApp, smUI, "showCredentials", true));
+        smUI.addCommand(new UICommandAcceptCredential(sharkMessengerApp, smUI, "acceptCredential", true));
+        smUI.addCommand(new UICommandRefuseCredential(sharkMessengerApp, smUI, "refuseCredential", true));
+
         smUI.addCommand(new UICommandGetIdentityAssurance(sharkMessengerApp, smUI, "ia", true));
         smUI.addCommand(new UICommandGetSigningFailureRate(sharkMessengerApp, smUI, "getSF", true));
         smUI.addCommand(new UICommandSetSigningFailureRate(sharkMessengerApp, smUI, "setSF", true));
