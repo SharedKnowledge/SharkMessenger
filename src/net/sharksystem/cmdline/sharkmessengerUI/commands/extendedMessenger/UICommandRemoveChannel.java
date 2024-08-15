@@ -1,4 +1,4 @@
-package net.sharksystem.cmdline.sharkmessengerUI.commands.messenger;
+package net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger;
 
 import java.util.List;
 

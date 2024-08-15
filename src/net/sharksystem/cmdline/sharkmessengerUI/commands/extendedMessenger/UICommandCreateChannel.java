@@ -1,4 +1,4 @@
-package net.sharksystem.cmdline.sharkmessengerUI.commands.messenger;
+package net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger;
 
 import net.sharksystem.messenger.SharkMessengerException;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
@@ -42,7 +42,7 @@ public class UICommandCreateChannel extends UICommand {
         String channelName = this.channelName.getValue();
 
         try {
-            this.getSharkMessengerApp().getMessengerComponent().createChannel(channelURI, channelName, true);
+            this.getSharkMessengerApp().getSharkMessengerComponent().createChannel(channelURI, channelName, true);
         } catch (SharkMessengerException | IOException e) {
             this.printErrorMessage(e.getLocalizedMessage());
         }

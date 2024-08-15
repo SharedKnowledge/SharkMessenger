@@ -1,5 +1,6 @@
-package net.sharksystem.cmdline.sharkmessengerUI.commands.messenger;
+package net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger;
 
+import net.sharksystem.cmdline.sharkmessengerUI.commands.simpleMessenger.ChannelPrinter;
 import net.sharksystem.messenger.SharkMessengerComponent;
 import net.sharksystem.messenger.SharkMessengerException;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
@@ -36,7 +37,7 @@ public class UICommandListChannels extends UICommand {
     @Override
     protected void execute() throws Exception {
         try {
-            SharkMessengerComponent messengerComponent = this.getSharkMessengerApp().getMessengerComponent();
+            SharkMessengerComponent messengerComponent = this.getSharkMessengerApp().getSharkMessengerComponent();
             ChannelPrinter.printChannelDescriptions(this.getPrintStream(), messengerComponent, false);
         } catch (SharkMessengerException | IOException e) {
             this.printErrorMessage(e.getLocalizedMessage());

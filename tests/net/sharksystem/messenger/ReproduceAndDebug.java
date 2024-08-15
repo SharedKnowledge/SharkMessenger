@@ -8,13 +8,13 @@ import net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol.UICommandCon
 import net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol.UICommandListConnectedHubs;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol.UICommandListHubDescriptions;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol.UICommandRemoveHubDescription;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandCreateChannel;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandGetMessageDetails;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandListChannels;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandListMessages;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandRemoveChannel;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandSendMessage;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandSetChannelAge;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandCreateChannel;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.simpleMessenger.UICommandGetMessageDetails;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandListChannels;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandListMessagesX;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandRemoveChannel;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandSendMessageExtended;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandSetChannelAge;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandCreateCredentialMessage;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandCreateNewKeyPair;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandExchangeCertificates;
@@ -83,7 +83,7 @@ public class ReproduceAndDebug {
         SharkMessengerUI smUI = new SharkMessengerUI(batchCommands, System.in, System.out, System.err, sharkMessengerApp);
 
         // Add test received listener.
-        sharkMessengerApp.getMessengerComponent().addSharkMessagesReceivedListener(
+        sharkMessengerApp.getSharkMessengerComponent().addSharkMessagesReceivedListener(
                 new TestMessageReceivedListener(sharkMessengerApp));
 
         //General
@@ -92,8 +92,8 @@ public class ReproduceAndDebug {
         //smUI.addCommand(new UICommandExit(sharkMessengerApp, smUI, "exit", false));
 
         // messages
-        smUI.addCommand(new UICommandSendMessage(sharkMessengerApp, smUI, "sendMessage", true));
-        smUI.addCommand(new UICommandListMessages(sharkMessengerApp, smUI, "listMessages", true));
+        smUI.addCommand(new UICommandSendMessageExtended(sharkMessengerApp, smUI, "sendMessage", true));
+        smUI.addCommand(new UICommandListMessagesX(sharkMessengerApp, smUI, "listMessages", true));
         smUI.addCommand(new UICommandGetMessageDetails(sharkMessengerApp, smUI, "getMessageDetails", true));
 
         // channels
@@ -173,8 +173,8 @@ public class ReproduceAndDebug {
         Thread.sleep(1000);
 
         // Compare number of sent and received messages
-        int amountOutgoingMessages = smaAlice.getMessengerComponent().getChannel("test://t1").getMessages().size();
-        int amountIncomingMessages = smaBob.getMessengerComponent().getChannel("test://t1").getMessages().size();
+        int amountOutgoingMessages = smaAlice.getSharkMessengerComponent().getChannel("test://t1").getMessages().size();
+        int amountIncomingMessages = smaBob.getSharkMessengerComponent().getChannel("test://t1").getMessages().size();
         Assertions.assertTrue(amountOutgoingMessages == amountIncomingMessages);
     }
 
@@ -204,8 +204,8 @@ public class ReproduceAndDebug {
         Thread.sleep(1000);
 
         // Compare number of sent and received messages
-        int amountOutgoingMessages = smaAlice.getMessengerComponent().getChannel("test://t1").getMessages().size();
-        int amountIncomingMessages = smaBob.getMessengerComponent().getChannel("test://t1").getMessages().size();
+        int amountOutgoingMessages = smaAlice.getSharkMessengerComponent().getChannel("test://t1").getMessages().size();
+        int amountIncomingMessages = smaBob.getSharkMessengerComponent().getChannel("test://t1").getMessages().size();
         Assertions.assertTrue(amountOutgoingMessages == amountIncomingMessages);
     }
 
@@ -254,8 +254,8 @@ public class ReproduceAndDebug {
         Thread.sleep(1000);
 
         // Compare number of sent and received messages
-        int amountOutgoingMessages = smaAlice.getMessengerComponent().getChannel("test://t1").getMessages().size();
-        int amountIncomingMessages = smaBob.getMessengerComponent().getChannel("test://t1").getMessages().size();
+        int amountOutgoingMessages = smaAlice.getSharkMessengerComponent().getChannel("test://t1").getMessages().size();
+        int amountIncomingMessages = smaBob.getSharkMessengerComponent().getChannel("test://t1").getMessages().size();
         Assertions.assertTrue(amountOutgoingMessages == amountIncomingMessages);
     }
 

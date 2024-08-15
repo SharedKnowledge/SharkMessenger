@@ -19,7 +19,7 @@ public class UICommandChannelArgument extends UICommandArgument<SharkMessengerCh
         super.setEmptyStringAllowed(false);
         if(super.tryParse(input)) {
             try {
-                this.parsedInput = this.getSharkMessengerApp().getMessengerComponent().getChannel(input);
+                this.parsedInput = this.getSharkMessengerApp().getSharkMessengerComponent().getChannel(input);
                 return true;
             } catch (SharkException | IOException e) {
                 return false;

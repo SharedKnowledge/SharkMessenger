@@ -61,7 +61,7 @@ public class TestMessageReceivedListener implements SharkMessagesReceivedListene
         }
 
         try {
-            SharkMessageList messages = this.sharkMessengerApp.getMessengerComponent().getChannel(uri).getMessages();
+            SharkMessageList messages = this.sharkMessengerApp.getSharkMessengerComponent().getChannel(uri).getMessages();
 
             // When multiple messages are received as a block (possible when connection
             // reestablished) they should receive the same time stamp.

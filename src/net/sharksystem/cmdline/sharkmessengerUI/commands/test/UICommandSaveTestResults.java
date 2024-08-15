@@ -84,7 +84,7 @@ public class UICommandSaveTestResults extends UICommand {
         Path path = Paths.get(pathName);
         Files.write(path, HEADER.getBytes());
 
-        SharkMessengerComponent messenger = super.getSharkMessengerApp().getMessengerComponent();
+        SharkMessengerComponent messenger = super.getSharkMessengerApp().getSharkMessengerComponent();
         List<CharSequence> uris = messenger.getChannelUris();
         TestMessageReceivedListener listener = TestMessageReceivedListener.getInstance();
 

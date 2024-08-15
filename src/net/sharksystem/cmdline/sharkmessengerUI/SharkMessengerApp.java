@@ -100,7 +100,7 @@ public class SharkMessengerApp {
         return this.sharkPeerFS;
     }
 
-    public SharkMessengerComponent getMessengerComponent() {
+    public SharkMessengerComponent getSharkMessengerComponent() {
         return this.messengerComponent;
     }
 

@@ -7,6 +7,7 @@ import java.io.PrintStream;
 
 import net.sharksystem.SharkException;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.encounter.UICommandShowEncounter;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.*;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.general.UICommandExit;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.general.UICommandSaveLog;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.general.UICommandShowLog;
@@ -15,13 +16,7 @@ import net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol.UICommandCon
 import net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol.UICommandListConnectedHubs;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol.UICommandListHubDescriptions;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol.UICommandRemoveHubDescription;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandCreateChannel;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandGetMessageDetails;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandListChannels;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandListMessages;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandRemoveChannel;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandSendMessage;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandSetChannelAge;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.simpleMessenger.*;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.*;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.tcp.UICommandCloseTCP;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.tcp.UICommandConnectTCP;
@@ -115,14 +110,18 @@ public class ProductionUI {
         // encounter control
         smUI.addCommand(new UICommandShowEncounter(sharkMessengerApp, smUI, "showEncounter", false));
 
-        // Messenger
-        smUI.addCommand(new UICommandSendMessage(sharkMessengerApp, smUI, "sendMessage", true));
-        smUI.addCommand(new UICommandListMessages(sharkMessengerApp, smUI, "lsMessages", true));
-        smUI.addCommand(new UICommandGetMessageDetails(sharkMessengerApp, smUI, "getMessageDetails", true));
+        // extended messenger
+        smUI.addCommand(new UICommandSendMessageExtended(sharkMessengerApp, smUI, "sendMessageX", true));
         smUI.addCommand(new UICommandListChannels(sharkMessengerApp, smUI, "lsChannel", true));
         smUI.addCommand(new UICommandCreateChannel(sharkMessengerApp, smUI, "mkChannel", true));
         smUI.addCommand(new UICommandSetChannelAge(sharkMessengerApp, smUI, "setChannelAge", true));
         smUI.addCommand(new UICommandRemoveChannel(sharkMessengerApp, smUI, "rmChannel", true));
+        smUI.addCommand(new UICommandListMessagesX(sharkMessengerApp, smUI, "lsMessagesX", true));
+
+        // simple messenger
+        smUI.addCommand(new UICommandSendMessage(sharkMessengerApp, smUI, "sendMessage", true));
+        smUI.addCommand(new UICommandGetMessageDetails(sharkMessengerApp, smUI, "getMessageDetails", true));
+        smUI.addCommand(new UICommandListMessages(sharkMessengerApp, smUI, "lsMessages", true));
 
         // PKI
         smUI.addCommand(new UICommandShowCertificatesByIssuer(sharkMessengerApp, smUI, "certByIssuer", true));
@@ -134,7 +133,7 @@ public class ProductionUI {
         smUI.addCommand(new UICommandGetIdentityAssurance(sharkMessengerApp, smUI, "ia", true));
         smUI.addCommand(new UICommandGetSigningFailureRate(sharkMessengerApp, smUI, "getSF", true));
         smUI.addCommand(new UICommandSetSigningFailureRate(sharkMessengerApp, smUI, "setSF", true));
-        smUI.addCommand(new UICommandCreateCredentialMessage(sharkMessengerApp, smUI, "mkCredentialMsg", true));
+        //smUI.addCommand(new UICommandCreateCredentialMessage(sharkMessengerApp, smUI, "mkCredentialMsg", true));
         smUI.addCommand(new UICommandExchangeCertificates(sharkMessengerApp, smUI, "exchCert", true));
         smUI.addCommand(new UICommandGetCertificationPath(sharkMessengerApp, smUI, "certPath", true));
         smUI.addCommand(new UICommandGetOwnerInfo(sharkMessengerApp, smUI, "ownerInfo", true));

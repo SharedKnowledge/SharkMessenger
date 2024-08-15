@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.sharksystem.SharkException;
 import net.sharksystem.cmdline.sharkmessengerUI.*;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandSendMessage;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandSendMessageExtended;
 import net.sharksystem.messenger.SharkMessengerComponent;
 
 /**
@@ -88,7 +88,7 @@ public class UICommandSendTestMessage extends UICommand {
 
     @Override
     protected void execute() throws Exception {
-        UICommand sendCommand = new UICommandSendMessage(getSharkMessengerApp(),
+        UICommand sendCommand = new UICommandSendMessageExtended(getSharkMessengerApp(),
                 getSharkMessengerUI(), getIdentifier(), false);
 
         // messageCounter provides message IDs
@@ -103,7 +103,7 @@ public class UICommandSendTestMessage extends UICommand {
         arguments.add(this.receivers.getValue());
 
         // information for the messageCounter
-        SharkMessengerComponent messenger = getSharkMessengerApp().getMessengerComponent();
+        SharkMessengerComponent messenger = getSharkMessengerApp().getSharkMessengerComponent();
         String channelUri = messenger.getChannel(this.channelIndex.getValue()).getURI().toString();
         String content = this.message.getValue();
         String receivers = this.receivers.getValue();

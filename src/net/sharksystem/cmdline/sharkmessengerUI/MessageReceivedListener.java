@@ -14,7 +14,7 @@ public class MessageReceivedListener extends SharkMessengerAppListener implement
     @Override
     public void sharkMessagesReceived(CharSequence uri) {
         try {
-            SharkMessageList messages = this.sharkMessengerApp.getMessengerComponent().getChannel(uri).getMessages();
+            SharkMessageList messages = this.sharkMessengerApp.getSharkMessengerComponent().getChannel(uri).getMessages();
             System.out.println("TODO in MessageReceivedListener: show messages");
             //cliModel.observer.displayMessages(messages);
 

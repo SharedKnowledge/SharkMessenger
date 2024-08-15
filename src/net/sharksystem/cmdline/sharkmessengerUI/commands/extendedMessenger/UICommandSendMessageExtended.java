@@ -1,4 +1,4 @@
-package net.sharksystem.cmdline.sharkmessengerUI.commands.messenger;
+package net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger;
 
 import net.sharksystem.SharkException;
 import net.sharksystem.cmdline.sharkmessengerUI.*;
@@ -13,7 +13,7 @@ import java.util.Set;
 /**
  * This command sends a message into a channel.
  */
-public class UICommandSendMessage extends UICommandProduceChannelListBefore {
+public class UICommandSendMessageExtended extends UICommandProduceChannelListBefore {
     private final UICommandIntegerArgument channelIndex;
     private final UICommandBooleanArgument sign;
     private final UICommandBooleanArgument encrypt;
@@ -21,8 +21,8 @@ public class UICommandSendMessage extends UICommandProduceChannelListBefore {
     private final UICommandStringArgument receivers;
 
 
-    public UICommandSendMessage(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
-                                String identifier, boolean rememberCommand) {
+    public UICommandSendMessageExtended(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                                        String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.channelIndex = new UICommandIntegerArgument(sharkMessengerApp);
         this.sign = new UICommandBooleanArgument(sharkMessengerApp);
@@ -46,7 +46,7 @@ public class UICommandSendMessage extends UICommandProduceChannelListBefore {
     @Override
     public void execute() throws Exception {
         try {
-            SharkMessengerComponent messenger = this.getSharkMessengerApp().getMessengerComponent();
+            SharkMessengerComponent messenger = this.getSharkMessengerApp().getSharkMessengerComponent();
 
             int channelIndex = this.channelIndex.getValue();
             SharkMessengerChannel channel = messenger.getChannel(channelIndex);
@@ -74,6 +74,9 @@ public class UICommandSendMessage extends UICommandProduceChannelListBefore {
     @Override
     public String getDescription() {
         StringBuilder sb = new StringBuilder();
+        sb.append("Sends a message into a channel.");
+        sb.append("Full parameter set");
+        sb.append("Sends a message into a channel.");
         sb.append("Sends a message into a channel.");
         return sb.toString();
     }
