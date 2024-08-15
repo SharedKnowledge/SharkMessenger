@@ -1,4 +1,4 @@
-package net.sharksystem.cmdline.sharkmessengerUI.commands.general;
+package net.sharksystem.cmdline.sharkmessengerUI.commands.testing;
 
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 
