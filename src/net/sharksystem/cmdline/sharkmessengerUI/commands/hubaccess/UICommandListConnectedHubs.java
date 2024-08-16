@@ -1,13 +1,18 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.hubaccess;
 
+import net.sharksystem.SharkException;
 import net.sharksystem.asap.utils.DateTimeHelper;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaire;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.helper.Printer;
 import net.sharksystem.hub.HubConnectionManager;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaireBuilder;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommand;
+import net.sharksystem.hub.peerside.HubConnector;
+import net.sharksystem.hub.peerside.HubConnectorDescription;
 
+import java.util.Collection;
 import java.util.List;
 
 public class UICommandListConnectedHubs extends UICommand {
@@ -23,9 +28,34 @@ public class UICommandListConnectedHubs extends UICommand {
 
     @Override
     protected void execute() throws Exception {
-        HubDescriptionPrinter.printConnectedHubs(
-                this.getPrintStream(), this.getSharkMessengerApp().getHubConnectionManager());
+        StringBuilder sb = new StringBuilder();
+        HubConnectionManager hubConnectionManager = this.getSharkMessengerApp().getHubConnectionManager();
+        List<HubConnectorDescription> connectedHubs = hubConnectionManager.getConnectedHubs();
 
+        if(connectedHubs == null || connectedHubs.isEmpty()) {
+            this.getSharkMessengerApp().tellUI("no hub connections");
+            return;
+        }
+
+        sb.append("number of hub connections: ");
+        sb.append(connectedHubs.size());
+        int i = 1;
+        for(HubConnectorDescription hcd : connectedHubs) {
+            sb.append("\n#");
+            sb.append(i++);
+            sb.append(": ");
+            sb.append(Printer.getHubConnectorDescriptionAsString(hcd));
+            sb.append("\npeers on hub: ");
+            try {
+                HubConnector hubConnector = hubConnectionManager.getHubConnector(hcd);
+                Collection<CharSequence> peerIDs = hubConnector.getPeerIDs();
+                sb.append(Printer.getStringListAsCommaSeparatedString(peerIDs.iterator()));
+            }
+            catch(SharkException se) {
+                sb.append("problem accessing hub information - maybe syncing.");
+            }
+        }
+        // TODO!!
         List<HubConnectionManager.FailedConnectionAttempt> failedConnectionAttemptsList =
                 this.getSharkMessengerApp().getHubConnectionManager().getFailedConnectionAttempts();
         if(!failedConnectionAttemptsList.isEmpty()) {
@@ -38,11 +68,13 @@ public class UICommandListConnectedHubs extends UICommand {
                         this.getPrintStream(), failedConnectionAttempt.getHubConnectorDescription());
             }
         }
+
+        this.getSharkMessengerApp().tellUI(sb.toString());
     }
 
     @Override
     public String getDescription() {
-        return "List connected hubs.";
+        return "list connected hubs.";
     }
 
     /**
