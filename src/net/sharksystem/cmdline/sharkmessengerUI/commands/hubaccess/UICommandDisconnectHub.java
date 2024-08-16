@@ -1,10 +1,10 @@
-package net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol;
+package net.sharksystem.cmdline.sharkmessengerUI.commands.hubaccess;
 
 import java.util.List;
 
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
-import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaire;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaire;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommand;
 
 public class UICommandDisconnectHub extends UICommand {

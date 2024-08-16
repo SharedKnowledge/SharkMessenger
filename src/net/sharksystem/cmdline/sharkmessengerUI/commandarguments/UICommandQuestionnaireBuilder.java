@@ -1,4 +1,4 @@
-package net.sharksystem.cmdline.sharkmessengerUI;
+package net.sharksystem.cmdline.sharkmessengerUI.commandarguments;
 
 /**
  * This builder makes it a bit easier to create a questionnaire by saving some lines of code for creating needed objects.

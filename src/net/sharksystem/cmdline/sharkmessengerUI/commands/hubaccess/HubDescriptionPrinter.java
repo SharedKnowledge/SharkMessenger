@@ -1,4 +1,4 @@
-package net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol;
+package net.sharksystem.cmdline.sharkmessengerUI.commands.hubaccess;
 
 import net.sharksystem.hub.ASAPHubException;
 import net.sharksystem.hub.HubConnectionManager;

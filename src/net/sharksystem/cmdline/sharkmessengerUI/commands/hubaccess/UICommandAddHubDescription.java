@@ -1,8 +1,9 @@
-package net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol;
+package net.sharksystem.cmdline.sharkmessengerUI.commands.hubaccess;
 
 import java.util.List;
 
 import net.sharksystem.cmdline.sharkmessengerUI.*;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.*;
 import net.sharksystem.hub.peerside.HubConnectorDescription;
 import net.sharksystem.hub.peerside.TCPHubConnectorDescriptionImpl;
 

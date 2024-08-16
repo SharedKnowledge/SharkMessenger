@@ -1,9 +1,9 @@
-package net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol;
+package net.sharksystem.cmdline.sharkmessengerUI.commands.hubaccess;
 
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
-import net.sharksystem.cmdline.sharkmessengerUI.UICommandIntegerArgument;
-import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaire;
-import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaireBuilder;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandIntegerArgument;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaire;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaireBuilder;
 import net.sharksystem.hub.peerside.HubConnectorDescription;
 
 import java.util.List;
@@ -11,11 +11,11 @@ import java.util.List;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommand;
 
-public class UICommandConnectHub extends UICommand {
+public class UICommandConnectHubFromDescriptionList extends UICommand {
     private UICommandIntegerArgument hubIndex;
 
-    public UICommandConnectHub(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
-                               String identifier, boolean rememberCommand) {
+    public UICommandConnectHubFromDescriptionList(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                                                  String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.hubIndex = new UICommandIntegerArgument(sharkMessengerApp);
     }
@@ -37,7 +37,7 @@ public class UICommandConnectHub extends UICommand {
         HubConnectorDescription hubDescription =
                 this.getSharkMessengerApp().getSharkPeer().getHubDescription(this.hubIndex.getValue());
 
-        this.getSharkMessengerUI().getOutStream().println("try to connect to hub");
+        this.getSharkMessengerApp().tellUI("try to connect to hub");
         HubDescriptionPrinter.print(this.getSharkMessengerUI().getOutStream(), hubDescription);
 
         this.getSharkMessengerApp().getHubConnectionManager().connectHub(hubDescription);

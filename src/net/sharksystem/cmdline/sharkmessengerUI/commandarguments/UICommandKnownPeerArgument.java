@@ -1,7 +1,8 @@
-package net.sharksystem.cmdline.sharkmessengerUI;
+package net.sharksystem.cmdline.sharkmessengerUI.commandarguments;
 
 import net.sharksystem.asap.ASAPSecurityException;
 import net.sharksystem.asap.persons.PersonValues;
+import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 
 /**
  * An argument for SharkPeers

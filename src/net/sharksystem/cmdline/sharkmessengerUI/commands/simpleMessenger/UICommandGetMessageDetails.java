@@ -2,6 +2,10 @@ package net.sharksystem.cmdline.sharkmessengerUI.commands.simpleMessenger;
 
 import net.sharksystem.asap.ASAPHop;
 import net.sharksystem.cmdline.sharkmessengerUI.*;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandChannelArgument;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandIntegerArgument;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaire;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaireBuilder;
 
 import java.util.List;
 

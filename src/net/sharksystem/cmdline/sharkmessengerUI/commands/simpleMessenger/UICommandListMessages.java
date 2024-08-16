@@ -2,6 +2,7 @@ package net.sharksystem.cmdline.sharkmessengerUI.commands.simpleMessenger;
 
 import net.sharksystem.SharkException;
 import net.sharksystem.cmdline.sharkmessengerUI.*;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaire;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandProduceChannelListBefore;
 import net.sharksystem.messenger.SharkMessageList;
 import net.sharksystem.messenger.SharkMessengerChannel;

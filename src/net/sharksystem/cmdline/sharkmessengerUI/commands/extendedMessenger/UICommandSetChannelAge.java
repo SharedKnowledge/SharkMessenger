@@ -3,6 +3,10 @@ package net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger;
 import java.util.List;
 
 import net.sharksystem.cmdline.sharkmessengerUI.*;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandChannelArgument;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaire;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaireBuilder;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandStringArgument;
 import net.sharksystem.messenger.SharkCommunicationAge;
 
 public class UICommandSetChannelAge extends UICommand {

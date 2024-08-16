@@ -11,6 +11,8 @@ import java.util.List;
 import net.sharksystem.SharkException;
 import net.sharksystem.asap.ASAPException;
 import net.sharksystem.cmdline.sharkmessengerUI.*;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaire;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandStringArgument;
 import net.sharksystem.messenger.SharkMessage;
 import net.sharksystem.messenger.SharkMessageList;
 import net.sharksystem.messenger.SharkMessengerComponent;

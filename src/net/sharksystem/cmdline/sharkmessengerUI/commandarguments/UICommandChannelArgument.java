@@ -1,6 +1,7 @@
-package net.sharksystem.cmdline.sharkmessengerUI;
+package net.sharksystem.cmdline.sharkmessengerUI.commandarguments;
 
 import net.sharksystem.SharkException;
+import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.messenger.SharkMessengerChannel;
 
 import java.io.IOException;

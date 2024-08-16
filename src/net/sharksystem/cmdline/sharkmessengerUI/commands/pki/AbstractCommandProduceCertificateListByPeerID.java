@@ -4,6 +4,8 @@ import net.sharksystem.SharkException;
 import net.sharksystem.asap.ASAPSecurityException;
 import net.sharksystem.asap.pki.ASAPCertificate;
 import net.sharksystem.cmdline.sharkmessengerUI.*;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaire;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandStringArgument;
 import net.sharksystem.pki.PKIHelper;
 
 import java.util.Collection;

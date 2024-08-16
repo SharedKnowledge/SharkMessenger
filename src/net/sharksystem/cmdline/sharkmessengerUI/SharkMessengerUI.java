@@ -1,5 +1,8 @@
 package net.sharksystem.cmdline.sharkmessengerUI;
 
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestion;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaire;
+
 import java.io.*;
 import java.util.*;
 

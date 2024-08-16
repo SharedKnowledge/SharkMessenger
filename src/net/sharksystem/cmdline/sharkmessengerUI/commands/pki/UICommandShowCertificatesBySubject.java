@@ -1,16 +1,11 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.pki;
 
 import java.util.Collection;
-import java.util.List;
 
 import net.sharksystem.asap.ASAPSecurityException;
 import net.sharksystem.asap.pki.ASAPCertificate;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
-import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaireBuilder;
-import net.sharksystem.cmdline.sharkmessengerUI.UICommandKnownPeerArgument;
-import net.sharksystem.cmdline.sharkmessengerUI.UICommand;
-import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaire;
 
 public class UICommandShowCertificatesBySubject extends AbstractCommandProduceCertificateListByPeerID {
     public UICommandShowCertificatesBySubject(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,

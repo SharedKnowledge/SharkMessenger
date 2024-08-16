@@ -6,7 +6,7 @@ import java.util.List;
 
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommand;
-import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaire;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaire;
 
 /**
  * Command for displaying the log history to the user.

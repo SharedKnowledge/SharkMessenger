@@ -4,10 +4,10 @@ import net.sharksystem.messenger.SharkMessengerException;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommand;
-import net.sharksystem.cmdline.sharkmessengerUI.UICommandBooleanArgument;
-import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaire;
-import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaireBuilder;
-import net.sharksystem.cmdline.sharkmessengerUI.UICommandStringArgument;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandBooleanArgument;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaire;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaireBuilder;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandStringArgument;
 
 import java.io.IOException;
 import java.util.List;

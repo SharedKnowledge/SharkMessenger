@@ -1,11 +1,11 @@
-package net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol;
+package net.sharksystem.cmdline.sharkmessengerUI.commands.hubaccess;
 
 import net.sharksystem.asap.utils.DateTimeHelper;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
-import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaire;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaire;
 import net.sharksystem.hub.HubConnectionManager;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
-import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaireBuilder;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaireBuilder;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommand;
 
 import java.util.List;

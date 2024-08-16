@@ -2,12 +2,9 @@ package net.sharksystem.cmdline.sharkmessengerUI.commands.basics;
 
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
-import net.sharksystem.cmdline.sharkmessengerUI.UICommand;
-import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaire;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.helper.AbstractCommandNoParameter;
 
-import java.util.List;
-
-public class UICommandDestroyPeer extends UICommand {
+public class UICommandDestroyPeer extends AbstractCommandNoParameter {
     public UICommandDestroyPeer(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
                                 String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
@@ -24,18 +21,4 @@ public class UICommandDestroyPeer extends UICommand {
         sb.append("BE CAREFUL. ALL PEER DATA WILL BE DELETED. Application stops.");
         return sb.toString();
     }
-
-    /**
-     * This command requires no arguments.
-     */
-    @Override
-    protected boolean handleArguments(List<String> arguments) {
-        return true;
-    }
-
-    @Override
-    protected UICommandQuestionnaire specifyCommandStructure() {
-        return null;
-    }
-
 }

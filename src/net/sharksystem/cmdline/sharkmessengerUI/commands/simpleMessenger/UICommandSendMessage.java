@@ -2,6 +2,9 @@ package net.sharksystem.cmdline.sharkmessengerUI.commands.simpleMessenger;
 
 import net.sharksystem.asap.utils.ASAPSerialization;
 import net.sharksystem.cmdline.sharkmessengerUI.*;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaire;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaireBuilder;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandStringArgument;
 import net.sharksystem.messenger.SharkMessengerComponent;
 
 import java.io.ByteArrayOutputStream;

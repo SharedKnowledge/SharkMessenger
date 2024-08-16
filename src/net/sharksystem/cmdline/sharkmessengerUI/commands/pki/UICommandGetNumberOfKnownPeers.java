@@ -4,9 +4,9 @@ import java.util.List;
 
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
-import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaire;
-import net.sharksystem.cmdline.sharkmessengerUI.UICommandQuestionnaireBuilder;
-import net.sharksystem.cmdline.sharkmessengerUI.UICommandKnownPeerArgument;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaire;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaireBuilder;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandKnownPeerArgument;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommand;
 
 public class UICommandGetNumberOfKnownPeers extends UICommand {

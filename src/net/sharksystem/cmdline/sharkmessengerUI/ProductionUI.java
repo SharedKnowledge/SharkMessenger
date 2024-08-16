@@ -10,13 +10,12 @@ import net.sharksystem.cmdline.sharkmessengerUI.commands.basics.UICommandDestroy
 import net.sharksystem.cmdline.sharkmessengerUI.commands.encounter.UICommandShowEncounter;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.*;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.basics.UICommandExit;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.hubaccess.*;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.hubmanagement.UICommandListHub;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.hubmanagement.UICommandStartHub;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.hubmanagement.UICommandStopHub;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.testing.UICommandSaveLog;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.testing.UICommandShowLog;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol.UICommandAddHubDescription;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol.UICommandConnectHub;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol.UICommandListConnectedHubs;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol.UICommandListHubDescriptions;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol.UICommandRemoveHubDescription;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.simpleMessenger.*;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.*;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.tcp.UICommandCloseTCP;
@@ -125,12 +124,19 @@ public class ProductionUI {
         smUI.addCommand(new UICommandSaveLog(sharkMessengerApp, smUI, "saveLog", false));
         smUI.addCommand(new UICommandShowLog(sharkMessengerApp, smUI, "showLog", false));
 
-        // Hub control
+        // hub access
+        smUI.addCommand(new UICommandConnectHub(sharkMessengerApp, smUI, "connectHub", true));
+        smUI.addCommand(new UICommandListConnectedHubs(sharkMessengerApp, smUI, "lsHubs", true));
+
+        smUI.addCommand(new UICommandConnectHubFromDescriptionList(sharkMessengerApp, smUI, "connectHubFromList", true));
         smUI.addCommand(new UICommandListHubDescriptions(sharkMessengerApp, smUI, "lsHubDescr", true));
         smUI.addCommand(new UICommandAddHubDescription(sharkMessengerApp, smUI,"addHubDescr", true));
         smUI.addCommand(new UICommandRemoveHubDescription(sharkMessengerApp, smUI, "rmHubDescr", true));
-        smUI.addCommand(new UICommandListConnectedHubs(sharkMessengerApp, smUI, "lsHubs", true));
-        smUI.addCommand(new UICommandConnectHub(sharkMessengerApp, smUI, "connectHub", true));
+
+        // hub management
+        smUI.addCommand(new UICommandStartHub(sharkMessengerApp, smUI, "startHub", true));
+        smUI.addCommand(new UICommandStopHub(sharkMessengerApp, smUI, "stopHub", true));
+        smUI.addCommand(new UICommandListHub(sharkMessengerApp, smUI, "lsHubs", true));
 
         // extended messenger
         smUI.addCommand(new UICommandSendMessageExtended(sharkMessengerApp, smUI, "sendMessageX", true));

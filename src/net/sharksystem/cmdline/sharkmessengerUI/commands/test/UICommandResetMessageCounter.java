@@ -2,6 +2,7 @@ package net.sharksystem.cmdline.sharkmessengerUI.commands.test;
 
 import net.sharksystem.SharkException;
 import net.sharksystem.cmdline.sharkmessengerUI.*;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaire;
 
 import java.util.List;
 

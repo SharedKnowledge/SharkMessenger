@@ -3,11 +3,11 @@ package net.sharksystem.messenger;
 import net.sharksystem.SharkException;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol.UICommandAddHubDescription;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol.UICommandConnectHub;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol.UICommandListConnectedHubs;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol.UICommandListHubDescriptions;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.hubcontrol.UICommandRemoveHubDescription;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.hubaccess.UICommandAddHubDescription;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.hubaccess.UICommandConnectHubFromDescriptionList;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.hubaccess.UICommandListConnectedHubs;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.hubaccess.UICommandListHubDescriptions;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.hubaccess.UICommandRemoveHubDescription;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandCreateChannel;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.simpleMessenger.UICommandGetMessageDetails;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandListChannels;
@@ -120,7 +120,7 @@ public class ReproduceAndDebug {
         smUI.addCommand(new UICommandAddHubDescription(sharkMessengerApp, smUI, "addHubDescr", true));
         smUI.addCommand(new UICommandRemoveHubDescription(sharkMessengerApp, smUI, "rmHubDescr", true));
         smUI.addCommand(new UICommandListConnectedHubs(sharkMessengerApp, smUI, "lsHubs", true));
-        smUI.addCommand(new UICommandConnectHub(sharkMessengerApp, smUI, "connectHub", true));
+        smUI.addCommand(new UICommandConnectHubFromDescriptionList(sharkMessengerApp, smUI, "connectHub", true));
 
         // Test
         smUI.addCommand(new UICommandOpenTCP(sharkMessengerApp, smUI, "openTCP", true));

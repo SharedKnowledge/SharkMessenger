@@ -3,6 +3,9 @@ package net.sharksystem.cmdline.sharkmessengerUI.commands.simpleMessenger;
 import java.util.List;
 
 import net.sharksystem.cmdline.sharkmessengerUI.*;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandKnownPeerArgument;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaire;
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaireBuilder;
 
 @Deprecated
 public class UICommandStopEncounter extends UICommand {

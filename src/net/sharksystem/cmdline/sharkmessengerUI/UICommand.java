@@ -1,5 +1,7 @@
 package net.sharksystem.cmdline.sharkmessengerUI;
 
+import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaire;
+
 import java.io.PrintStream;
 import java.util.List;
 
@@ -87,9 +89,7 @@ public abstract class UICommand {
      * Prepares the command for execution and executes it if successfull.
      * Preparing is the act of extracting the needed parameters from the
      * argument list and checking if they are valid.
-     * After the preperation is completed, the command is executed immidiatly.
-     * For the full list of arguments see {@link #handleArguments() handleArguments}
-     * of the needed Command class.
+     * After the preparation is completed, the command is executed immediately.
      * @param arguments needed for execution.
      * @return true, if preperation was successfull. False if an argument could
      *         not be prepared correctly.

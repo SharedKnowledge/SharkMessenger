@@ -9,6 +9,7 @@ import net.sharksystem.fs.ExtraData;
 import net.sharksystem.fs.FSUtils;
 import net.sharksystem.hub.HubConnectionManager;
 import net.sharksystem.hub.HubConnectionManagerImpl;
+import net.sharksystem.hub.hubside.ASAPTCPHub;
 import net.sharksystem.messenger.SharkMessengerComponent;
 import net.sharksystem.messenger.SharkMessengerComponentFactory;
 import net.sharksystem.pki.*;
@@ -36,7 +37,6 @@ public class SharkMessengerApp {
     private final String peerDataFolderName;
     private final ExtraData settings;
     private final String peerName;
-    private Map<Integer, TCPServerSocketAcceptor> openSockets = new HashMap<>();
     private PrintStream outStream;
     private PrintStream errStream;
 
@@ -88,7 +88,7 @@ public class SharkMessengerApp {
             this.encounterManager = asapEncounterManager;
             this.encounterManagerAdmin = asapEncounterManager;
 
-            this.hubConnectionManager = new HubConnectionManagerImpl(encounterManager, asapPeer);
+            this.hubConnectionManager = new HubConnectionManagerImpl(this.encounterManager, asapPeer);
         } else {
             Log.writeLogErr(this,
                     "ASAP peer set but is not a connection handler - cannot set up connection management");
@@ -124,8 +124,23 @@ public class SharkMessengerApp {
     /////////////////////////////////////////////////////////////////////////////////////////////
     //                                    direct TCP connections                               //
     /////////////////////////////////////////////////////////////////////////////////////////////
+    private Map<Integer, TCPServerSocketAcceptor> openSockets = new HashMap<>();
+
+    private boolean portAlreadyInUse(int port) {
+        // hub using that port?
+        Object something = this.asapHubs.get(port);
+        if(something == null) {
+            // an open tcp port?
+            something = this.openSockets.get(port);
+            if (something == null) return false; // exit - port is available
+        }
+
+        tellUI("port already in use - choose another one");
+        return true;
+    }
 
     public void openTCPConnection(int portNumber) throws IOException {
+        if(this.portAlreadyInUse(portNumber)) return;
         TCPServerSocketAcceptor tcpServerSocketAcceptor =
                 new TCPServerSocketAcceptor(portNumber, this.encounterManager, true);
         this.openSockets.put(portNumber, tcpServerSocketAcceptor);
@@ -160,6 +175,35 @@ public class SharkMessengerApp {
 
     public ASAPEncounterManagerAdmin getEncounterManagerAdmin() {
         return this.encounterManagerAdmin;
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    //                                         hub management                                  //
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+    private Map<Integer, ASAPTCPHub> asapHubs = new HashMap<>();
+
+    public Set<Integer> getOpenHubPorts() {
+        return this.asapHubs.keySet();
+    }
+
+    public void startHub(int portNumber) throws IOException {
+        if(this.portAlreadyInUse(portNumber)) return;
+
+        ASAPTCPHub asapHub = new ASAPTCPHub(portNumber);
+        this.asapHubs.put(portNumber, asapHub);
+        new Thread(asapHub).start();
+    }
+
+    public void stopHub(int portNumber) throws IOException {
+        ASAPTCPHub asapHub = this.asapHubs.remove(portNumber);
+        if(asapHub == null) {
+            this.tellUIError("there is no ASAP hub listening on port " + portNumber);
+            return;
+        }
+        // stop it
+        asapHub.kill();
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////
