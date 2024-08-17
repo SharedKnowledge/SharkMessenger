@@ -24,6 +24,7 @@ import net.sharksystem.cmdline.sharkmessengerUI.commands.tcp.UICommandOpenTCP;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.tcp.UICommandShowOpenTCPPorts;
 import net.sharksystem.fs.ExtraData;
 import net.sharksystem.fs.ExtraDataFS;
+import net.sharksystem.hub.peerside.ASAPHubManager;
 import net.sharksystem.utils.Log;
 
 /**
@@ -33,9 +34,11 @@ import net.sharksystem.utils.Log;
 public class ProductionUI {
     public static final String SETTINGSFILENAME = ".sharkMessengerSettings";
     public static final String PEERNAME_KEY = "peername";
+    public static final String SYNC_WITH_OTHERS_IN_SECONDS_KEY = "syncWithOthersInSeconds";
 
     public static void main(String[] args) throws SharkException, IOException {
         String peerName = null;
+        int syncWithOthersInSeconds = ASAPHubManager.DEFAULT_WAIT_INTERVAL_IN_SECONDS;
         ExtraData settings = new ExtraDataFS("./" + SETTINGSFILENAME);
         boolean isBack = false;
 
@@ -48,6 +51,17 @@ public class ProductionUI {
                 break;
             case 1:
                 peerName = args[0];
+                break;
+            case 2:
+                peerName = args[0];
+                try {
+                    syncWithOthersInSeconds = Integer.parseInt(args[1]);
+                }
+                catch(NumberFormatException re) {
+                    System.err.println("could not parse second parameter " +
+                            "/ meant to be an integer telling how many seconds to wait for syncing with hubs"
+                            + re.getLocalizedMessage());
+                }
                 break;
             default:
                 System.out.println("possible arguments: ");
@@ -83,6 +97,8 @@ public class ProductionUI {
             // store it
             settings.putExtra(PEERNAME_KEY, peerName.getBytes());
         }
+
+        settings.putExtra(SYNC_WITH_OTHERS_IN_SECONDS_KEY, syncWithOthersInSeconds);
 
         // Re-direct asap/shark log messages.
         PrintStream asapLogMessages = new PrintStream("asapLogs" + peerName + ".txt");

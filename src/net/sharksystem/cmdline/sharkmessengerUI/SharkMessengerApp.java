@@ -21,6 +21,8 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.*;
 
+import static net.sharksystem.cmdline.sharkmessengerUI.ProductionUI.SYNC_WITH_OTHERS_IN_SECONDS_KEY;
+
 /**
  * Proposed and suggested pattern for Shark app. Implement a central entity (could even be a singleton)
  * that provides access to any component that is part of this application
@@ -45,6 +47,7 @@ public class SharkMessengerApp {
         this.settings = settings;
         this.sharkPeerFS = new SharkPeerFS(peerName, this.peerDataFolderName);
         this.peerName = peerName;
+        int syncWithOthersInSeconds = settings.getExtraInteger(SYNC_WITH_OTHERS_IN_SECONDS_KEY);
 
         // set up shark components
 
@@ -79,16 +82,19 @@ public class SharkMessengerApp {
         //////////////////////// setup hub connection management
         // TODO: that's still a design flaw. We need something that extracts a connection handler from a peer. Do we?
         ASAPPeer asapPeer = this.sharkPeerFS.getASAPPeer();
+        ASAPConnectionHandler asapHandler = (ASAPConnectionHandler) asapPeer;
         // this code runs on service side - this peer should be a connection handler
         if (asapPeer instanceof ASAPConnectionHandler) { // TODO: aaaaargs
             // yes it is
             ASAPEncounterManagerImpl asapEncounterManager =
-                    new ASAPEncounterManagerImpl((ASAPConnectionHandler) asapPeer, asapPeer.getPeerID());
+                    new ASAPEncounterManagerImpl(asapHandler, asapPeer.getPeerID(),
+                            syncWithOthersInSeconds*1000);
             // same object - different roles
             this.encounterManager = asapEncounterManager;
             this.encounterManagerAdmin = asapEncounterManager;
 
-            this.hubConnectionManager = new HubConnectionManagerImpl(this.encounterManager, asapPeer);
+            this.hubConnectionManager =
+                    new HubConnectionManagerImpl(this.encounterManager, asapPeer, syncWithOthersInSeconds);
         } else {
             Log.writeLogErr(this,
                     "ASAP peer set but is not a connection handler - cannot set up connection management");
@@ -191,7 +197,10 @@ public class SharkMessengerApp {
     public void startHub(int portNumber) throws IOException {
         if(this.portAlreadyInUse(portNumber)) return;
 
-        ASAPTCPHub asapHub = new ASAPTCPHub(portNumber);
+        // create a new hub that spawns new TCP connections.
+//        ASAPTCPHub asapHub = new ASAPTCPHub(portNumber, true);
+
+        ASAPTCPHub asapHub = new ASAPTCPHub(portNumber, false);
         this.asapHubs.put(portNumber, asapHub);
         new Thread(asapHub).start();
     }
