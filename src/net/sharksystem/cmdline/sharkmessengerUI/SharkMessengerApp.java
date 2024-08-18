@@ -2,9 +2,12 @@ package net.sharksystem.cmdline.sharkmessengerUI;
 
 import net.sharksystem.SharkException;
 import net.sharksystem.SharkPeer;
+import net.sharksystem.SharkPeerEncounterChangedListener;
 import net.sharksystem.SharkPeerFS;
 import net.sharksystem.asap.*;
 import net.sharksystem.asap.apps.TCPServerSocketAcceptor;
+import net.sharksystem.asap.pki.ASAPCertificate;
+import net.sharksystem.asap.utils.DateTimeHelper;
 import net.sharksystem.fs.ExtraData;
 import net.sharksystem.fs.FSUtils;
 import net.sharksystem.hub.HubConnectionManager;
@@ -27,7 +30,7 @@ import static net.sharksystem.cmdline.sharkmessengerUI.ProductionUI.SYNC_WITH_OT
  * Proposed and suggested pattern for Shark app. Implement a central entity (could even be a singleton)
  * that provides access to any component that is part of this application
  */
-public class SharkMessengerApp {
+public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
     private final SharkPeerFS sharkPeerFS;
 
     //private static final CharSequence ROOTFOLDER = "sharkMessengerDataStorage";
@@ -79,9 +82,13 @@ public class SharkMessengerApp {
         //System.out.println("Fill PKI with example data - for testing purposes");
         //HelperPKITests.fillWithExampleData(this.pkiComponent);
 
+        // get informed about encounter changes
+        this.sharkPeerFS.addSharkPeerEncounterChangedListener(this);
+
         //////////////////////// setup hub connection management
         // TODO: that's still a design flaw. We need something that extracts a connection handler from a peer. Do we?
         ASAPPeer asapPeer = this.sharkPeerFS.getASAPPeer();
+
         ASAPConnectionHandler asapHandler = (ASAPConnectionHandler) asapPeer;
         // this code runs on service side - this peer should be a connection handler
         if (asapPeer instanceof ASAPConnectionHandler) { // TODO: aaaaargs
@@ -263,6 +270,46 @@ public class SharkMessengerApp {
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////
+    //                                 environment changed handling                            //
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public void encounterStarted(CharSequence peerID) {
+        this.tellUI("\nnew encounter: " + peerID);
+
+        // check if better ask for a (fresh) certificate?
+        try {
+            try {
+                ASAPCertificate certificateByIssuerAndSubject =
+                        this.getSharkPKIComponent().
+                                getCertificateByIssuerAndSubject(peerID, this.getSharkPeer().getPeerID());
+
+                ;
+                StringBuilder sb = new StringBuilder();
+                sb.append("\nYou have an encounter with peer ");
+                sb.append(peerID);
+                sb.append(". It issued a certificate for you that runs out ");
+                sb.append(DateTimeHelper.
+                        long2DateString(certificateByIssuerAndSubject.getValidUntil().getTimeInMillis()));
+                this.tellUI(sb.toString());
+            }
+            catch(ASAPSecurityException ase) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("\nPeer ");
+                sb.append(peerID);
+                sb.append(" has not yet issued a certificate for you. You are connected now. A good time to ask for one?");
+                this.tellUI(sb.toString());
+            }
+        } catch (SharkException e) {
+            this.tellUIError("unexpected problems when dealing with present certificates: " + e.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public void encounterTerminated(CharSequence peerID) {
+        this.tellUI("\nterminated encounter: " + peerID);
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////////
     //                                    communicate with UI                                  //
     /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -278,4 +325,5 @@ public class SharkMessengerApp {
     public void tellUIError(String message) {
         this.errStream.println(message);
     }
+
 }

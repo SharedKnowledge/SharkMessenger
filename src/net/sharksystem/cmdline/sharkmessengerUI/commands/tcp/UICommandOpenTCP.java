@@ -11,19 +11,15 @@ import java.io.IOException;
  */
 public class UICommandOpenTCP extends AbstractCommandWithSingleInteger {
 
-    private final UICommandIntegerArgument portNumber;
-
     public UICommandOpenTCP(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
                             String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
-
-        this.portNumber = new UICommandIntegerArgument(sharkMessengerApp);
     }
 
     @Override
     protected void execute() throws Exception {
         try {
-            this.getSharkMessengerApp().openTCPConnection(this.portNumber.getValue());
+            this.getSharkMessengerApp().openTCPConnection(this.getIntegerArgument());
         } catch (IOException e) {
             this.printErrorMessage(e.getLocalizedMessage());
         }

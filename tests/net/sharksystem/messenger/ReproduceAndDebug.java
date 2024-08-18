@@ -15,7 +15,7 @@ import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICom
 import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandRemoveChannel;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandSendMessageExtended;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandSetChannelAge;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandCreateCredentialMessage;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandSendCredentialMessage;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandCreateNewKeyPair;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandExchangeCertificates;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandShowCertificatesBySubject;
@@ -103,6 +103,7 @@ public class ReproduceAndDebug {
         smUI.addCommand(new UICommandRemoveChannel(sharkMessengerApp, smUI, "rmCh", true));
 
         //PKI
+        smUI.addCommand(new UICommandSendCredentialMessage(sharkMessengerApp, smUI, "sendCredential", true));
         smUI.addCommand(new UICommandGetOwnerInfo(sharkMessengerApp, smUI, "ownerInfo", true));
         smUI.addCommand(new UICommandGetNumberOfKnownPeers(sharkMessengerApp, smUI, "numPeers", true));
         smUI.addCommand(new UICommandCreateNewKeyPair(sharkMessengerApp, smUI, "mkKeys", true));
@@ -111,7 +112,6 @@ public class ReproduceAndDebug {
         smUI.addCommand(new UICommandGetIdentityAssurance(sharkMessengerApp, smUI, "ia", true));
         smUI.addCommand(new UICommandGetSigningFailureRate(sharkMessengerApp, smUI, "getSF", true));
         smUI.addCommand(new UICommandSetSigningFailureRate(sharkMessengerApp, smUI, "setSF", true));
-        smUI.addCommand(new UICommandCreateCredentialMessage(sharkMessengerApp, smUI, "mkCredentialMsg", true));
         smUI.addCommand(new UICommandExchangeCertificates(sharkMessengerApp, smUI, "exchCert", true));
         smUI.addCommand(new UICommandGetCertificationPath(sharkMessengerApp, smUI, "certPath", true));
 

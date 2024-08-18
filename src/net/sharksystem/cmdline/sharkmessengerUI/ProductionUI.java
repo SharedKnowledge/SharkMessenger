@@ -123,7 +123,7 @@ public class ProductionUI {
         // TCP connection management
         smUI.addCommand(new UICommandOpenTCP(sharkMessengerApp, smUI, "openTCP", false));
         smUI.addCommand(new UICommandConnectTCP(sharkMessengerApp, smUI, "connectTCP", false));
-        smUI.addCommand(new UICommandCloseTCP(sharkMessengerApp, smUI, "closeTCPPort", false));
+        smUI.addCommand(new UICommandCloseTCP(sharkMessengerApp, smUI, "closeTCP", false));
         smUI.addCommand(new UICommandShowOpenTCPPorts(sharkMessengerApp, smUI, "showOpenTCPPorts", false));
 
         // encounter control
@@ -133,6 +133,7 @@ public class ProductionUI {
         smUI.addCommand(new UICommandShowCertificatesByIssuer(sharkMessengerApp, smUI, "certByIssuer", true));
         smUI.addCommand(new UICommandShowCertificatesBySubject(sharkMessengerApp, smUI, "certBySubject", true));
         smUI.addCommand(new UICommandShowPendingCredentials(sharkMessengerApp, smUI, "showCredentials", true));
+        smUI.addCommand(new UICommandSendCredentialMessage(sharkMessengerApp, smUI, "sendCredential", true));
         smUI.addCommand(new UICommandAcceptCredential(sharkMessengerApp, smUI, "acceptCredential", true));
         smUI.addCommand(new UICommandRefuseCredential(sharkMessengerApp, smUI, "refuseCredential", true));
 
