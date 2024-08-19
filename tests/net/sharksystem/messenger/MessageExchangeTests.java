@@ -72,7 +72,7 @@ public class MessageExchangeTests extends TestHelper {
         this.setUpScenario_1();
 
         // Alice broadcasts message in channel URI - not signed, not encrypted
-        this.aliceMessenger.sendSharkMessage(MESSAGE_BYTE, URI, false, false);
+        this.aliceMessenger.sendSharkMessage(MESSAGE_BYTE, URI, false);
 
         ///////////////////////////////// Encounter Alice - Bob ////////////////////////////////////////////////////
         this.runEncounter(this.alicePeer, this.bobPeer, true);
@@ -110,7 +110,7 @@ public class MessageExchangeTests extends TestHelper {
         this.setUpScenario_1();
 
         // Alice broadcasts message in channel URI - signed, not encrypted
-        this.aliceMessenger.sendSharkMessage(MESSAGE_BYTE, URI, true, false);
+        this.aliceMessenger.sendSharkMessage(MESSAGE_BYTE, URI, true);
 
         ///////////////////////////////// Encounter Alice - Bob ////////////////////////////////////////////////////
         this.runEncounter(this.alicePeer, this.bobPeer, true);
@@ -158,7 +158,7 @@ public class MessageExchangeTests extends TestHelper {
         this.setUpScenario_1();
 
         // Clara broadcast message in channel URI - signed, not encrypted
-        this.claraMessenger.sendSharkMessage(MESSAGE_BYTE, URI, true, false);
+        this.claraMessenger.sendSharkMessage(MESSAGE_BYTE, URI, true);
 
         ///////////////////////////////// Encounter Clara - Bob ////////////////////////////////////////////////////
         this.runEncounter(this.claraPeer, this.bobPeer, true);
@@ -411,7 +411,7 @@ public class MessageExchangeTests extends TestHelper {
         this.setUpScenario_1();
 
         // Alice broadcasts a signed but not encrypted message
-        this.aliceMessenger.sendSharkMessage(MESSAGE_BYTE, URI, true, false);
+        this.aliceMessenger.sendSharkMessage(MESSAGE_BYTE, URI, true);
 
         ///////////////////////////////// Encounter Alice - Bob ////////////////////////////////////////////////////
         this.runEncounter(this.alicePeer, this.bobPeer, true);

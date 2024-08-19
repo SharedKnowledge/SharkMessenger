@@ -98,7 +98,7 @@ import java.util.Set;
  */
 @ASAPFormats(formats = {SharkMessengerComponent.SHARK_MESSENGER_FORMAT})
 public interface SharkMessengerComponent extends SharkComponent {
-    String CHANNEL_DEFAULT_NAME = "channel has no name";
+    String CHANNEL_DEFAULT_NAME = "<no name set>";
     String UNIVERSAL_CHANNEL_URI = "sharkMsg://...";
 
     /*
@@ -149,7 +149,7 @@ public interface SharkMessengerComponent extends SharkComponent {
      * @see #sendSharkMessage(byte[], CharSequence, CharSequence, boolean, boolean)
      * @since 1.0
      */
-    void sendSharkMessage(byte[] content, CharSequence uri, boolean sign, boolean encrypt)
+    void sendSharkMessage(byte[] content, CharSequence uri, boolean sign)
             throws SharkMessengerException, IOException;
 
     /**
@@ -175,26 +175,6 @@ public interface SharkMessengerComponent extends SharkComponent {
     void removeChannel(CharSequence uri) throws IOException, SharkMessengerException;
 
     /**
-     * Remove all channels - be careful.
-     * @throws IOException
-     * @since 1.1
-     */
-    void removeAllChannels() throws IOException;
-
-
-    /*
-     * Set communication behaviour (stone, bronze, internet age) for a channel.
-     * @param uri channel uri
-     * @param behaviour behaviour
-     * @throws SharkUnknownBehaviourException unknown communication behaviour
-     * @throws SharkMessengerException unknown channel uri
-     * @since 1.1
-     * /
-    void setChannelBehaviour(CharSequence uri, String behaviour)
-            throws SharkUnknownBehaviourException, SharkMessengerException;
-    */
-
-    /**
      * Produces an object reference to a messenger channel with specified uri - throws an exception otherwise
      *
      * @param uri
@@ -216,12 +196,12 @@ public interface SharkMessengerComponent extends SharkComponent {
      * Create a new channel.
      * @param uri channel uri
      * @param name user friendly name
-     * @param mustNotExist if true - an exception is thrown if a channel with this uri already exists
+     * @param mustNotAlreadyExist if true - an exception is thrown if a channel with this uri already exists
      * @return
      * @throws SharkMessengerException
      * @throws IOException
      */
-    SharkMessengerChannel createChannel(CharSequence uri, CharSequence name, boolean mustNotExist)
+    SharkMessengerChannel createChannel(CharSequence uri, CharSequence name, boolean mustNotAlreadyExist)
             throws SharkMessengerException, IOException;
 
     /**

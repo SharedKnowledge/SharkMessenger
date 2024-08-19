@@ -11,8 +11,7 @@ import net.sharksystem.cmdline.sharkmessengerUI.commands.hubaccess.UICommandRemo
 import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandCreateChannel;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.simpleMessenger.UICommandGetMessageDetails;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandListChannels;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandListMessagesX;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandRemoveChannel;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandRemoveChannelByIndex;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandSendMessageExtended;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandSetChannelAge;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandSendCredentialMessage;
@@ -93,14 +92,13 @@ public class ReproduceAndDebug {
 
         // messages
         smUI.addCommand(new UICommandSendMessageExtended(sharkMessengerApp, smUI, "sendMessage", true));
-        smUI.addCommand(new UICommandListMessagesX(sharkMessengerApp, smUI, "listMessages", true));
         smUI.addCommand(new UICommandGetMessageDetails(sharkMessengerApp, smUI, "getMessageDetails", true));
 
         // channels
         smUI.addCommand(new UICommandListChannels(sharkMessengerApp, smUI, "lsChannel", true));
         smUI.addCommand(new UICommandCreateChannel(sharkMessengerApp, smUI, "mkChannel", true));
         smUI.addCommand(new UICommandSetChannelAge(sharkMessengerApp, smUI, "setChAge", true));
-        smUI.addCommand(new UICommandRemoveChannel(sharkMessengerApp, smUI, "rmCh", true));
+        smUI.addCommand(new UICommandRemoveChannelByIndex(sharkMessengerApp, smUI, "rmCh", true));
 
         //PKI
         smUI.addCommand(new UICommandSendCredentialMessage(sharkMessengerApp, smUI, "sendCredential", true));

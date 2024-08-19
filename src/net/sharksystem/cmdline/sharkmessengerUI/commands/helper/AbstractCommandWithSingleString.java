@@ -10,27 +10,39 @@ import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandString
 import java.util.List;
 
 public abstract class AbstractCommandWithSingleString extends UICommand {
+    private String defaultString;
+    private boolean optional;
+    private String derString;
     private UICommandStringArgument stringArgument;
 
     public AbstractCommandWithSingleString(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
                                            String identifier, boolean rememberCommand) {
+        this(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand, false, null);
+    }
+
+    public AbstractCommandWithSingleString(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                                           String identifier, boolean rememberCommand, boolean optional, String defaultString) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
 
         this.stringArgument = new UICommandStringArgument(sharkMessengerApp);
+        this.optional = optional;
+        this.defaultString = defaultString;
     }
 
     @Override
     protected boolean handleArguments(List<String> arguments) {
+        this.derString = defaultString;
         if (arguments.size() < 1) {
-            this.getSharkMessengerApp().tellUI("string argument required");
-            return false;
+            if(this.optional) return true;
+            else this.getSharkMessengerApp().tellUI("string argument required");
         } else {
             boolean isParsable = this.stringArgument.tryParse(arguments.get(0));
             if (!isParsable) {
+                if(this.optional) return true;
                 System.err.println("failed to parse string value" + arguments.get(0));
             }
-            return isParsable;
         }
+        return false;
     }
 
     protected String getStringArgument() {

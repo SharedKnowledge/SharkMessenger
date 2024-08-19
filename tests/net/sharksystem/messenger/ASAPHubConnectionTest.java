@@ -82,7 +82,7 @@ public class ASAPHubConnectionTest {
         peerMessenger.createChannel("my_channel/test", "aliceChannel");
 
         // alice sends a message to bob
-        peerMessenger.sendSharkMessage("Hi Bob".getBytes(), "my_channel/test", false, false);
+        peerMessenger.sendSharkMessage("Hi Bob".getBytes(), "my_channel/test", false);
 
         ASAPConnectionHandler aliceConnectionHandler = (ASAPConnectionHandler) alice.getASAPPeer();
         ASAPConnectionHandler bobConnectionHandler = (ASAPConnectionHandler) bob.getASAPPeer();
@@ -170,7 +170,7 @@ public class ASAPHubConnectionTest {
         peerMessenger.createChannel("my_channel/test", "aliceChannel");
 
         // alice sends a message to bob
-        peerMessenger.sendSharkMessage("Hi Bob".getBytes(), "my_channel/test", false, false);
+        peerMessenger.sendSharkMessage("Hi Bob".getBytes(), "my_channel/test", false);
 
         ASAPConnectionHandler aliceConnectionHandler = (ASAPConnectionHandler) alice.getASAPPeer();
         ASAPConnectionHandler bobConnectionHandler = (ASAPConnectionHandler) bob.getASAPPeer();

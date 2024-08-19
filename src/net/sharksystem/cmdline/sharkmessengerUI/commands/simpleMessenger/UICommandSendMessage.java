@@ -33,7 +33,7 @@ public class UICommandSendMessage extends UICommand {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ASAPSerialization.writeCharSequenceParameter(this.message.getValue(), baos);
         messengerComponent.sendSharkMessage(baos.toByteArray(),
-                SharkMessengerComponent.UNIVERSAL_CHANNEL_URI,false, false);
+                SharkMessengerComponent.UNIVERSAL_CHANNEL_URI,false);
     }
 
     @Override

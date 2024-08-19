@@ -3,7 +3,6 @@ package net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 import net.sharksystem.cmdline.sharkmessengerUI.UICommand;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.simpleMessenger.ChannelPrinter;
 import net.sharksystem.messenger.SharkMessengerComponent;
 import net.sharksystem.messenger.SharkMessengerException;
 
@@ -19,7 +18,7 @@ public abstract class UICommandProduceChannelListBefore extends UICommand {
         // produce channel list
         try {
             SharkMessengerComponent messengerComponent = this.getSharkMessengerApp().getSharkMessengerComponent();
-            ChannelPrinter.printChannelDescriptions(this.getPrintStream(), messengerComponent, true);
+            new ChannelPrinter().getChannelDescriptions(messengerComponent);
         } catch (IOException | SharkMessengerException e) {
             this.printErrorMessage(e.getLocalizedMessage());
         }

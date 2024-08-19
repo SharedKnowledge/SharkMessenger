@@ -46,14 +46,22 @@ public interface SharkMessage {
     Set<CharSequence> getRecipients();
 
     /**
-     * Not part of the transferred message - just a flag that indicates if this message could now
+     * Not part of the transferred message - just a flag that indicates if this message could
      * be verified. This can change over time, though. A non-verifiable message can be verified if the
      * right certificate arrives. A verifiable message can become non-verifiable due to loss of certificates
      * validity. In short: Result can change state of your local PKI
-     * @return
+     * @return yes - a signature is present and can be verified; no - there is no signature OR it can not be verified
      * @throws ASAPSecurityException if message could not be encrypted
      */
     boolean verified() throws ASAPSecurityException;
+
+    /**
+     * Message was signed or not. A present signature does not make this message more reliable. It will, if the
+     * signature can be verified.
+     * @return
+     * @throws ASAPSecurityException
+     */
+    boolean signed() throws ASAPSecurityException;
 
     /**
      * Not part of the transferred message - just a flag that indicates if this message is encrypted.

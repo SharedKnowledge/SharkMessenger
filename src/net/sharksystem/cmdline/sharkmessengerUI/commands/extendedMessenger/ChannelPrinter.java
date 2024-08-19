@@ -1,4 +1,4 @@
-package net.sharksystem.cmdline.sharkmessengerUI.commands.simpleMessenger;
+package net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger;
 
 import net.sharksystem.asap.ASAPException;
 import net.sharksystem.asap.ASAPHop;
@@ -13,51 +13,53 @@ import java.util.List;
 import java.util.Set;
 
 public class ChannelPrinter {
-    private final SharkMessengerApp sharkMessengerApp;
-
-    public ChannelPrinter(SharkMessengerApp sharkMessengerApp) {
-        this.sharkMessengerApp = sharkMessengerApp;
-    }
-
-    public static void printChannelDescription(PrintStream ps, SharkMessengerChannel channel)
+    public String getChannelDescription(SharkMessengerChannel channel)
             throws IOException, SharkMessengerException {
 
-        ps.print(channel.getName());
-        ps.print(" | uri: ");
-        ps.print(channel.getURI());
-        ps.print(" | #messages: ");
-        ps.print(channel.getMessages().size());
-        ps.print(" | communication-age: ");
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("name: ");
+        sb.append(channel.getName());
+        sb.append(" | uri: ");
+        sb.append(channel.getURI());
+        sb.append(" | #messages: ");
+        sb.append(channel.getMessages().size());
+        sb.append(" | age: ");
         SharkCommunicationAge age = channel.getAge();
         switch (age) {
-            case BRONZE_AGE: ps.print("bronze"); break;
-            case STONE_AGE: ps.print("stone"); break;
-            case NETWORK_AGE: ps.print("network"); break;
-            default: ps.print("unknown"); break;
+            case BRONZE_AGE: sb.append("bronze"); break;
+            case STONE_AGE: sb.append("stone"); break;
+            case NETWORK_AGE: sb.append("network"); break;
+            default: sb.append("unknown"); break;
         }
+
+        return sb.toString();
     }
 
-    public static void printChannelDescriptions(
-            PrintStream ps, SharkMessengerComponent messengerComponent, boolean printIndex)
+    public String getChannelDescriptions(SharkMessengerComponent messengerComponent)
                 throws IOException, SharkMessengerException {
+
+        StringBuilder sb = new StringBuilder();
 
         List<CharSequence> channelUris = messengerComponent.getChannelUris();
         if(channelUris.isEmpty()) {
-            ps.println("no channels");
+            sb.append("no channels\n");
         } else {
-            int i = 0;
-            for (CharSequence channelUri : channelUris) {
-                if(printIndex) ps.print(i++ + ": ");
-                SharkMessengerChannel channel = messengerComponent.getChannel(channelUri);
-                printChannelDescription(ps, channel);
-            }
-            ps.print("\n");
-        }
-    }
+            sb.append(channelUris.size());
+            if(channelUris.size() > 1) sb.append(" channels:\n");
+            else sb.append(" channel:\n");
 
-    private static void printYesNo(PrintStream ps, boolean value) {
-        if(value) ps.print("yes");
-        else ps.print("no");
+            int i = 1;
+            for (CharSequence channelUri : channelUris) {
+                sb.append(i++ + ": ");
+                SharkMessengerChannel channel = messengerComponent.getChannel(channelUri);
+                sb.append(this.getChannelDescription(channel));
+                sb.append("\n");
+            }
+            sb.append("\n");
+        }
+
+        return sb.toString();
     }
 
     private String returnYesNo(boolean value) {
@@ -65,37 +67,43 @@ public class ChannelPrinter {
         else return "no";
     }
 
-    private static final String CHANNEL_PRINTER_LINE_SEPARATOR = "--------------------------------------------------------------------------------";
-    public void printMessages(String channelUri, PrintStream ps, SharkMessageList messages)
+    private static final String CHANNEL_PRINTER_LINE_SEPARATOR = "\n--------------------------------------------------------------------------------\n";
+    public String getMessagesASString(String channelUri, SharkMessageList messages)
             throws IOException, SharkMessengerException, ASAPException {
 
-        this.sharkMessengerApp.tellUI("list messages in channel: " + channelUri);
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("list messages in channel: " + channelUri);
         if(messages.size() < 1) {
-            this.sharkMessengerApp.tellUI(": no messages");
+            sb.append(": no messages\n");
+            return sb.toString();
         }
         else {
+            sb.append("\n");
             for (int i = 0; i < messages.size(); i++) {
-                this.sharkMessengerApp.tellUI("#" + i);
-                this.sharkMessengerApp.tellUI(CHANNEL_PRINTER_LINE_SEPARATOR);
+                sb.append("#" + i);
+                sb.append(CHANNEL_PRINTER_LINE_SEPARATOR);
                 SharkMessage message = messages.getSharkMessage(i, true);
-                this.printMessageDetails(message);
-                this.sharkMessengerApp.tellUI(CHANNEL_PRINTER_LINE_SEPARATOR);
+                sb.append(this.getMessageDetails(message));
+                sb.append(CHANNEL_PRINTER_LINE_SEPARATOR);
             }
         }
+        return sb.toString();
     }
 
-    public void printMessageDetails(SharkMessage message)
+    public String getMessageDetails(SharkMessage message)
             throws IOException, ASAPException {
 
         StringBuilder sb = new StringBuilder();
         // content
         byte[] content = message.getContent();
-        if(content.length < 1) {
-            sb.append("no content");
+        if (content.length < 1) {
+            sb.append("no content\n");
+        } else {
+            sb.append("message content interpreted as String: ");
+            sb.append(SerializationHelper.bytes2characterSequence(content).toString());
+            sb.append("\n");
         }
-        sb.append("message content interpreted as String: ");
-        sb.append(SerializationHelper.bytes2characterSequence(content).toString());
-        sb.append("\n");
 
         // sender
         sb.append("sender: ");
@@ -103,10 +111,10 @@ public class ChannelPrinter {
         // recipients
         sb.append(" | recipients: ");
         Set<CharSequence> recipients = message.getRecipients();
-        if(recipients.size() < 1) sb.append("not specified");
+        if (recipients.size() < 1) sb.append("not specified");
         boolean first = true;
-        for(CharSequence recipient : recipients) {
-            if(first) first = false;
+        for (CharSequence recipient : recipients) {
+            if (first) first = false;
             else sb.append(";");
             sb.append(recipient.toString());
         }
@@ -117,14 +125,21 @@ public class ChannelPrinter {
 
         // encryption / verification
         sb.append("\n");
-        sb.append("encrypted: ");
+        sb.append("E2E security: encrypted: ");
         sb.append(this.returnYesNo(message.encrypted()));
 
-        sb.append(" | couldBeDecrypted: ");
-        sb.append(this.returnYesNo(message.couldBeDecrypted()));
+        if (message.encrypted()) {
+            sb.append(" | can decrypt: ");
+            sb.append(this.returnYesNo(message.couldBeDecrypted()));
+        }
 
-        sb.append(" | verified: ");
-        sb.append(this.returnYesNo(message.verified()));
+        sb.append(" | ");
+        sb.append("signed: ");
+        sb.append(this.returnYesNo(message.signed()));
+        if (message.signed()) {
+            sb.append(" | verified: ");
+            sb.append(this.returnYesNo(message.verified()));
+        }
 
         // hoping list
         sb.append("\n");
@@ -141,20 +156,19 @@ public class ChannelPrinter {
                 this.addHobDetails(sb, hop);
                 sb.append("\n");
             }
-            sb.append("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            sb.append("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
         }
 
-        // content
-        sb.append("\n");
+        //sb.append("\n");
 
-        this.sharkMessengerApp.tellUI(sb.toString());
+        return sb.toString();
     }
 
     private void addHobDetails(StringBuilder sb, ASAPHop hop) {
         sb.append("sender: ");
         sb.append(hop.sender());
         sb.append(" | ");
-        sb.append("encrypted: ");
+        sb.append("P2P security: encrypted: ");
         sb.append(this.returnYesNo(hop.encrypted()));
         sb.append(" | ");
         sb.append("verified: ");

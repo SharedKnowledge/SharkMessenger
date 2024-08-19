@@ -1,11 +1,13 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger;
 
 import net.sharksystem.SharkException;
+import net.sharksystem.asap.utils.ASAPSerialization;
 import net.sharksystem.cmdline.sharkmessengerUI.*;
 import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.*;
 import net.sharksystem.messenger.SharkMessengerChannel;
 import net.sharksystem.messenger.SharkMessengerComponent;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
@@ -15,32 +17,30 @@ import java.util.Set;
  * This command sends a message into a channel.
  */
 public class UICommandSendMessageExtended extends UICommandProduceChannelListBefore {
-    private final UICommandIntegerArgument channelIndex;
-    private final UICommandBooleanArgument sign;
-    private final UICommandBooleanArgument encrypt;
-    private final UICommandStringArgument message;
-    private final UICommandStringArgument receivers;
+    private final UICommandIntegerArgument channelIndexArgument;
+    private final UICommandBooleanArgument signArgument;
+    private final UICommandStringArgument messageArgument;
 
+    private String message;
+    private int channelIndex;
+    private boolean sign;
 
     public UICommandSendMessageExtended(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
                                         String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
-        this.channelIndex = new UICommandIntegerArgument(sharkMessengerApp);
-        this.sign = new UICommandBooleanArgument(sharkMessengerApp);
-        this.encrypt = new UICommandBooleanArgument(sharkMessengerApp);
-        this.message = new UICommandStringArgument(sharkMessengerApp);
-        this.receivers = new UICommandStringArgument(sharkMessengerApp);
-        this.receivers.setEmptyStringAllowed(true);
+        this.messageArgument = new UICommandStringArgument(sharkMessengerApp);
+        this.channelIndexArgument = new UICommandIntegerArgument(sharkMessengerApp);
+        this.signArgument = new UICommandBooleanArgument(sharkMessengerApp);
     }
 
     @Override
     public UICommandQuestionnaire specifyCommandStructure() {
         return new UICommandQuestionnaireBuilder()
-                .addQuestion("Index target channel (0..n): ", this.channelIndex)
-                .addQuestion("Sign? ", this.sign)
-                .addQuestion("Encrypt? ", this.encrypt)
-                .addQuestion("Message: ", this.message)
-                .addQuestion("Receivers (leave blank for anybody): ", this.receivers)
+                .addQuestion("Index target channel (0..n): ", this.channelIndexArgument)
+                .addQuestion("Sign? ", this.signArgument)
+                //.addQuestion("Encrypt? ", this.encrypt)
+                .addQuestion("Message: ", this.messageArgument)
+                //.addQuestion("Receivers (leave blank for anybody): ", this.receivers)
                 .build();
     }
 
@@ -48,16 +48,27 @@ public class UICommandSendMessageExtended extends UICommandProduceChannelListBef
     public void execute() throws Exception {
         try {
             SharkMessengerComponent messenger = this.getSharkMessengerApp().getSharkMessengerComponent();
+            int index = this.channelIndex - 1;
+            SharkMessengerChannel channel;
+            CharSequence channelURI;
+            try {
+                channelURI = messenger.getChannel(index).getURI();
+            }
+            catch(SharkException se) {
+                if(this.channelIndex == 1) {
+                    // okay, go with default
+                    channelURI = SharkMessengerComponent.UNIVERSAL_CHANNEL_URI;
+                } else {
+                    this.getSharkMessengerApp().tellUIError("create a channel on index " + this.channelIndex + "before.");
+                    return;
+                }
+            }
 
-            int channelIndex = this.channelIndex.getValue();
-            SharkMessengerChannel channel = messenger.getChannel(channelIndex);
-            boolean sign = this.sign.getValue();
-            boolean encrypt = this.encrypt.getValue();
-            byte[] message = this.message.getValue().getBytes();
-
-            Set<CharSequence> receivers = this.getAllExistingPeers(this.receivers.getValue());
-
-            messenger.sendSharkMessage(message, channel.getURI(), receivers, sign, encrypt);
+            // serialize message
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ASAPSerialization.writeCharSequenceParameter(this.message, baos);
+            byte[] messageContent = baos.toByteArray();
+            messenger.sendSharkMessage(messageContent, channelURI, this.sign);
         } catch (SharkException | IOException e) {
             this.printErrorMessage(e.getLocalizedMessage());
         }
@@ -75,36 +86,40 @@ public class UICommandSendMessageExtended extends UICommandProduceChannelListBef
     @Override
     public String getDescription() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Sends a message into a channel.");
-        sb.append("Full parameter set");
-        sb.append("Sends a message into a channel.");
-        sb.append("Sends a message into a channel.");
+        sb.append("Sends a message into a channel (required: message (no spaces allowed - it is just an example app); " +
+                "optional: channel index | sign (true/false");
         return sb.toString();
     }
 
-    /**
-     * @param arguments in following order:
-     * <ol>
-     *  <li>channelIndex - int</li>
-     *  <li>sign - boolean</li>
-     *  <li>encrypt - boolean</li>
-     *  <li>message - String</li>
-     *  <li>receivers - String [comma seperated]</li>
-     * </ol>
-     */
     @Override
     protected boolean handleArguments(List<String> arguments) {
-        if(arguments.size() < 5) {
+        if(arguments.size() < 1) {
+            this.getSharkMessengerApp().tellUIError("required: message content (a string, no spaces allowed)");
             return false;
         }
 
-        boolean isParsable = channelIndex.tryParse(arguments.get(0)) 
-                && sign.tryParse(arguments.get(1)) 
-                && encrypt.tryParse(arguments.get(2)) 
-                && message.tryParse(arguments.get(3)) 
-                && receivers.tryParse(arguments.get(4));
+        if(!messageArgument.tryParse(arguments.get(0))) {
+            this.getSharkMessengerApp().tellUIError("cannot parse message: " + arguments.get(0));
+            return false;
+        } else {
+            this.message = this.messageArgument.getValue();
+        }
 
-        return isParsable;
+        this.channelIndex = 1; // set default
+        if(arguments.size() > 1) {
+            if(channelIndexArgument.tryParse(arguments.get(1))) {
+                // overwrite default
+                this.channelIndex = this.channelIndexArgument.getValue();
+            }
+        }
+
+        this.sign = false; // set default
+        if(arguments.size() > 2) {
+            // overwrite default
+            if(signArgument.tryParse(arguments.get(2))) {
+                this.sign = this.signArgument.getValue();
+            }
+        }
+        return true;
     }
-
 }

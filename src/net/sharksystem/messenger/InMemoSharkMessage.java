@@ -24,6 +24,7 @@ public class InMemoSharkMessage implements SharkMessage {
     private ASAPCryptoAlgorithms.EncryptedMessagePackage encryptedMessagePackage;
     private byte[] snContent;
     private CharSequence snSender;
+    private boolean signed;
     private boolean verified;
     private boolean encrypted;
     private Set<CharSequence> snRecipients;
@@ -39,9 +40,10 @@ public class InMemoSharkMessage implements SharkMessage {
      */
     private InMemoSharkMessage(byte[] message, CharSequence sender,
                                Set<CharSequence> snRecipients, long creationTime,
-                               boolean verified, boolean encrypted, List<ASAPHop> hopsList) {
+                               boolean signed, boolean verified, boolean encrypted, List<ASAPHop> hopsList) {
         this.snContent = message;
         this.snSender = sender;
+        this.signed = signed;
         this.verified = verified;
         this.encrypted = encrypted;
         this.snRecipients = snRecipients;
@@ -190,6 +192,11 @@ public class InMemoSharkMessage implements SharkMessage {
     }
 
     @Override
+    public boolean signed() throws ASAPSecurityException {
+        return this.signed;
+    }
+
+    @Override
     public boolean encrypted() {
         return this.encrypted;
     }
@@ -287,7 +294,7 @@ public class InMemoSharkMessage implements SharkMessage {
         }
 
         // replace special sn symbols
-        return new InMemoSharkMessage(snMessage, snSender, snReceivers, creationTime, verified, encrypted, hopsList);
+        return new InMemoSharkMessage(snMessage, snSender, snReceivers, creationTime, signed, verified, encrypted, hopsList);
     }
 
     public boolean isAnonymousSender(CharSequence peerID) {

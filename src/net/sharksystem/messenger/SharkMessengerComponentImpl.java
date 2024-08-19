@@ -42,10 +42,9 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
     }
 
     @Override
-    public void sendSharkMessage(byte[] content, CharSequence uri, boolean sign,
-                                 boolean encrypt) throws IOException, SharkMessengerException {
+    public void sendSharkMessage(byte[] content, CharSequence uri, boolean sign) throws IOException, SharkMessengerException {
         HashSet<CharSequence> set = new HashSet<>();
-        this.sendSharkMessage(content, uri, set, sign, encrypt);
+        this.sendSharkMessage(content, uri, set, sign, false);
     }
 
     @Override
@@ -116,8 +115,13 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
     }
 
     public SharkMessengerChannel getChannel(int position) throws SharkMessengerException, IOException {
-        CharSequence uri = this.getChannelUris().get(position);
-        return this.getChannel(uri);
+        try {
+            CharSequence uri = this.getChannelUris().get(position);
+            return this.getChannel(uri);
+        }
+        catch(IndexOutOfBoundsException ioe) {
+            throw new SharkMessengerException("channel position is out of bound: " +  + position);
+        }
     }
 
     public SharkMessengerChannel createChannel(CharSequence uri, CharSequence name)
@@ -125,7 +129,7 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
         return this.createChannel(uri, name, true);
     }
 
-    public SharkMessengerChannel createChannel(CharSequence uri, CharSequence name, boolean mustNotExist)
+    public SharkMessengerChannel createChannel(CharSequence uri, CharSequence name, boolean mustNotAlreadyExist)
             throws SharkMessengerException, IOException {
 
         this.checkComponentRunning();
@@ -133,7 +137,7 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
         try {
             this.getChannel(uri); // already exists ?
             // yes exists
-            if(mustNotExist) throw new SharkMessengerException("channel already exists");
+            if(mustNotAlreadyExist) throw new SharkMessengerException("channel already exists");
         }
         catch(SharkMessengerException asapException) {
             // does not exist yet - or it is okay
@@ -166,18 +170,11 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
 
     @Override
     public void removeChannel(CharSequence uri) throws IOException, SharkMessengerException {
-        Log.writeLog(this, "removeChannel", "not yet implemented");
-        throw new SharkNotSupportedException("not yet implemented");
-    }
-
-    @Override
-    public void removeAllChannels() throws IOException {
-        Log.writeLog(this, "removeAllChannels", "not yet implemented");
-        throw new SharkNotSupportedException("not yet implemented");
-    }
-
-    public void setChannelBehaviour(CharSequence uri, String behaviour) throws SharkUnknownBehaviourException, SharkMessengerException {
-        Log.writeLog(this, "setChannelBehaviour", "not yet implemented");
+        try {
+            this.asapPeer.getASAPStorage(SharkMessengerComponent.SHARK_MESSENGER_FORMAT).removeChannel(uri);
+        } catch(ASAPException asapException) {
+            throw new SharkMessengerException(asapException);
+        }
     }
 
     public int size() throws IOException, SharkMessengerException {
@@ -191,27 +188,6 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
             throw new SharkMessengerException(asapException);
         }
     }
-
-    /*
-    @Override
-    public SharkMessage getSharkMessage(CharSequence uri, int position, boolean chronologically)
-            throws SharkMessengerException, IOException {
-
-        try {
-            ASAPStorage asapStorage =
-                    this.asapPeer.getASAPStorage(SharkMessengerComponent.SHARK_MESSENGER_FORMAT);
-
-            byte[] asapMessage =
-                    asapStorage.getChannel(uri).getMessages(false).getMessage(position, chronologically);
-
-            return InMemoSharkMessage.parseMessage(asapMessage, this.sharkPKIComponent);
-
-        }
-        catch(ASAPException asapException) {
-            throw new SharkMessengerException(asapException);
-        }
-    }
-     */
 
     @Override
     public SharkPKIComponent getSharkPKI() {
