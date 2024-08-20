@@ -5,22 +5,24 @@ import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerUI;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.helper.AbstractCommandWithSingleString;
 
 public class UICommandSendCredentialMessage extends AbstractCommandWithSingleString {
-    private static final String NO_PEER_ID = null;
+    private static final String NO_PEER_NAME = null;
 
     public UICommandSendCredentialMessage(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
                                           String identifier, boolean rememberCommand) {
-        super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand, true, NO_PEER_ID);
+        super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand, true, NO_PEER_NAME);
     }
 
     @Override
     protected void execute() throws Exception {
-        String peerID = this.getStringArgument();
-        if(peerID == NO_PEER_ID) {
+        String peerName = this.getStringArgument();
+        if(peerName == NO_PEER_NAME) {
             // send credentials to all
-            this.getSharkMessengerApp().tellUIError("TODO: implement version and send credentials in all open connections");
+            this.getSharkMessengerApp().tellUI("going to send credential message to anybody");
+            this.getSharkMessengerApp().getSharkPKIComponent().sendTransientCredentialMessage();
         } else {
-            this.getSharkMessengerApp().tellUI("going to send credential message to peer " + peerID);
-            this.getSharkMessengerApp().getSharkPKIComponent().sendOnlineCredentialMessage(peerID);
+            this.getSharkMessengerApp().tellUI("won't work since we need an id instead of a name");
+            this.getSharkMessengerApp().tellUI("going to send credential message to peer " + peerName);
+            this.getSharkMessengerApp().getSharkPKIComponent().sendTransientCredentialMessage(peerName);
         }
     }
 

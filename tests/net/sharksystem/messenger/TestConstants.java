@@ -6,6 +6,10 @@ public interface TestConstants {
     String BOB_ID = "BOB_ID";
     String CLARA_ID = "CLARA_ID";
     String DAVID_ID = "DAVID_ID";
+    String ALICE_NAME = "Alice";
+    String BOB_NAME = "Bob";
+    String CLARA_NAME = "Clara";
+    String DAVID_NAME = "David";
     String MESSAGE = "Hi";
     byte[] MESSAGE_BYTE = MESSAGE.getBytes();
     String MESSAGE_1 = "Hello";

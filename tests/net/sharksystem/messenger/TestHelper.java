@@ -3,6 +3,7 @@ package net.sharksystem.messenger;
 import net.sharksystem.SharkException;
 import net.sharksystem.SharkPeer;
 import net.sharksystem.SharkTestPeerFS;
+import net.sharksystem.asap.crypto.InMemoASAPKeyStore;
 import net.sharksystem.asap.pki.ASAPCertificate;
 import net.sharksystem.pki.CredentialMessage;
 import net.sharksystem.pki.SharkPKIComponent;
@@ -61,25 +62,25 @@ public class TestHelper {
         System.out.println("test number == " + TestHelper.testNumber);
         String aliceFolderName = aliceFolder + "_" + TestHelper.testNumber;
         SharkTestPeerFS.removeFolder(aliceFolderName);
-        this.alicePeer = new SharkTestPeerFS(ALICE_ID, aliceFolderName);
-        TestHelper.addComponentsToSharkPeer(this.alicePeer);
+        this.alicePeer = new SharkTestPeerFS(ALICE_NAME, aliceFolderName);
+        TestHelper.addComponentsToSharkPeer(ALICE_ID, this.alicePeer);
 
         String bobFolderName = bobFolder + "_" + TestHelper.testNumber;
         SharkTestPeerFS.removeFolder(bobFolderName);
-        this.bobPeer = new SharkTestPeerFS(BOB_ID, bobFolderName);
-        TestHelper.addComponentsToSharkPeer(this.bobPeer);
+        this.bobPeer = new SharkTestPeerFS(BOB_NAME, bobFolderName);
+        TestHelper.addComponentsToSharkPeer(BOB_ID, this.bobPeer);
 
         String claraFolderName = claraFolder + "_" + TestHelper.testNumber;
         SharkTestPeerFS.removeFolder(claraFolderName);
-        this.claraPeer = new SharkTestPeerFS(CLARA_ID, claraFolderName);
-        TestHelper.addComponentsToSharkPeer(this.claraPeer);
+        this.claraPeer = new SharkTestPeerFS(CLARA_NAME, claraFolderName);
+        TestHelper.addComponentsToSharkPeer(CLARA_ID, this.claraPeer);
 
         TestHelper.testNumber++;
 
         // start peers
-        this.alicePeer.start();
-        this.bobPeer.start();
-        this.claraPeer.start();
+        this.alicePeer.start(ALICE_ID);
+        this.bobPeer.start(BOB_ID);
+        this.claraPeer.start(CLARA_ID);
 
         // add some keys as described in scenario settings
         SharkPKIComponent alicePKI = (SharkPKIComponent) this.alicePeer.getComponent(SharkPKIComponent.class);
@@ -153,31 +154,31 @@ public class TestHelper {
         System.out.println("test number == " + TestHelper.testNumber);
         String aliceFolderName = this.aliceFolder + "_" + TestHelper.testNumber;
         SharkTestPeerFS.removeFolder(aliceFolderName);
-        this.alicePeer = new SharkTestPeerFS(ALICE_ID, aliceFolderName);
-        TestHelper.addComponentsToSharkPeer(this.alicePeer);
+        this.alicePeer = new SharkTestPeerFS(ALICE_NAME, aliceFolderName);
+        TestHelper.addComponentsToSharkPeer(ALICE_ID, this.alicePeer);
 
         String bobFolderName = this.bobFolder + "_" + TestHelper.testNumber;
         SharkTestPeerFS.removeFolder(bobFolderName);
-        this.bobPeer = new SharkTestPeerFS(BOB_ID, bobFolderName);
-        TestHelper.addComponentsToSharkPeer(this.bobPeer);
+        this.bobPeer = new SharkTestPeerFS(BOB_NAME, bobFolderName);
+        TestHelper.addComponentsToSharkPeer(BOB_ID, this.bobPeer);
 
         String claraFolderName = this.claraFolder + "_" + TestHelper.testNumber;
         SharkTestPeerFS.removeFolder(claraFolderName);
-        this.claraPeer = new SharkTestPeerFS(CLARA_ID, claraFolderName);
-        TestHelper.addComponentsToSharkPeer(this.claraPeer);
+        this.claraPeer = new SharkTestPeerFS(CLARA_NAME, claraFolderName);
+        TestHelper.addComponentsToSharkPeer(CLARA_ID, this.claraPeer);
 
         String davidFolderName = this.davidFolder + "_" + TestHelper.testNumber;
         SharkTestPeerFS.removeFolder(davidFolderName);
-        this.davidPeer = new SharkTestPeerFS(DAVID_ID, davidFolderName);
-        TestHelper.addComponentsToSharkPeer(this.davidPeer);
+        this.davidPeer = new SharkTestPeerFS(DAVID_NAME, davidFolderName);
+        TestHelper.addComponentsToSharkPeer(DAVID_ID, this.davidPeer);
 
         TestHelper.testNumber++;
 
         // start peers
-        this.alicePeer.start();
-        this.bobPeer.start();
-        this.claraPeer.start();
-        this.davidPeer.start();
+        this.alicePeer.start(ALICE_ID);
+        this.bobPeer.start(BOB_ID);
+        this.claraPeer.start(CLARA_ID);
+        this.davidPeer.start(DAVID_ID);
 
         // add some keys as described in scenario settings
         SharkPKIComponent alicePKI = (SharkPKIComponent) this.alicePeer.getComponent(SharkPKIComponent.class);
@@ -277,11 +278,12 @@ public class TestHelper {
     /**
      * Adds a SharkPKIComponent and a SharkMessengerComponent to a given SharkPeer
      */
-    public static void addComponentsToSharkPeer(SharkPeer sharkPeer)
+    public static void addComponentsToSharkPeer(CharSequence peerID, SharkPeer sharkPeer)
             throws SharkException {
 
         // create a component factory
-        SharkPKIComponentFactory certificateComponentFactory = new SharkPKIComponentFactory();
+        SharkPKIComponentFactory certificateComponentFactory =
+                new SharkPKIComponentFactory(new InMemoASAPKeyStore(peerID));
 
         // register this component with shark peer - note: we use interface SharkPeer
         sharkPeer.addComponent(certificateComponentFactory, SharkPKIComponent.class);

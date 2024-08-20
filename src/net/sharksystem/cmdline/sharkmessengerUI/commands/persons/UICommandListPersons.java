@@ -9,6 +9,7 @@ import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.Chann
 import net.sharksystem.cmdline.sharkmessengerUI.commands.helper.AbstractCommandNoParameter;
 import net.sharksystem.messenger.SharkMessengerComponent;
 import net.sharksystem.messenger.SharkMessengerException;
+import net.sharksystem.pki.PKIHelper;
 import net.sharksystem.pki.SharkPKIComponent;
 
 import java.io.IOException;
@@ -22,14 +23,23 @@ public class UICommandListPersons extends AbstractCommandNoParameter {
 
     @Override
     protected void execute() throws Exception {
-//        try {
-            SharkPKIComponent pki = this.getSharkMessengerApp().getSharkPKIComponent();
-            this.getSharkMessengerApp().tellUI(pki.getNumberOfPersons() + " persons known");
-            /*
-        } catch (SharkMessengerException | IOException e) {
-            this.printErrorMessage(e.getLocalizedMessage());
+        SharkPKIComponent pki = this.getSharkMessengerApp().getSharkPKIComponent();
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("We know ");
+        sb.append(pki.getNumberOfPersons());
+        sb.append(" persons\n");
+
+        boolean first = true;
+        for(int i = 0; i < pki.getNumberOfPersons(); i++) {
+            if(first) first = false;
+            else sb.append("\n");
+            sb.append(i+1);
+            sb.append(": ");
+            sb.append(PKIHelper.personalValue2String(pki.getPersonValuesByPosition(i)));
         }
-             */
+
+        this.getSharkMessengerApp().tellUI(sb.toString());
     }
 
     @Override

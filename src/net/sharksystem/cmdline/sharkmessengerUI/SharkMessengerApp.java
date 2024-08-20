@@ -6,8 +6,13 @@ import net.sharksystem.SharkPeerEncounterChangedListener;
 import net.sharksystem.SharkPeerFS;
 import net.sharksystem.asap.*;
 import net.sharksystem.asap.apps.TCPServerSocketAcceptor;
+import net.sharksystem.asap.crypto.InMemoASAPKeyStore;
+import net.sharksystem.asap.persons.PersonValues;
 import net.sharksystem.asap.pki.ASAPCertificate;
+import net.sharksystem.asap.pki.ASAPKeyStorage;
+import net.sharksystem.asap.utils.ASAPSerialization;
 import net.sharksystem.asap.utils.DateTimeHelper;
+import net.sharksystem.asap.utils.PeerIDHelper;
 import net.sharksystem.fs.ExtraData;
 import net.sharksystem.fs.FSUtils;
 import net.sharksystem.hub.HubConnectionManager;
@@ -31,6 +36,7 @@ import static net.sharksystem.cmdline.sharkmessengerUI.ProductionUI.SYNC_WITH_OT
  * that provides access to any component that is part of this application
  */
 public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
+    private static final CharSequence PEER_ID_KEY = "peerIDKey";
     private final SharkPeerFS sharkPeerFS;
 
     //private static final CharSequence ROOTFOLDER = "sharkMessengerDataStorage";
@@ -44,6 +50,7 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
     private final String peerName;
     private PrintStream outStream;
     private PrintStream errStream;
+    private CharSequence peerID;
 
     public SharkMessengerApp(String peerName, ExtraData settings) throws SharkException, IOException {
         this.peerDataFolderName = "./" + peerName;
@@ -52,10 +59,22 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
         this.peerName = peerName;
         int syncWithOthersInSeconds = settings.getExtraInteger(SYNC_WITH_OTHERS_IN_SECONDS_KEY);
 
+        boolean saveNewPeerID = false;
+        try {
+            byte[] peerIDBytes = this.sharkPeerFS.getExtra(PEER_ID_KEY);
+            this.peerID = ASAPSerialization.byteArray2String(peerIDBytes);
+        }
+        catch (SharkException se) {
+            this.peerID = peerName + "_" + PeerIDHelper.createUniqueID();
+            saveNewPeerID = true;
+        }
+
         // set up shark components
 
+        // produce KeyStore
+        InMemoASAPKeyStore keyStore = new InMemoASAPKeyStore(this.peerID);
         // get PKI factory
-        SharkPKIComponentFactory pkiComponentFactory = new SharkPKIComponentFactory();
+        SharkPKIComponentFactory pkiComponentFactory = new SharkPKIComponentFactory(keyStore);
 
         // tell peer
         this.sharkPeerFS.addComponent(pkiComponentFactory, SharkPKIComponent.class);
@@ -68,7 +87,8 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
         this.sharkPeerFS.addComponent(messengerComponentFactory, SharkMessengerComponent.class);
 
         // all component in place - start peer
-        this.sharkPeerFS.start();
+        this.sharkPeerFS.start(this.peerID);
+        if(saveNewPeerID) this.sharkPeerFS.putExtra(PEER_ID_KEY, ASAPSerialization.string2byteArray(peerID));
 
         // get component to add listener
         this.messengerComponent = (SharkMessengerComponent) this.sharkPeerFS.
@@ -251,11 +271,21 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
         // we are in the range
         index--; // adjust to internal counting .. we start with 0 as any normal person ;)
         CredentialMessage actionedCredential = this.pendingCredentialMessages.remove(index);
+
         if(accept) {
+            try {
+                this.getSharkPKIComponent().getPersonValuesByName(actionedCredential.getSubjectName());
+                this.tellUI("we already know a peer with that name - take id instead their name for your address book");
+                actionedCredential.setSubjectName(actionedCredential.getSubjectID());
+            }
+            catch(ASAPException ae) {
+                this.tellUI("You do not know a peer with that name yet.");
+            }
+
             this.getSharkPKIComponent().acceptAndSignCredential(actionedCredential);
-            this.tellUI("\ncredential message accepted: \n" + PKIHelper.credentialMessage2String(actionedCredential));
+            this.tellUI("\nissued certificate based on:\n" + PKIHelper.credentialMessage2String(actionedCredential));
         } else {
-            this.tellUI("\ncredential message refused: \n" + PKIHelper.credentialMessage2String(actionedCredential));
+            this.tellUI("\nrefused to issue a certificate:\n" + PKIHelper.credentialMessage2String(actionedCredential));
         }
 
         this.tellUI("\nnote - indices of pending credential message has changed. Produce a new list before further actions.");

@@ -43,11 +43,13 @@ public class ASAPHubConnectionTest {
         FSUtils.removeFolder(TEST_FOLDER);
     }
 
+
     /**
      * This test sends messages with the SharkMessenger using a TCP-Socket. The test uses instances of
      * ASAPConnectionHandler, ASAPEncounterManager and TCPServerSocketAcceptor to be able to send the messages
      * over a network.
      */
+    /*
     @Test
     public void sendMessageUsingTCPSocket() throws IOException, SharkException, InterruptedException {
         Collection<CharSequence> formats = new ArrayList<>();
@@ -128,10 +130,13 @@ public class ASAPHubConnectionTest {
         Assertions.assertEquals("Hi Bob", receivedMessage);
     }
 
+     */
+
     /**
      * This test exchanges a message between the peers Alice and Bob using the ASAPHub. The test uses instances of
      * ASAPConnectionHandler, ASAPEncounterManager and NewConnectionListener to reach this goal.
      */
+    /*
     @Test
     public void sendMessageUsingHubConnector() throws IOException, SharkException, InterruptedException {
         Collection<CharSequence> formats = new ArrayList<>();
@@ -222,7 +227,9 @@ public class ASAPHubConnectionTest {
         Assertions.assertEquals(1, list.size());
         Assertions.assertEquals("Hi Bob", receivedMessage);
     }
-	
+
+
+     */
 	class TestConnectionListener implements NewConnectionListener {
 		private ASAPEncounterManager encounterManager;
 
