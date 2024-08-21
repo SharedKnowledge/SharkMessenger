@@ -4,7 +4,9 @@ import net.sharksystem.asap.ASAPException;
 import net.sharksystem.asap.ASAPHop;
 import net.sharksystem.asap.utils.DateTimeHelper;
 import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.PKIPrinter;
 import net.sharksystem.messenger.*;
+import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.utils.SerializationHelper;
 
 import java.io.IOException;
@@ -68,7 +70,7 @@ public class ChannelPrinter {
     }
 
     private static final String CHANNEL_PRINTER_LINE_SEPARATOR = "\n--------------------------------------------------------------------------------\n";
-    public String getMessagesASString(String channelUri, SharkMessageList messages)
+    public String getMessagesASString(SharkPKIComponent pki, String channelUri, SharkMessageList messages)
             throws IOException, SharkMessengerException, ASAPException {
 
         StringBuilder sb = new StringBuilder();
@@ -84,14 +86,14 @@ public class ChannelPrinter {
                 sb.append("#" + i);
                 sb.append(CHANNEL_PRINTER_LINE_SEPARATOR);
                 SharkMessage message = messages.getSharkMessage(i, true);
-                sb.append(this.getMessageDetails(message));
+                sb.append(this.getMessageDetails(pki, message));
                 sb.append(CHANNEL_PRINTER_LINE_SEPARATOR);
             }
         }
         return sb.toString();
     }
 
-    public String getMessageDetails(SharkMessage message)
+    public String getMessageDetails(SharkPKIComponent pki, SharkMessage message)
             throws IOException, ASAPException {
 
         StringBuilder sb = new StringBuilder();
@@ -139,6 +141,10 @@ public class ChannelPrinter {
         if (message.signed()) {
             sb.append(" | verified: ");
             sb.append(this.returnYesNo(message.verified()));
+            if(message.verified()) {
+                sb.append(" | ");
+                sb.append(new PKIPrinter(pki).getIAString(message.getSender()));
+            }
         }
 
         // hoping list

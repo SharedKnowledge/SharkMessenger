@@ -25,13 +25,12 @@ public class SharkMessengerUI {
     /**
      * Use for string input in unittests or no input
      */
-    public SharkMessengerUI(String batchCommands, InputStream is, PrintStream out, PrintStream err,
-                            SharkMessengerApp sharkMessengerApp) {
+    public SharkMessengerUI(
+            String batchCommands, InputStream is, PrintStream out, PrintStream err) {
         this.parsedCommands.addAll(Arrays.asList(batchCommands.trim().split(System.lineSeparator())));
         this.outStream = out;
         this.errStream = err;
         this.bufferedReader = new BufferedReader(new InputStreamReader(is));
-        sharkMessengerApp.setUIStreams(this.outStream, this.errStream);
     }
 
     /**
@@ -39,10 +38,9 @@ public class SharkMessengerUI {
      *
      * @throws FileNotFoundException
      */
-    public SharkMessengerUI(File file, InputStream is, PrintStream out, PrintStream err,
-                            SharkMessengerApp sharkMessengerApp) throws FileNotFoundException {
+    public SharkMessengerUI(File file, InputStream is, PrintStream out, PrintStream err) throws FileNotFoundException {
         this(new BufferedReader(new InputStreamReader(new FileInputStream(file)))
-                .lines().reduce("", (a, b) -> a + System.lineSeparator() + b), is, out, err, sharkMessengerApp
+                .lines().reduce("", (a, b) -> a + System.lineSeparator() + b), is, out, err
         );
     }
 

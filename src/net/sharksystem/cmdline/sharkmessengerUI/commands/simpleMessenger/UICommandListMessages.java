@@ -30,7 +30,14 @@ public class UICommandListMessages extends AbstractCommandWithSingleInteger {
         try {
             int channelIndex = this.getIntegerArgument() - 1; // we start with 1 in UI and 0 inside
             SharkMessengerComponent messenger = this.getSharkMessengerApp().getSharkMessengerComponent();
-            SharkMessengerChannel channel = messenger.getChannel(channelIndex);
+            SharkMessengerChannel channel = null;
+            try {
+                channel = messenger.getChannel(channelIndex);
+            }
+            catch (SharkException se) {
+                this.getSharkMessengerApp().tellUI("there is no channel at all (yet)");
+            }
+
             SharkMessageList messages = channel.getMessages();
             if(messages == null || messages.size() <1) {
                 this.getSharkMessengerApp().tellUI("no messages in channel " + channelIndex);
@@ -40,7 +47,9 @@ public class UICommandListMessages extends AbstractCommandWithSingleInteger {
             this.getSharkMessengerApp().tellUI(channelPrinter.getChannelDescription(channel));
 
             this.getSharkMessengerApp().tellUI(
-                    channelPrinter.getMessagesASString(channel.getURI().toString(), messages));
+                    channelPrinter.getMessagesASString(
+                            this.getSharkMessengerApp().getSharkPKIComponent(),
+                            channel.getURI().toString(), messages));
         } catch (SharkException | IOException e) {
             this.printErrorMessage(e.getLocalizedMessage());
         }

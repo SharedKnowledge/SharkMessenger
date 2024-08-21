@@ -33,14 +33,14 @@ import net.sharksystem.utils.Log;
  * Only commands a user should be able to execute are used below.
  */
 public class ProductionUI {
-    public static final String SETTINGSFILENAME = ".sharkMessengerSettings";
+    public static final String SETTINGSFILENAME = ".sharkMessengerSessionSettings";
     public static final String PEERNAME_KEY = "peername";
     public static final String SYNC_WITH_OTHERS_IN_SECONDS_KEY = "syncWithOthersInSeconds";
 
     public static void main(String[] args) throws SharkException, IOException {
         String peerName = null;
         int syncWithOthersInSeconds = ASAPHubManager.DEFAULT_WAIT_INTERVAL_IN_SECONDS;
-        ExtraData settings = new ExtraDataFS("./" + SETTINGSFILENAME);
+        ExtraData sessionSettings = new ExtraDataFS("./" + SETTINGSFILENAME);
         boolean isBack = false;
 
         /**
@@ -74,7 +74,7 @@ public class ProductionUI {
 
         System.out.println("Welcome to SharkMessenger version 0.1");
         if(peerName == null) {
-            byte[] storedPeerNameBytes = settings.getExtra(PEERNAME_KEY);
+            byte[] storedPeerNameBytes = sessionSettings.getExtra(PEERNAME_KEY);
             if(storedPeerNameBytes != null) {
                 // we have a peer name
                 peerName = new String(storedPeerNameBytes);
@@ -96,10 +96,10 @@ public class ProductionUI {
                 }
             } while (peerName.equals(""));
             // store it
-            settings.putExtra(PEERNAME_KEY, peerName.getBytes());
+            sessionSettings.putExtra(PEERNAME_KEY, peerName.getBytes());
         }
 
-        settings.putExtra(SYNC_WITH_OTHERS_IN_SECONDS_KEY, syncWithOthersInSeconds);
+        sessionSettings.putExtra(SYNC_WITH_OTHERS_IN_SECONDS_KEY, syncWithOthersInSeconds);
 
         // Re-direct asap/shark log messages.
         PrintStream asapLogMessages = new PrintStream("asapLogs" + peerName + ".txt");
@@ -109,8 +109,9 @@ public class ProductionUI {
         if(isBack) System.out.println("Welcome back " + peerName);
         else System.out.println("Welcome " + peerName);
 
-        SharkMessengerApp sharkMessengerApp = new SharkMessengerApp(peerName, settings);
-        SharkMessengerUI smUI = new SharkMessengerUI("", System.in, System.out, System.err, sharkMessengerApp);
+        SharkMessengerUI smUI = new SharkMessengerUI("", System.in, System.out, System.err);
+        SharkMessengerApp sharkMessengerApp =
+                new SharkMessengerApp(peerName, syncWithOthersInSeconds, System.out, System.err);
 
         // basics
         smUI.addCommand(new UICommandExit(sharkMessengerApp, smUI, "exit", false));

@@ -7,13 +7,11 @@ import net.sharksystem.SharkPeerFS;
 import net.sharksystem.asap.*;
 import net.sharksystem.asap.apps.TCPServerSocketAcceptor;
 import net.sharksystem.asap.crypto.InMemoASAPKeyStore;
-import net.sharksystem.asap.persons.PersonValues;
 import net.sharksystem.asap.pki.ASAPCertificate;
-import net.sharksystem.asap.pki.ASAPKeyStorage;
-import net.sharksystem.asap.utils.ASAPSerialization;
 import net.sharksystem.asap.utils.DateTimeHelper;
 import net.sharksystem.asap.utils.PeerIDHelper;
 import net.sharksystem.fs.ExtraData;
+import net.sharksystem.fs.ExtraDataFS;
 import net.sharksystem.fs.FSUtils;
 import net.sharksystem.hub.HubConnectionManager;
 import net.sharksystem.hub.HubConnectionManagerImpl;
@@ -39,6 +37,9 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
     private static final CharSequence PEER_ID_KEY = "peerIDKey";
     private final SharkPeerFS sharkPeerFS;
 
+    // keystore
+    private static final CharSequence KEYSTORE_MEMENTO_KEY = "keyStoreMemento";
+
     //private static final CharSequence ROOTFOLDER = "sharkMessengerDataStorage";
     private final SharkMessengerComponent messengerComponent;
     private final SharkPKIComponent pkiComponent;
@@ -46,33 +47,51 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
     private final ASAPEncounterManager encounterManager;
     private final ASAPEncounterManagerAdmin encounterManagerAdmin;
     private final String peerDataFolderName;
-    private final ExtraData settings;
+    private final ExtraData appSettings;
     private final String peerName;
     private PrintStream outStream;
     private PrintStream errStream;
     private CharSequence peerID;
 
-    public SharkMessengerApp(String peerName, ExtraData settings) throws SharkException, IOException {
+    public SharkMessengerApp(String peerName, PrintStream out, PrintStream err)
+            throws SharkException, IOException {
+        this(peerName, 60*10, out, err);
+    }
+
+    public SharkMessengerApp(String peerName, int syncWithOthersInSeconds, PrintStream out, PrintStream err)
+            throws SharkException, IOException {
+
         this.peerDataFolderName = "./" + peerName;
-        this.settings = settings;
+        this.appSettings = new ExtraDataFS(".", "SharkMessengerSetting" + peerName);
+        this.outStream = out;
+        this.errStream = err;
         this.sharkPeerFS = new SharkPeerFS(peerName, this.peerDataFolderName);
         this.peerName = peerName;
-        int syncWithOthersInSeconds = settings.getExtraInteger(SYNC_WITH_OTHERS_IN_SECONDS_KEY);
 
-        boolean saveNewPeerID = false;
         try {
-            byte[] peerIDBytes = this.sharkPeerFS.getExtra(PEER_ID_KEY);
-            this.peerID = ASAPSerialization.byteArray2String(peerIDBytes);
+            this.peerID = this.sharkPeerFS.getSharkPeerExtraData().getExtraString(PEER_ID_KEY);
+            this.tellUI("asap peer id for " + peerName + " is " + this.peerID);
         }
         catch (SharkException se) {
             this.peerID = peerName + "_" + PeerIDHelper.createUniqueID();
-            saveNewPeerID = true;
+            this.tellUI("created a new asap peer id for " + peerName + ": " + this.peerID);
+            this.sharkPeerFS.getSharkPeerExtraData().putExtra(PEER_ID_KEY, this.peerID);
         }
 
         // set up shark components
 
         // produce KeyStore
         InMemoASAPKeyStore keyStore = new InMemoASAPKeyStore(this.peerID);
+        keyStore.setMementoTarget(this.appSettings, KEYSTORE_MEMENTO_KEY);
+        try {
+            keyStore.restoreFromMemento(this.appSettings.getExtra(KEYSTORE_MEMENTO_KEY));
+            this.tellUI("restored keystore from memento");
+        }
+        catch(SharkException se) {
+            // no memento for key store - must be new
+            this.tellUI("no keystore memento - must be new");
+        }
+
         // get PKI factory
         SharkPKIComponentFactory pkiComponentFactory = new SharkPKIComponentFactory(keyStore);
 
@@ -88,7 +107,6 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
 
         // all component in place - start peer
         this.sharkPeerFS.start(this.peerID);
-        if(saveNewPeerID) this.sharkPeerFS.putExtra(PEER_ID_KEY, ASAPSerialization.string2byteArray(peerID));
 
         // get component to add listener
         this.messengerComponent = (SharkMessengerComponent) this.sharkPeerFS.
@@ -147,7 +165,7 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
 
     public void destroyAllData() throws SharkException, IOException {
         FSUtils.removeFolder(this.peerDataFolderName);
-        this.settings.removeAll();
+        this.appSettings.removeAll();
     }
 
     public String getPeerName() {

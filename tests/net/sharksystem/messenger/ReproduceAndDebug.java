@@ -79,7 +79,7 @@ public class ReproduceAndDebug {
     private SharkMessengerUI initializeSharkMessengerUI(SharkMessengerApp sharkMessengerApp, String batchCommands)
             throws SharkException, IOException {
 
-        SharkMessengerUI smUI = new SharkMessengerUI(batchCommands, System.in, System.out, System.err, sharkMessengerApp);
+        SharkMessengerUI smUI = new SharkMessengerUI(batchCommands, System.in, System.out, System.err);
 
         // Add test received listener.
         sharkMessengerApp.getSharkMessengerComponent().addSharkMessagesReceivedListener(
@@ -156,8 +156,8 @@ public class ReproduceAndDebug {
                 System.lineSeparator() +
                 "mkChannel test://t1 channel1 false";
 
-        SharkMessengerApp smaAlice = new SharkMessengerApp(ALICE, getAliceSettings());
-        SharkMessengerApp smaBob = new SharkMessengerApp(BOB, getBobSettings());
+        SharkMessengerApp smaAlice = new SharkMessengerApp(ALICE, System.out, System.err);
+        SharkMessengerApp smaBob = new SharkMessengerApp(BOB, System.out, System.err);
         SharkMessengerUI smUIAlice = this.initializeSharkMessengerUI(smaAlice, cmdLogAlice);
         SharkMessengerUI smUIBob = this.initializeSharkMessengerUI(smaBob, cmdLogBob);
 
@@ -188,8 +188,8 @@ public class ReproduceAndDebug {
         String cmdBob4th = "mkChannel test://t1 channel1 false";
         String cmdAlice5th = "sendMessage 0 false false hi_bob bob";
 
-        SharkMessengerApp smaAlice = new SharkMessengerApp(ALICE, getAliceSettings());
-        SharkMessengerApp smaBob = new SharkMessengerApp(BOB, getBobSettings());
+        SharkMessengerApp smaAlice = new SharkMessengerApp(ALICE, System.out, System.err);
+        SharkMessengerApp smaBob = new SharkMessengerApp(BOB, System.out, System.err);
         SharkMessengerUI smUIAlice = this.initializeSharkMessengerUI(smaAlice, "");
         SharkMessengerUI smUIBob = this.initializeSharkMessengerUI(smaBob, "");
 
@@ -238,8 +238,8 @@ public class ReproduceAndDebug {
         String cmdBob4th = "mkChannel test://t1 channel1 false";
         String cmdAlice5th = "sendMessageTest 25 30 0 false false hi_bob bob";
 
-        SharkMessengerApp smaAlice = new SharkMessengerApp(ALICE, getAliceSettings());
-        SharkMessengerApp smaBob = new SharkMessengerApp(BOB, getBobSettings());
+        SharkMessengerApp smaAlice = new SharkMessengerApp(ALICE, System.out, System.err);
+        SharkMessengerApp smaBob = new SharkMessengerApp(BOB, System.out, System.err);
         SharkMessengerUI smUIAlice = this.initializeSharkMessengerUI(smaAlice, "");
         SharkMessengerUI smUIBob = this.initializeSharkMessengerUI(smaBob, "");
 
