@@ -1,4 +1,4 @@
-package net.sharksystem.cmdline.sharkmessengerUI.commands.simpleMessenger;
+package net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger;
 
 import net.sharksystem.asap.utils.ASAPSerialization;
 import net.sharksystem.cmdline.sharkmessengerUI.*;

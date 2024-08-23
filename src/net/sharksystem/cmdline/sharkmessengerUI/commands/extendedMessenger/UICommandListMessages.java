@@ -1,18 +1,13 @@
-package net.sharksystem.cmdline.sharkmessengerUI.commands.simpleMessenger;
+package net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger;
 
 import net.sharksystem.SharkException;
 import net.sharksystem.cmdline.sharkmessengerUI.*;
-import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandIntegerArgument;
-import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaire;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.ChannelPrinter;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandProduceChannelListBefore;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.helper.AbstractCommandWithSingleInteger;
 import net.sharksystem.messenger.SharkMessageList;
 import net.sharksystem.messenger.SharkMessengerChannel;
 import net.sharksystem.messenger.SharkMessengerComponent;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * This command lists all known messages of a channel.
@@ -36,6 +31,7 @@ public class UICommandListMessages extends AbstractCommandWithSingleInteger {
             }
             catch (SharkException se) {
                 this.getSharkMessengerApp().tellUI("there is no channel at all (yet)");
+                return;
             }
 
             SharkMessageList messages = channel.getMessages();

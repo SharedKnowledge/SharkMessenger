@@ -17,7 +17,6 @@ import net.sharksystem.cmdline.sharkmessengerUI.commands.hubmanagement.UICommand
 import net.sharksystem.cmdline.sharkmessengerUI.commands.persons.UICommandListPersons;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.testing.UICommandSaveLog;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.testing.UICommandShowLog;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.simpleMessenger.*;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.*;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.tcp.UICommandCloseTCP;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.tcp.UICommandConnectTCP;
@@ -134,6 +133,8 @@ public class ProductionUI {
         smUI.addCommand(new UICommandListPersons(sharkMessengerApp, smUI, "lsPersons", true));
 
         // PKI
+        smUI.addCommand(new UICommandListCertificateIssuer(sharkMessengerApp, smUI, "lsCertIssuer", true));
+        smUI.addCommand(new UICommandListCertificateIssuer(sharkMessengerApp, smUI, "lsCertSubjects", true));
         smUI.addCommand(new UICommandShowCertificatesByIssuer(sharkMessengerApp, smUI, "certByIssuer", true));
         smUI.addCommand(new UICommandShowCertificatesBySubject(sharkMessengerApp, smUI, "certBySubject", true));
         smUI.addCommand(new UICommandShowPendingCredentials(sharkMessengerApp, smUI, "lsCredentials", true));
@@ -165,18 +166,6 @@ public class ProductionUI {
         smUI.addCommand(new UICommandCreateChannel(sharkMessengerApp, smUI, "mkChannel", true));
         //smUI.addCommand(new UICommandSetChannelAge(sharkMessengerApp, smUI, "setChannelAge", true));
         smUI.addCommand(new UICommandRemoveChannelByIndex(sharkMessengerApp, smUI, "rmChannel", true));
-
-        smUI.addCommand(new UICommandGetIdentityAssurance(sharkMessengerApp, smUI, "ia", true));
-        smUI.addCommand(new UICommandGetSigningFailureRate(sharkMessengerApp, smUI, "getSF", true));
-        smUI.addCommand(new UICommandSetSigningFailureRate(sharkMessengerApp, smUI, "setSF", true));
-        //smUI.addCommand(new UICommandCreateCredentialMessage(sharkMessengerApp, smUI, "mkCredentialMsg", true));
-        smUI.addCommand(new UICommandExchangeCertificates(sharkMessengerApp, smUI, "exchCert", true));
-        smUI.addCommand(new UICommandGetCertificationPath(sharkMessengerApp, smUI, "certPath", true));
-        smUI.addCommand(new UICommandGetOwnerInfo(sharkMessengerApp, smUI, "ownerInfo", true));
-        smUI.addCommand(new UICommandGetNumberOfKnownPeers(sharkMessengerApp, smUI, "numPeers", true));
-        smUI.addCommand(new UICommandCreateNewKeyPair(sharkMessengerApp, smUI, "mkKeys", true));
-        smUI.addCommand(new UICommandGetKeysCreationTime(sharkMessengerApp, smUI, "keysTime", true));
-        smUI.addCommand(new UICommandGetMessageDetails(sharkMessengerApp, smUI, "getMessageDetails", true));
 
         smUI.printUsage();
         smUI.runCommandLoop();

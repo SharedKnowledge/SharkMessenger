@@ -9,21 +9,14 @@ import net.sharksystem.cmdline.sharkmessengerUI.commands.hubaccess.UICommandList
 import net.sharksystem.cmdline.sharkmessengerUI.commands.hubaccess.UICommandListHubDescriptions;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.hubaccess.UICommandRemoveHubDescription;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandCreateChannel;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.simpleMessenger.UICommandGetMessageDetails;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandListChannels;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandRemoveChannelByIndex;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandSendMessageExtended;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandSetChannelAge;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandSendCredentialMessage;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandCreateNewKeyPair;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandExchangeCertificates;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandShowCertificatesBySubject;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandGetCertificationPath;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandGetIdentityAssurance;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandGetKeysCreationTime;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandGetNumberOfKnownPeers;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandGetOwnerInfo;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandGetSigningFailureRate;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandSetSigningFailureRate;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.tcp.UICommandCloseTCP;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.tcp.UICommandConnectTCP;
@@ -103,15 +96,9 @@ public class ReproduceAndDebug {
         //PKI
         smUI.addCommand(new UICommandSendCredentialMessage(sharkMessengerApp, smUI, "sendCredential", true));
         smUI.addCommand(new UICommandGetOwnerInfo(sharkMessengerApp, smUI, "ownerInfo", true));
-        smUI.addCommand(new UICommandGetNumberOfKnownPeers(sharkMessengerApp, smUI, "numPeers", true));
         smUI.addCommand(new UICommandCreateNewKeyPair(sharkMessengerApp, smUI, "mkKeys", true));
-        smUI.addCommand(new UICommandGetKeysCreationTime(sharkMessengerApp, smUI, "keysTime", true));
         smUI.addCommand(new UICommandShowCertificatesBySubject(sharkMessengerApp, smUI, "certBySubject", true));
-        smUI.addCommand(new UICommandGetIdentityAssurance(sharkMessengerApp, smUI, "ia", true));
-        smUI.addCommand(new UICommandGetSigningFailureRate(sharkMessengerApp, smUI, "getSF", true));
         smUI.addCommand(new UICommandSetSigningFailureRate(sharkMessengerApp, smUI, "setSF", true));
-        smUI.addCommand(new UICommandExchangeCertificates(sharkMessengerApp, smUI, "exchCert", true));
-        smUI.addCommand(new UICommandGetCertificationPath(sharkMessengerApp, smUI, "certPath", true));
 
         // Hub control
         smUI.addCommand(new UICommandListHubDescriptions(sharkMessengerApp, smUI, "lsHubDescr", true));

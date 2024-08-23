@@ -182,9 +182,9 @@ public class ChannelPrinter {
         sb.append(" | ");
         sb.append("via: ");
         switch(hop.getConnectionType()) {
-            case INTERNET -> sb.append("DIRECT TCP");
+            case INTERNET -> sb.append("TCP");
             case ASAP_HUB -> sb.append("HUB");
-            case AD_HOC_LAYER_2_NETWORK -> sb.append("Ad-HOC");
+            case AD_HOC_LAYER_2_NETWORK -> sb.append("Ad-Hoc");
             case ONION_NETWORK -> sb.append("Onion");
         }
     }

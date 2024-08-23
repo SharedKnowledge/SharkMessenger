@@ -299,6 +299,7 @@ public class SharkMessengerUI {
 
             } catch (Exception e) {
                 this.errStream.println("exception caught: " + e.getLocalizedMessage());
+                e.printStackTrace(errStream);
             }
         }
     }
