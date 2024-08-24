@@ -79,21 +79,8 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
         }
 
         // set up shark components
-
-        // produce KeyStore
-        InMemoASAPKeyStore keyStore = new InMemoASAPKeyStore(this.peerID);
-        keyStore.setMementoTarget(this.appSettings, KEYSTORE_MEMENTO_KEY);
-        try {
-            keyStore.restoreFromMemento(this.appSettings.getExtra(KEYSTORE_MEMENTO_KEY));
-            this.tellUI("restored keystore from memento");
-        }
-        catch(SharkException se) {
-            // no memento for key store - must be new
-            this.tellUI("no keystore memento - must be new");
-        }
-
         // get PKI factory
-        SharkPKIComponentFactory pkiComponentFactory = new SharkPKIComponentFactory(keyStore);
+        SharkPKIComponentFactory pkiComponentFactory = new SharkPKIComponentFactory();
 
         // tell peer
         this.sharkPeerFS.addComponent(pkiComponentFactory, SharkPKIComponent.class);

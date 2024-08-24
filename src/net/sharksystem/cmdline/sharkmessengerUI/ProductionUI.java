@@ -6,10 +6,9 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 
 import net.sharksystem.SharkException;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.basics.UICommandDestroyPeer;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.basics.*;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.encounter.UICommandShowEncounter;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.*;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.basics.UICommandExit;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.*;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.hubaccess.*;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.hubmanagement.UICommandListHub;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.hubmanagement.UICommandStartHub;
@@ -113,10 +112,16 @@ public class ProductionUI {
                 new SharkMessengerApp(peerName, syncWithOthersInSeconds, System.out, System.err);
 
         // basics
+        smUI.addCommand(new UICommandWait(sharkMessengerApp, smUI, "wait", false));
+        smUI.addCommand(new UICommandEcho(sharkMessengerApp, smUI, "echo", false));
+        smUI.addCommand(new UICommandMarkStep(sharkMessengerApp, smUI, "markstep", false));
         smUI.addCommand(new UICommandExit(sharkMessengerApp, smUI, "exit", false));
         smUI.addCommand(new UICommandDestroyPeer(sharkMessengerApp, smUI, "destroyPeer", false));
 
         // simple messenger
+        smUI.addCommand(new UICommandListChannels(sharkMessengerApp, smUI, "lsChannel", true));
+        smUI.addCommand(new UICommandCreateChannel(sharkMessengerApp, smUI, "mkChannel", true));
+        smUI.addCommand(new UICommandRemoveChannelByIndex(sharkMessengerApp, smUI, "rmChannel", true));
         smUI.addCommand(new UICommandSendMessageExtended(sharkMessengerApp, smUI, "sendMessage", true));
         smUI.addCommand(new UICommandListMessages(sharkMessengerApp, smUI, "lsMessages", true));
 
@@ -133,8 +138,7 @@ public class ProductionUI {
         smUI.addCommand(new UICommandListPersons(sharkMessengerApp, smUI, "lsPersons", true));
 
         // PKI
-        smUI.addCommand(new UICommandListCertificateIssuer(sharkMessengerApp, smUI, "lsCertIssuer", true));
-        smUI.addCommand(new UICommandListCertificateIssuer(sharkMessengerApp, smUI, "lsCertSubjects", true));
+        smUI.addCommand(new UICommandListCertificates(sharkMessengerApp, smUI, "lsCerts", true));
         smUI.addCommand(new UICommandShowCertificatesByIssuer(sharkMessengerApp, smUI, "certByIssuer", true));
         smUI.addCommand(new UICommandShowCertificatesBySubject(sharkMessengerApp, smUI, "certBySubject", true));
         smUI.addCommand(new UICommandShowPendingCredentials(sharkMessengerApp, smUI, "lsCredentials", true));
@@ -160,12 +164,6 @@ public class ProductionUI {
         smUI.addCommand(new UICommandStopHub(sharkMessengerApp, smUI, "stopHub", true));
         smUI.addCommand(new UICommandListHub(sharkMessengerApp, smUI, "lsHubs", true));
 
-        // extended messenger
-        //smUI.addCommand(new UICommandSendMessageExtended(sharkMessengerApp, smUI, "sendMessageX", true));
-        smUI.addCommand(new UICommandListChannels(sharkMessengerApp, smUI, "lsChannel", true));
-        smUI.addCommand(new UICommandCreateChannel(sharkMessengerApp, smUI, "mkChannel", true));
-        //smUI.addCommand(new UICommandSetChannelAge(sharkMessengerApp, smUI, "setChannelAge", true));
-        smUI.addCommand(new UICommandRemoveChannelByIndex(sharkMessengerApp, smUI, "rmChannel", true));
 
         smUI.printUsage();
         smUI.runCommandLoop();

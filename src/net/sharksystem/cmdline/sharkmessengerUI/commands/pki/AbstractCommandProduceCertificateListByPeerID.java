@@ -1,7 +1,9 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.pki;
 
 import net.sharksystem.SharkException;
+import net.sharksystem.asap.ASAPException;
 import net.sharksystem.asap.ASAPSecurityException;
+import net.sharksystem.asap.persons.PersonValues;
 import net.sharksystem.asap.pki.ASAPCertificate;
 import net.sharksystem.cmdline.sharkmessengerUI.*;
 import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.UICommandQuestionnaire;
@@ -10,6 +12,7 @@ import net.sharksystem.pki.PKIHelper;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public abstract class AbstractCommandProduceCertificateListByPeerID extends UICommand {
     private final UICommandStringArgument peer;
@@ -74,7 +77,38 @@ public abstract class AbstractCommandProduceCertificateListByPeerID extends UICo
         }
 
         // print results
-        this.tellUICertificates(this.produceCertificateCollection(this.peerID));
+        Collection<ASAPCertificate> certs = this.produceCertificateCollection(this.peerID);
+        if(certs == null || certs.isEmpty()) {
+            // asked for yourself?
+            if(this.peerID.equalsIgnoreCase(this.getSharkMessengerApp().getPeerName())) {
+                this.getSharkMessengerApp().tellUI("it is your peer *name* you used as parameter " +
+                        "- look for your certificates");
+                certs =
+                    this.produceCertificateCollection(this.getSharkMessengerApp().getSharkPeer().getPeerID().toString());
+
+            } else {
+                try {
+                    Set<PersonValues> persons =
+                            this.getSharkMessengerApp().getSharkPKIComponent().getPersonValuesByName(this.peerID);
+
+                    if (persons != null && !persons.isEmpty()) {
+                        this.getSharkMessengerApp().tellUI("there is no peer with " + this.peerID
+                                + " as id but as *name*, check for credentials");
+                        for (PersonValues person : persons) {
+                            this.getSharkMessengerApp().tellUI(PKIHelper.personalValue2String(person));
+                            this.tellUICertificates(this.produceCertificateCollection(person.getUserID().toString()));
+                            this.getSharkMessengerApp().tellUI("-------------------\n");
+                        }
+                    } else {
+                        this.getSharkMessengerApp().tellUI("nothing found for " + this.peerID + " as peer name or id");
+                    }
+                } catch (ASAPException as) {
+                    // okay, there is nothing not under an id or a name
+                }
+                return;
+            }
+        }
+        this.tellUICertificates(certs);
     }
 
     protected abstract Collection<ASAPCertificate> produceCertificateCollection(String peerID) throws ASAPSecurityException;

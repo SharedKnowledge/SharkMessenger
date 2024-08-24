@@ -35,14 +35,16 @@ public abstract class AbstractCommandWithSingleString extends UICommand {
         if (arguments.size() < 1) {
             if(this.optional) return true;
             else this.getSharkMessengerApp().tellUI("string argument required");
-        } else {
-            boolean isParsable = this.stringArgument.tryParse(arguments.get(0));
-            if (!isParsable) {
-                if(this.optional) return true;
-                System.err.println("failed to parse string value" + arguments.get(0));
-            }
+            return false;
         }
-        return false;
+
+        boolean isParsable = this.stringArgument.tryParse(arguments.get(0));
+        if (!isParsable) {
+            System.err.println("failed to parse string value" + arguments.get(0));
+            return false;
+        }
+
+        return true;
     }
 
     protected String getStringArgument() {

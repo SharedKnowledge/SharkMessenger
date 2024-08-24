@@ -1,6 +1,8 @@
 package net.sharksystem.cmdline.sharkmessengerUI.commands.pki;
 
 import net.sharksystem.asap.ASAPSecurityException;
+import net.sharksystem.asap.pki.ASAPCertificate;
+import net.sharksystem.asap.utils.DateTimeHelper;
 import net.sharksystem.pki.SharkPKIComponent;
 
 public class PKIPrinter {
@@ -35,6 +37,34 @@ public class PKIPrinter {
         else if(ia < 4) sb.append("bad");
         else sb.append("enough?");
         sb.append(") ");
+
+        return sb.toString();
+    }
+
+    public String getCertificateAsString(ASAPCertificate cert) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("issued by: ");
+        sb.append(" | name: ");
+        sb.append(cert.getIssuerName());
+        sb.append(" | id: ");
+        sb.append(cert.getIssuerID());
+        sb.append("\n");
+
+        sb.append("for subject: ");
+        sb.append(" | name: ");
+        sb.append(cert.getSubjectName());
+        sb.append(" | id: ");
+        sb.append(cert.getSubjectID());
+        sb.append("\n");
+
+        sb.append("valid since: ");
+        sb.append(DateTimeHelper.long2DateString(cert.getValidSince().getTimeInMillis()));
+        sb.append(" | valid until: ");
+        sb.append(DateTimeHelper.long2DateString(cert.getValidUntil().getTimeInMillis()));
+        sb.append("\n");
+
+        sb.append("todo: print public key finger print");
+        // cert.getPublicKey();
 
         return sb.toString();
     }

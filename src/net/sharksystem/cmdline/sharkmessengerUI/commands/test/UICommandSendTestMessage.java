@@ -6,7 +6,7 @@ import java.util.List;
 import net.sharksystem.SharkException;
 import net.sharksystem.cmdline.sharkmessengerUI.*;
 import net.sharksystem.cmdline.sharkmessengerUI.commandarguments.*;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandSendMessageExtended;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandSendMessageExtended;
 import net.sharksystem.messenger.SharkMessengerComponent;
 
 /**

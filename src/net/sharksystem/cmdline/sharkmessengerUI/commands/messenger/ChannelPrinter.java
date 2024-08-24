@@ -1,16 +1,14 @@
-package net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger;
+package net.sharksystem.cmdline.sharkmessengerUI.commands.messenger;
 
 import net.sharksystem.asap.ASAPException;
 import net.sharksystem.asap.ASAPHop;
 import net.sharksystem.asap.utils.DateTimeHelper;
-import net.sharksystem.cmdline.sharkmessengerUI.SharkMessengerApp;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.PKIPrinter;
 import net.sharksystem.messenger.*;
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.utils.SerializationHelper;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.List;
 import java.util.Set;
 

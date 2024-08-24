@@ -285,13 +285,28 @@ public class SharkMessengerUI {
      */
     public void runCommandLoop() {
         boolean running = true;
+        String commandsBuffer = null;
         while (running) {
             try {
-                this.outStream.println();
-                this.outStream.print("Run a command by entering its name from the list above:");
+                String userInputString;
+                if(commandsBuffer == null) {
+                    this.outStream.println();
+                    this.outStream.print("Enter a (comma separated) command (list) and press ENTER > ");
 
-                String userInputString = this.bufferedReader.readLine();
-                this.outStream.println("> " + userInputString);
+                    userInputString = this.bufferedReader.readLine();
+                } else {
+                    userInputString = commandsBuffer;
+                }
+
+                int indexComma = userInputString.indexOf(",");
+                if(indexComma != -1) {
+                    commandsBuffer = userInputString.substring(indexComma+1).trim();
+                    if(commandsBuffer.length() == 0) commandsBuffer = null;
+                    userInputString = userInputString.substring(0, indexComma);
+                } else {
+                    commandsBuffer = null;
+                }
+
 
                 if (userInputString != null) {
                     this.handleUserInput(userInputString);

@@ -8,11 +8,11 @@ import net.sharksystem.cmdline.sharkmessengerUI.commands.hubaccess.UICommandConn
 import net.sharksystem.cmdline.sharkmessengerUI.commands.hubaccess.UICommandListConnectedHubs;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.hubaccess.UICommandListHubDescriptions;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.hubaccess.UICommandRemoveHubDescription;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandCreateChannel;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandListChannels;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandRemoveChannelByIndex;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandSendMessageExtended;
-import net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger.UICommandSetChannelAge;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandCreateChannel;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandListChannels;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandRemoveChannelByIndex;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandSendMessageExtended;
+import net.sharksystem.cmdline.sharkmessengerUI.commands.messenger.UICommandSetChannelAge;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandSendCredentialMessage;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandCreateNewKeyPair;
 import net.sharksystem.cmdline.sharkmessengerUI.commands.pki.UICommandShowCertificatesBySubject;
@@ -85,7 +85,6 @@ public class ReproduceAndDebug {
 
         // messages
         smUI.addCommand(new UICommandSendMessageExtended(sharkMessengerApp, smUI, "sendMessage", true));
-        smUI.addCommand(new UICommandGetMessageDetails(sharkMessengerApp, smUI, "getMessageDetails", true));
 
         // channels
         smUI.addCommand(new UICommandListChannels(sharkMessengerApp, smUI, "lsChannel", true));

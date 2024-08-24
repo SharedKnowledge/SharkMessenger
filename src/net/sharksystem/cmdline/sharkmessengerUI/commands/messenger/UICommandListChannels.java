@@ -1,4 +1,4 @@
-package net.sharksystem.cmdline.sharkmessengerUI.commands.extendedMessenger;
+package net.sharksystem.cmdline.sharkmessengerUI.commands.messenger;
 
 import net.sharksystem.messenger.SharkMessengerComponent;
 import net.sharksystem.messenger.SharkMessengerException;
