@@ -30,7 +30,7 @@ public class SharkMessageListImpl implements SharkMessageList {
         try {
             List<ASAPHop> hopsList = this.asapMessages.getChunk(position, chronologically).getASAPHopList();
             byte[] content = this.asapMessages.getMessage(position, chronologically);
-            return InMemoSharkMessage.parseMessage(content, hopsList, this.pkiComponent);
+            return InMemoSharkMessage.parseMessage(content, hopsList, this.pkiComponent.getASAPKeyStore());
         }
         catch(ASAPException | IOException asapException) {
             throw new SharkMessengerException(asapException);

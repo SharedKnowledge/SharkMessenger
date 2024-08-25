@@ -5,9 +5,7 @@ import net.sharksystem.SharkPeer;
 import net.sharksystem.SharkTestPeerFS;
 import net.sharksystem.asap.crypto.InMemoASAPKeyStore;
 import net.sharksystem.asap.pki.ASAPCertificate;
-import net.sharksystem.pki.CredentialMessage;
-import net.sharksystem.pki.SharkPKIComponent;
-import net.sharksystem.pki.SharkPKIComponentFactory;
+import net.sharksystem.pki.*;
 import org.junit.jupiter.api.Assertions;
 
 import java.io.IOException;
@@ -88,9 +86,9 @@ public class TestHelper {
         SharkPKIComponent claraPKI = (SharkPKIComponent) this.claraPeer.getComponent(SharkPKIComponent.class);
 
         // create credential messages
-        CredentialMessage aliceCredentialMessage = alicePKI.createCredentialMessage();
-        CredentialMessage bobCredentialMessage = bobPKI.createCredentialMessage();
-        CredentialMessage claraCredentialMessage = claraPKI.createCredentialMessage();
+        CredentialMessage aliceCredentialMessage = ((SharkPKIDebugSupport) alicePKI).createCredentialMessage();
+        CredentialMessage bobCredentialMessage = ((SharkPKIDebugSupport) bobPKI).createCredentialMessage();
+        CredentialMessage claraCredentialMessage = ((SharkPKIDebugSupport) claraPKI).createCredentialMessage();
 
         // a) Alice and Bob exchange and accept credential messages and issue certificates
         ASAPCertificate aliceIssuedBobCert = alicePKI.acceptAndSignCredential(bobCredentialMessage);
@@ -187,10 +185,10 @@ public class TestHelper {
         SharkPKIComponent davidPKI = (SharkPKIComponent) this.davidPeer.getComponent(SharkPKIComponent.class);
 
         // create credential messages
-        CredentialMessage aliceCredentialMessage = alicePKI.createCredentialMessage();
-        CredentialMessage bobCredentialMessage = bobPKI.createCredentialMessage();
-        CredentialMessage claraCredentialMessage = claraPKI.createCredentialMessage();
-        CredentialMessage davidCredentialMessage = davidPKI.createCredentialMessage();
+        CredentialMessage aliceCredentialMessage = ((SharkPKIDebugSupport) alicePKI).createCredentialMessage();
+        CredentialMessage bobCredentialMessage = ((SharkPKIDebugSupport) bobPKI).createCredentialMessage();
+        CredentialMessage claraCredentialMessage = ((SharkPKIDebugSupport) claraPKI).createCredentialMessage();
+        CredentialMessage davidCredentialMessage = ((SharkPKIDebugSupport) davidPKI).createCredentialMessage();
 
         // a) Alice and Bob exchange and accept credential messages and issue certificates
         alicePKI.acceptAndSignCredential(bobCredentialMessage);
@@ -283,7 +281,7 @@ public class TestHelper {
 
         // create a component factory
         SharkPKIComponentFactory certificateComponentFactory =
-                new SharkPKIComponentFactory(new InMemoASAPKeyStore(peerID));
+                new SharkPKIComponentFactory();
 
         // register this component with shark peer - note: we use interface SharkPeer
         sharkPeer.addComponent(certificateComponentFactory, SharkPKIComponent.class);

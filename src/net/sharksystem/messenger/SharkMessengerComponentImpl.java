@@ -76,7 +76,7 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
                                     this.asapPeer.getPeerID(),
                                     receiver,
                                     sign, encrypt,
-                                    this.sharkPKIComponent));
+                                    this.sharkPKIComponent.getASAPKeyStore()));
                 }
             } else {
                 this.asapPeer.sendASAPMessage(SHARK_MESSENGER_FORMAT, uri,
@@ -86,7 +86,7 @@ class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
                             this.asapPeer.getPeerID(),
                             selectedRecipients,
                             sign, encrypt,
-                            this.sharkPKIComponent));
+                            this.sharkPKIComponent.getASAPKeyStore()));
             }
         } catch (ASAPException e) {
             throw new SharkMessengerException("when serialising and sending message: " + e.getLocalizedMessage(), e);

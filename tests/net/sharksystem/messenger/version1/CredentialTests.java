@@ -4,7 +4,7 @@ public class CredentialTests {
     public void a2b2c() {
         /*
         step 1:
-        A send signed message, opens (sendMessage signedA 1 true, openTCP 7777, lsMessages, showOpenTCPPorts) okay
+        A send signed message, opens (sendMessage signedA 1 true, openTCP 7777, lsMessages, showOpenTCPPorts) fails - cannot verify
         B connects to A, got message, cannot verify (connectTCP localhost 7777, wait 500, lsMessages) okay
 
         step 2:

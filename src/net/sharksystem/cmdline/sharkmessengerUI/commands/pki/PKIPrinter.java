@@ -20,7 +20,7 @@ public class PKIPrinter {
 
         int ia = 0;
         try {
-            ia = pki.getPersonValuesByID(peerID).getIdentityAssurance();
+            ia = pki.getIdentityAssurance(peerID);
         } catch (ASAPSecurityException e) {
             // nothing found
             // is it you

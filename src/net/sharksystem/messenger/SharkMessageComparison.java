@@ -18,8 +18,10 @@ class SharkMessageComparison implements ASAPMessageCompare {
     @Override
     public boolean earlier(byte[] msgA, byte[] msgB) {
         try {
-            InMemoSharkMessage sharkMsgA = InMemoSharkMessage.parseMessage(msgA, new ArrayList<ASAPHop>(), this.pki);
-            InMemoSharkMessage sharkMsgB = InMemoSharkMessage.parseMessage(msgB, new ArrayList<ASAPHop>(), this.pki);
+            InMemoSharkMessage sharkMsgA =
+                    InMemoSharkMessage.parseMessage(msgA, new ArrayList<ASAPHop>(), this.pki.getASAPKeyStore());
+            InMemoSharkMessage sharkMsgB =
+                    InMemoSharkMessage.parseMessage(msgB, new ArrayList<ASAPHop>(), this.pki.getASAPKeyStore());
 
             long creationTimeA = -1;
             long creationTimeB = -1;
