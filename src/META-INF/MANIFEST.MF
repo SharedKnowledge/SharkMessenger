@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: net.sharksystem.cmdline.sharkmessengerUI.TestUI
+Main-Class: net.sharksystem.messenger.cli.ProductionUI
 
