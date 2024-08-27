@@ -123,7 +123,8 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
             this.encounterManagerAdmin = asapEncounterManager;
 
             this.hubConnectionManager =
-                    new HubConnectionManagerImpl(this.encounterManager, asapPeer, syncWithOthersInSeconds);
+//                    new HubConnectionManagerImpl(this.encounterManager, asapPeer, syncWithOthersInSeconds);
+                  new HubConnectionManagerImpl(this.encounterManager, asapPeer); // default time is okay
         } else {
             Log.writeLogErr(this,
                     "ASAP peer set but is not a connection handler - cannot set up connection management");

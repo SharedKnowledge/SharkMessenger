@@ -1,9 +1,12 @@
 package net.sharksystem.messenger.cli.commands.pki;
 
 import net.sharksystem.asap.ASAPSecurityException;
+import net.sharksystem.asap.crypto.ASAPCryptoAlgorithms;
 import net.sharksystem.asap.pki.ASAPCertificate;
 import net.sharksystem.asap.utils.DateTimeHelper;
 import net.sharksystem.pki.SharkPKIComponent;
+
+import java.security.NoSuchAlgorithmException;
 
 public class PKIPrinter {
     private final SharkPKIComponent pki;
@@ -44,14 +47,14 @@ public class PKIPrinter {
     public String getCertificateAsString(ASAPCertificate cert) {
         StringBuilder sb = new StringBuilder();
         sb.append("issued by: ");
-        sb.append(" | name: ");
+        sb.append(" name: ");
         sb.append(cert.getIssuerName());
         sb.append(" | id: ");
         sb.append(cert.getIssuerID());
         sb.append("\n");
 
         sb.append("for subject: ");
-        sb.append(" | name: ");
+        sb.append(" name: ");
         sb.append(cert.getSubjectName());
         sb.append(" | id: ");
         sb.append(cert.getSubjectID());
@@ -63,8 +66,12 @@ public class PKIPrinter {
         sb.append(DateTimeHelper.long2DateString(cert.getValidUntil().getTimeInMillis()));
         sb.append("\n");
 
-        sb.append("todo: print public key finger print");
-        // cert.getPublicKey();
+        sb.append("public key finger print: ");
+        try {
+            sb.append(ASAPCryptoAlgorithms.getFingerprint(cert.getPublicKey()));
+        } catch (NoSuchAlgorithmException e) {
+            sb.append(e.getLocalizedMessage());
+        }
 
         return sb.toString();
     }
