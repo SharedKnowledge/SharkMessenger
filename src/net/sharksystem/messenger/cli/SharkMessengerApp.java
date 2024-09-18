@@ -6,6 +6,8 @@ import net.sharksystem.SharkPeerEncounterChangedListener;
 import net.sharksystem.SharkPeerFS;
 import net.sharksystem.asap.*;
 import net.sharksystem.asap.apps.TCPServerSocketAcceptor;
+import net.sharksystem.asap.crypto.ASAPKeyStore;
+import net.sharksystem.asap.crypto.InMemoASAPKeyStore;
 import net.sharksystem.asap.pki.ASAPCertificate;
 import net.sharksystem.asap.utils.DateTimeHelper;
 import net.sharksystem.asap.utils.PeerIDHelper;
@@ -89,8 +91,14 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
         // tell peer
         this.sharkPeerFS.addComponent(messengerComponentFactory, SharkMessengerComponent.class);
 
-        // all component in place - start peer
-        this.sharkPeerFS.start(this.peerID);
+        // all component in place - create asap peer and launch the system
+        ASAPPeer asapPeer = new ASAPPeerFS(this.peerID, this.peerDataFolderName, this.sharkPeerFS.getSupportedFormats());
+        // create Key Store
+        ASAPKeyStore keyStore = new InMemoASAPKeyStore(this.peerID);
+        asapPeer.setASAPKeyStore(keyStore);
+
+//        this.sharkPeerFS.start(this.peerID);
+        this.sharkPeerFS.start(asapPeer);
 
         // get component to add listener
         this.messengerComponent = (SharkMessengerComponent) this.sharkPeerFS.
@@ -109,7 +117,6 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
 
         //////////////////////// setup hub connection management
         // TODO: that's still a design flaw. We need something that extracts a connection handler from a peer. Do we?
-        ASAPPeer asapPeer = this.sharkPeerFS.getASAPPeer();
 
         ASAPConnectionHandler asapHandler = (ASAPConnectionHandler) asapPeer;
         // this code runs on service side - this peer should be a connection handler
