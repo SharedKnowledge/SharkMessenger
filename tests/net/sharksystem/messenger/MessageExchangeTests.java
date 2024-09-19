@@ -4,6 +4,7 @@ import net.sharksystem.SharkException;
 import net.sharksystem.SharkTestPeerFS;
 import net.sharksystem.SortedMessage;
 import net.sharksystem.SortedMessageFactory;
+import net.sharksystem.app.messenger.*;
 import net.sharksystem.asap.ASAPSecurityException;
 import net.sharksystem.asap.utils.PeerIDHelper;
 import net.sharksystem.pki.SharkPKIComponent;

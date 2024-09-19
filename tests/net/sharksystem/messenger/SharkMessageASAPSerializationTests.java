@@ -1,5 +1,6 @@
 package net.sharksystem.messenger;
 
+import net.sharksystem.app.messenger.InMemoSharkMessage;
 import net.sharksystem.asap.ASAPException;
 import net.sharksystem.asap.crypto.InMemoASAPKeyStore;
 import org.junit.jupiter.api.Assertions;
@@ -7,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.security.KeyPair;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
