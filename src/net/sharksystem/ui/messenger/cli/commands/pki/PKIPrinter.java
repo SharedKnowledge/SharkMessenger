@@ -33,15 +33,21 @@ public class PKIPrinter {
         }
         sb.append(ia);
         sb.append(" (");
-        if(ia == 0) sb.append("bad");
-        else if(ia == 10) sb.append("perfect");
-        else if(ia == 9) sb.append("good");
-        else if(ia > 6) sb.append("nice");
-        else if(ia < 4) sb.append("bad");
-        else sb.append("enough?");
+        sb.append(PKIPrinter.getIAExplainText(ia));
         sb.append(") ");
 
         return sb.toString();
+    }
+
+    public static String getIAExplainText(int ia) {
+        if(ia < 0 || ia > 10) return "error: iA must be in [0,10]";
+        if(ia == 0) return("bad");
+        else if(ia == 10) return("perfect");
+        else if(ia == 9) return("good");
+        else if(ia > 6) return("nice");
+        else if(ia < 4) return("bad");
+
+        return("enough?");
     }
 
     public String getCertificateAsString(ASAPCertificate cert) {

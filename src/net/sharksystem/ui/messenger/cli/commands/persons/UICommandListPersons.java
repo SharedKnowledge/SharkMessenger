@@ -1,10 +1,12 @@
 package net.sharksystem.ui.messenger.cli.commands.persons;
 
+import net.sharksystem.asap.persons.PersonValues;
 import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
 import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
 import net.sharksystem.ui.messenger.cli.commands.helper.AbstractCommandNoParameter;
 import net.sharksystem.pki.PKIHelper;
 import net.sharksystem.pki.SharkPKIComponent;
+import net.sharksystem.ui.messenger.cli.commands.pki.PKIPrinter;
 
 public class UICommandListPersons extends AbstractCommandNoParameter {
     public UICommandListPersons(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
@@ -27,7 +29,24 @@ public class UICommandListPersons extends AbstractCommandNoParameter {
             else sb.append("\n");
             sb.append(i+1);
             sb.append(": ");
-            sb.append(PKIHelper.personalValue2String(pki.getPersonValuesByPosition(i)));
+            PersonValues personValues = pki.getPersonValuesByPosition(i);
+            sb.append(PKIHelper.personalValue2String(personValues));
+            int identityAssurance = pki.getIdentityAssurance(personValues.getUserID());
+            sb.append(" | iA:  ");
+            sb.append(identityAssurance);
+            sb.append(" (");
+            sb.append(PKIPrinter.getIAExplainText(identityAssurance));
+            sb.append(")");
+        }
+        if(!first) {
+            sb.append("\n-----------------------------------------------------------------------------------------------------------------");
+            sb.append("\nid .. peer id.. chosen be peer itself.");
+            sb.append("\nname .. peer name. can be changed");
+            sb.append("\nsf..signing failure; what's the chance that a certificate issued by this peer is wrong");
+            sb.append("\n\t1 - best setting, hardly fails, 10 certs issued by this person cannot be trusted.");
+            sb.append("\niA..identity assurance .. how sure can we be about persons identity (calculated by iA and certificate chain)");
+            sb.append("\n\t0 an existing public key cannot be verified, 10 - got that key directly");
+            sb.append("\n-----------------------------------------------------------------------------------------------------------------");
         }
 
         this.getSharkMessengerApp().tellUI(sb.toString());

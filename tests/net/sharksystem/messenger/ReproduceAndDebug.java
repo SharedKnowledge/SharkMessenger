@@ -17,7 +17,7 @@ import net.sharksystem.ui.messenger.cli.commands.pki.UICommandSendCredentialMess
 import net.sharksystem.ui.messenger.cli.commands.pki.UICommandCreateNewKeyPair;
 import net.sharksystem.ui.messenger.cli.commands.pki.UICommandShowCertificatesBySubject;
 import net.sharksystem.ui.messenger.cli.commands.pki.UICommandGetOwnerInfo;
-import net.sharksystem.ui.messenger.cli.commands.pki.UICommandSetSigningFailureRate;
+import net.sharksystem.ui.messenger.cli.commands.persons.UICommandSetSigningFailure;
 import net.sharksystem.ui.messenger.cli.commands.tcp.UICommandCloseTCP;
 import net.sharksystem.ui.messenger.cli.commands.tcp.UICommandConnectTCP;
 import net.sharksystem.ui.messenger.cli.commands.tcp.UICommandOpenTCP;
@@ -100,7 +100,7 @@ public class ReproduceAndDebug {
         smUI.addCommand(new UICommandGetOwnerInfo(sharkMessengerApp, smUI, "ownerInfo", true));
         smUI.addCommand(new UICommandCreateNewKeyPair(sharkMessengerApp, smUI, "mkKeys", true));
         smUI.addCommand(new UICommandShowCertificatesBySubject(sharkMessengerApp, smUI, "certBySubject", true));
-        smUI.addCommand(new UICommandSetSigningFailureRate(sharkMessengerApp, smUI, "setSF", true));
+        smUI.addCommand(new UICommandSetSigningFailure(sharkMessengerApp, smUI, "setSF", true));
 
         // Hub control
         smUI.addCommand(new UICommandListHubDescriptions(sharkMessengerApp, smUI, "lsHubDescr", true));

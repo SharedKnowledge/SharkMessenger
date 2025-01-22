@@ -13,6 +13,8 @@ import net.sharksystem.ui.messenger.cli.commands.hubmanagement.UICommandStartHub
 import net.sharksystem.ui.messenger.cli.commands.hubmanagement.UICommandStopHub;
 import net.sharksystem.ui.messenger.cli.commands.messenger.*;
 import net.sharksystem.ui.messenger.cli.commands.persons.UICommandListPersons;
+import net.sharksystem.ui.messenger.cli.commands.persons.UICommandRenamePerson;
+import net.sharksystem.ui.messenger.cli.commands.persons.UICommandSetSigningFailure;
 import net.sharksystem.ui.messenger.cli.commands.pki.*;
 import net.sharksystem.ui.messenger.cli.commands.testing.UICommandSaveLog;
 import net.sharksystem.ui.messenger.cli.commands.testing.UICommandShowLog;
@@ -138,8 +140,10 @@ public class ProductionUI {
         // encounter control
         smUI.addCommand(new UICommandShowEncounter(sharkMessengerApp, smUI, "lsEncounter", false));
 
-        // PKI
+        // Persons
         smUI.addCommand(new UICommandListPersons(sharkMessengerApp, smUI, "lsPersons", true));
+        smUI.addCommand(new UICommandSetSigningFailure(sharkMessengerApp, smUI, "setSF", true));
+        smUI.addCommand(new UICommandRenamePerson(sharkMessengerApp, smUI, "rnPerson", true));
 
         // PKI
         smUI.addCommand(new UICommandListCertificates(sharkMessengerApp, smUI, "lsCerts", true));
