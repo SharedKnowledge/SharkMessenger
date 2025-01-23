@@ -8,6 +8,8 @@ import java.io.PrintStream;
 import net.sharksystem.SharkException;
 import net.sharksystem.ui.messenger.cli.commands.basics.*;
 import net.sharksystem.ui.messenger.cli.commands.encounter.UICommandShowEncounter;
+import net.sharksystem.ui.messenger.cli.commands.external.UICommandDecryptFile;
+import net.sharksystem.ui.messenger.cli.commands.external.UICommandEncryptFile;
 import net.sharksystem.ui.messenger.cli.commands.hubmanagement.UICommandListHub;
 import net.sharksystem.ui.messenger.cli.commands.hubmanagement.UICommandStartHub;
 import net.sharksystem.ui.messenger.cli.commands.hubmanagement.UICommandStopHub;
@@ -130,6 +132,10 @@ public class ProductionUI {
         smUI.addCommand(new UICommandRemoveChannelByIndex(sharkMessengerApp, smUI, "rmChannel", true));
         smUI.addCommand(new UICommandSendMessageExtended(sharkMessengerApp, smUI, "sendMessage", true));
         smUI.addCommand(new UICommandListMessages(sharkMessengerApp, smUI, "lsMessages", true));
+
+        // external io
+        smUI.addCommand(new UICommandEncryptFile(sharkMessengerApp, smUI, "encryptFile", true));
+        smUI.addCommand(new UICommandDecryptFile(sharkMessengerApp, smUI, "decryptFile", true));
 
         // TCP connection management
         smUI.addCommand(new UICommandOpenTCP(sharkMessengerApp, smUI, "openTCP", false));
