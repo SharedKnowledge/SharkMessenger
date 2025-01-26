@@ -312,6 +312,19 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
     /////////////////////////////////////////////////////////////////////////////////////////////
     //                                 environment changed handling                            //
     /////////////////////////////////////////////////////////////////////////////////////////////
+    public class EncounterLog {
+        public final ASAPEncounterConnectionType encounterType;
+        public final long startTime;
+        public final CharSequence peerID;
+        EncounterLog(ASAPEncounterConnectionType encounterType, CharSequence peerID) {
+            this.encounterType = encounterType;
+            this.peerID = peerID;
+            this.startTime = System.currentTimeMillis();
+        }
+    }
+
+    private List<EncounterLog> encounterLogs = new ArrayList<>();
+    public List<EncounterLog> getEncounterLogs() { return this.encounterLogs; }
 
     @Override
     public void encounterStarted(CharSequence peerID) {
@@ -326,6 +339,9 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
             this.tellUIError(s);
             return;
         }
+
+        // log
+        this.encounterLogs.add(new EncounterLog(connectionType, peerID));
 
         // check if better ask for a (fresh) certificate
         if(!(
