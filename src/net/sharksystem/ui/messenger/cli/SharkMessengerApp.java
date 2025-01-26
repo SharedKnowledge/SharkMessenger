@@ -315,9 +315,24 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
 
     @Override
     public void encounterStarted(CharSequence peerID) {
-        this.tellUI("\nnew encounter: " + peerID);
+        ASAPEncounterConnectionType connectionType = ASAPEncounterConnectionType.UNKNOWN;
 
-        // check if better ask for a (fresh) certificate?
+        try {
+             connectionType = this.encounterManagerAdmin.getConnectionType(peerID);
+            this.tellUI("\nnew encounter to " + peerID + " via " + connectionType);
+        } catch (ASAPException e) {
+            String s = "new connection but no connection type?? " + e.getLocalizedMessage();
+            Log.writeLogErr(this, s);
+            this.tellUIError(s);
+            return;
+        }
+
+        // check if better ask for a (fresh) certificate
+        if(!(
+            connectionType == ASAPEncounterConnectionType.AD_HOC_LAYER_2_NETWORK // if directly connected
+            || connectionType == ASAPEncounterConnectionType.INTERNET) // or via TCP for testing
+        ) return;
+
         try {
             try {
                 ASAPCertificate certificateByIssuerAndSubject =
