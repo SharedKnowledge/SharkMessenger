@@ -5,6 +5,7 @@ import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
 import net.sharksystem.ui.messenger.cli.commands.helper.AbstractCommandWithSingleInteger;
 
 import java.io.IOException;
+import java.util.List;
 
 public class UICommandStartHub extends AbstractCommandWithSingleInteger {
     public UICommandStartHub(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
@@ -27,5 +28,14 @@ public class UICommandStartHub extends AbstractCommandWithSingleInteger {
         sb.append("Open new port for establishing TCP connections with.");
         // append hint for how to use
         return sb.toString();
+    }
+
+    @Override
+    protected boolean handleArguments(List<String> arguments) {
+        if (arguments.size() < 1) {
+            this.getSharkMessengerApp().tellUIError("portnumber missing");
+            return false;
+        }
+        return super.handleArguments(arguments);
     }
 }

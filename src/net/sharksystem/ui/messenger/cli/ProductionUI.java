@@ -166,6 +166,7 @@ public class ProductionUI {
 
         // hub access
         smUI.addCommand(new UICommandConnectHub(sharkMessengerApp, smUI, "connectHub", true));
+        smUI.addCommand(new UICommandDisconnectHub(sharkMessengerApp, smUI, "disconnectHub", true));
         smUI.addCommand(new UICommandListConnectedHubs(sharkMessengerApp, smUI, "lsConnectedHubs", true));
 
         smUI.addCommand(new UICommandConnectHubFromDescriptionList(sharkMessengerApp, smUI, "connectHubFromList", true));

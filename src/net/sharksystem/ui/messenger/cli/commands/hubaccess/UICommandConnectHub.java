@@ -57,12 +57,12 @@ public class UICommandConnectHub extends UICommand {
                 true);
 
         this.getSharkMessengerApp().tellUI("try to connect to hub: " + hubDescription);
-
         this.getSharkMessengerApp().getHubConnectionManager().connectHub(hubDescription);
+        this.getSharkMessengerApp().tellUI("..done");
     }
 
     @Override
     public String getDescription() {
-        return "";
+        return "connects to a running hub";
     }
 }
