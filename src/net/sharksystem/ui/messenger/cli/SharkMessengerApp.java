@@ -231,13 +231,11 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
         return this.asapHubs.keySet();
     }
 
-    public void startHub(int portNumber) throws IOException {
+    public void startHub(int portNumber, boolean createNewConnection, int maxIdleInSeconds) throws IOException {
         if(this.portAlreadyInUse(portNumber)) return;
 
-        // create a new hub that spawns new TCP connections.
-//        ASAPTCPHub asapHub = new ASAPTCPHub(portNumber, true);
-
-        ASAPTCPHub asapHub = new ASAPTCPHub(portNumber, false);
+        ASAPTCPHub asapHub = new ASAPTCPHub(portNumber, createNewConnection);
+        asapHub.setMaxIdleConnectionInSeconds(maxIdleInSeconds);
         this.asapHubs.put(portNumber, asapHub);
         new Thread(asapHub).start();
     }
