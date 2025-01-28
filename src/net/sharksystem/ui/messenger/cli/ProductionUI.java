@@ -125,6 +125,7 @@ public class ProductionUI {
         smUI.addCommand(new UICommandMarkStep(sharkMessengerApp, smUI, "markstep", false));
         smUI.addCommand(new UICommandExit(sharkMessengerApp, smUI, "exit", false));
         smUI.addCommand(new UICommandDestroyPeer(sharkMessengerApp, smUI, "destroyPeer", false));
+        smUI.addCommand(new UICommandStatus(sharkMessengerApp, smUI, "status", false));
 
         // simple messenger
         smUI.addCommand(new UICommandListChannels(sharkMessengerApp, smUI, "lsChannel", true));
@@ -168,8 +169,9 @@ public class ProductionUI {
         smUI.addCommand(new UICommandConnectHub(sharkMessengerApp, smUI, "connectHub", true));
         smUI.addCommand(new UICommandDisconnectHub(sharkMessengerApp, smUI, "disconnectHub", true));
         smUI.addCommand(new UICommandListConnectedHubs(sharkMessengerApp, smUI, "lsConnectedHubs", true));
-
         smUI.addCommand(new UICommandConnectHubFromDescriptionList(sharkMessengerApp, smUI, "connectHubFromList", true));
+
+        // hub description management
         smUI.addCommand(new UICommandListHubDescriptions(sharkMessengerApp, smUI, "lsHubDescr", true));
         smUI.addCommand(new UICommandAddHubDescription(sharkMessengerApp, smUI,"addHubDescr", true));
         smUI.addCommand(new UICommandRemoveHubDescription(sharkMessengerApp, smUI, "rmHubDescr", true));

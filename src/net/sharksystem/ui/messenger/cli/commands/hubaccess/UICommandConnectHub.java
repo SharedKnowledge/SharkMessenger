@@ -1,5 +1,6 @@
 package net.sharksystem.ui.messenger.cli.commands.hubaccess;
 
+import net.sharksystem.SharkException;
 import net.sharksystem.hub.hubside.ASAPTCPHub;
 import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
 import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
@@ -11,6 +12,7 @@ import net.sharksystem.ui.messenger.cli.commandarguments.UICommandIntegerArgumen
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandStringArgument;
 
+import java.io.PrintStream;
 import java.util.List;
 
 public class UICommandConnectHub extends UICommand {
@@ -40,15 +42,37 @@ public class UICommandConnectHub extends UICommand {
                 new TCPHubConnectorDescriptionImpl(this.hubHost, this.hubPort, this.createNewChannel);
 
         this.getSharkMessengerApp().getHubConnectionManager().connectHub(hubDescription);
-        this.getSharkMessengerApp().tellUI("..done");
+        this.getSharkMessengerApp().tellUI("try to connect");
+        /*
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                    UICommandConnectHub.this.getSharkMessengerApp().tellUI("connected hubs:\n");
+                    HubDescriptionPrinter.printConnectedHubs(
+                            new PrintStream(UICommandConnectHub.this.getSharkMessengerApp().getOutStream()),
+                            UICommandConnectHub.this.getSharkMessengerApp().getHubConnectionManager()
+                            );
+                    UICommandConnectHub.this.getSharkMessengerApp().tellUI("\n");
+
+                } catch (InterruptedException e) {
+                    // ignore - wont happen
+                } catch (SharkException e) {
+                    UICommandConnectHub.this.getSharkMessengerApp().tellUIError("problem: " + e.getLocalizedMessage());
+                }
+
+            }
+        }).start();
+         */
     }
 
     @Override
     public String getDescription() {
-        return "connects to a running hub +" +
-                "\n(optional: hostname (default localhost)" +
-                "\n(optional: portnumber (default)" + ASAPTCPHub.DEFAULT_PORT +
-                "\n(optional: createNewConnection (default yes)";
+        return "connects to a hub: " +
+                "hostname (localhost), " +
+                "port (" + ASAPTCPHub.DEFAULT_PORT +
+                "), createNewConnection (yes)";
     }
 
     @Override

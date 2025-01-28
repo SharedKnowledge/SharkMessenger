@@ -1,0 +1,65 @@
+package net.sharksystem.ui.messenger.cli.commands.basics;
+
+import net.sharksystem.asap.crypto.ASAPCryptoAlgorithms;
+import net.sharksystem.asap.utils.DateTimeHelper;
+import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.commands.helper.AbstractCommandNoParameter;
+
+/**
+ * Command for terminating the messenger.
+ */
+public class UICommandStatus extends AbstractCommandNoParameter {
+    public UICommandStatus(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+                           String identifier, boolean rememberCommand) {
+        super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
+    }
+
+    @Override
+    public void execute() throws Exception {
+        StringBuilder sb = new StringBuilder();
+
+        // shark peer information
+        sb.append("peer information:\n\tname: ");
+        sb.append(this.getSharkMessengerApp().getSharkPeer().getSharkPeerName());
+        sb.append("\t| id: ");
+        sb.append(this.getSharkMessengerApp().getSharkPeer().getPeerID());
+
+        // app settings
+        sb.append("\napp settings:\n\t");
+        sb.append(this.getSharkMessengerApp().getSettings());
+
+        // pki information
+        sb.append("pki status:\n");
+        sb.append("\tpersons: ");
+        sb.append(this.getSharkMessengerApp().getSharkPKIComponent().getNumberOfPersons());
+        sb.append(" | certificates: ");
+        sb.append(this.getSharkMessengerApp().getSharkPKIComponent().getCertificates().size());
+        sb.append(" | keys created: ");
+        sb.append(DateTimeHelper.long2DateString(
+                this.getSharkMessengerApp().getSharkPKIComponent().getKeysCreationTime()));
+
+        sb.append("\n\tpublic key fingerprint:\n\t");
+        sb.append(ASAPCryptoAlgorithms.getFingerprint(
+                this.getSharkMessengerApp().getSharkPKIComponent().getASAPKeyStore().getPublicKey()));
+
+        sb.append("\nhub connections:\n");
+        sb.append("\thubs connected: ");
+        sb.append(this.getSharkMessengerApp().getHubConnectionManager().getConnectedHubs().size());
+        sb.append(" | failed to connect: ");
+        sb.append(this.getSharkMessengerApp().getHubConnectionManager().getFailedConnectionAttempts().size());
+
+        sb.append("\nencounter status:");
+        sb.append("\n\tencountered peers: ");
+        sb.append(this.getSharkMessengerApp().getEncounterLogs().size());
+
+        this.getSharkMessengerApp().tellUI(sb.toString());
+    }
+
+    @Override
+    public String getDescription() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Show app setting - todo: should be changeable.");
+        return sb.toString();
+    }
+}

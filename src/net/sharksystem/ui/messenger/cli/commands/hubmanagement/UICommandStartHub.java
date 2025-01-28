@@ -46,17 +46,16 @@ public class UICommandStartHub extends UICommand {
     @Override
     public String getDescription() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Creates a new hub");
-        sb.append("\noptional: port (default: ");
+        sb.append("start hub: ");
+        sb.append("port (");
         sb.append(ASAPTCPHub.DEFAULT_PORT);
         sb.append(")");
-        sb.append("\noptional: createNewConnection (default: true)");
-        sb.append("\noptional: maxIdleInSeconds (default: ");
+        sb.append(", createNewConnection (true)");
+        sb.append(", maxIdleInSeconds (");
         sb.append(ASAPTCPHub.DEFAULT_MAX_IDLE_CONNECTION_IN_SECONDS);
         sb.append(")");
         return sb.toString();
     }
-
     @Override
     protected boolean handleArguments(List<String> arguments) {
         // set defaults

@@ -16,14 +16,18 @@ import net.sharksystem.fs.ExtraDataFS;
 import net.sharksystem.fs.FSUtils;
 import net.sharksystem.hub.HubConnectionManager;
 import net.sharksystem.hub.HubConnectionManagerImpl;
+import net.sharksystem.hub.NewHubConnectedListener;
 import net.sharksystem.hub.hubside.ASAPTCPHub;
 import net.sharksystem.app.messenger.SharkMessengerComponent;
 import net.sharksystem.app.messenger.SharkMessengerComponentFactory;
+import net.sharksystem.hub.peerside.HubConnectorDescription;
 import net.sharksystem.pki.*;
+import net.sharksystem.ui.messenger.cli.commands.hubaccess.HubDescriptionPrinter;
 import net.sharksystem.utils.Log;
 import net.sharksystem.utils.streams.StreamPairImpl;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.*;
@@ -32,7 +36,7 @@ import java.util.*;
  * Proposed and suggested pattern for Shark app. Implement a central entity (could even be a singleton)
  * that provides access to any component that is part of this application
  */
-public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
+public class SharkMessengerApp implements SharkPeerEncounterChangedListener, NewHubConnectedListener {
     private static final CharSequence PEER_ID_KEY = "peerIDKey";
     private final SharkPeerFS sharkPeerFS;
 
@@ -57,6 +61,15 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
         this(peerName, 60*10, out, err);
     }
 
+    /**
+     * Setup the system
+     * @param peerName
+     * @param syncWithOthersInSeconds
+     * @param out
+     * @param err
+     * @throws SharkException
+     * @throws IOException
+     */
     public SharkMessengerApp(String peerName, int syncWithOthersInSeconds, PrintStream out, PrintStream err)
             throws SharkException, IOException {
 
@@ -132,6 +145,22 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
             this.hubConnectionManager =
 //                    new HubConnectionManagerImpl(this.encounterManager, asapPeer, syncWithOthersInSeconds);
                   new HubConnectionManagerImpl(this.encounterManager, asapPeer); // default time is okay
+
+            this.hubConnectionManager.addNewConnectedHubListener(this);
+
+            if(this.getSettings().getHubReconnect()) {
+                // try to reconnect to any known hub
+                List<HubConnectorDescription> hubDescriptions = this.getSharkPeer().getHubDescriptions();
+                if(!hubDescriptions.isEmpty()) {
+                    this.tellUI("try to reconnect to hubs");
+                    this.hubConnectionManager.connectHubs(hubDescriptions);
+                    try {
+                        Thread.sleep(100); // some output can be produced.
+                    } catch (InterruptedException e) {
+                        //
+                    }
+                }
+            }
         } else {
             Log.writeLogErr(this,
                     "ASAP peer set but is not a connection handler - cannot set up connection management");
@@ -139,6 +168,7 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
         }
     }
 
+    //////////////////// components
     public SharkPeer getSharkPeer() {
         return this.sharkPeerFS;
     }
@@ -162,6 +192,43 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
 
     public String getPeerName() {
         return this.peerName;
+    }
+
+    /////////////////// settings
+    private SharkMessengerSettings settings = new Settings();
+    public SharkMessengerSettings getSettings() {
+        return this.settings;
+    }
+
+    private class Settings implements SharkMessengerSettings {
+        private boolean rememberNewHubConnections = true;
+        private boolean hubReconnect = true;
+        public boolean getRememberNewHubConnections() {
+            return this.rememberNewHubConnections;
+        }
+        public void setRememberNewHubConnections(boolean rememberNewHubConnections) {
+            this.rememberNewHubConnections = rememberNewHubConnections;
+        }
+
+        @Override
+        public boolean getHubReconnect() {
+            return this.hubReconnect;
+        }
+
+        @Override
+        public void setHubReconnect(boolean hubReconnect) {
+            this.hubReconnect = hubReconnect;
+        }
+
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("rememberNewHubConnections: ");
+            sb.append(this.rememberNewHubConnections);
+            sb.append(" | hubReconnect: ");
+            sb.append(this.hubReconnect);
+            sb.append("\n");
+            return sb.toString();
+        }
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -310,6 +377,8 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
     /////////////////////////////////////////////////////////////////////////////////////////////
     //                                 environment changed handling                            //
     /////////////////////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////// Encounter
     public class EncounterLog {
         public final ASAPEncounterConnectionType encounterType;
         public final long startTime;
@@ -378,9 +447,26 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener {
     public void encounterTerminated(CharSequence peerID) {
         this.tellUI("\nterminated encounter: " + peerID);
     }
+
+    ////////////////////////// Hub Connections
+    @Override
+    public void newHubConnected(HubConnectorDescription hubConnectorDescription) {
+        this.tellUI("connected to a new hub:\n");
+        HubDescriptionPrinter.print(new PrintStream(this.getOutStream()), hubConnectorDescription);
+        if(this.getSettings().getRememberNewHubConnections()) {
+            this.getSharkPeer().addHubDescription(hubConnectorDescription);
+            this.tellUI("\nremembered hub description\n");
+        } else {
+            this.tellUI("\n");
+        }
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////////
     //                                    communicate with UI                                  //
     /////////////////////////////////////////////////////////////////////////////////////////////
+
+    public OutputStream getOutStream() { return this.outStream;}
+    public OutputStream getErrorStream() { return this.errStream;}
 
     public void setUIStreams(PrintStream outStream, PrintStream errStream) {
         this.outStream = outStream;

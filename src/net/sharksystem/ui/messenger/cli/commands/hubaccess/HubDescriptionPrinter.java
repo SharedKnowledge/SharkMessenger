@@ -8,7 +8,7 @@ import java.io.PrintStream;
 import java.util.List;
 
 public class HubDescriptionPrinter {
-    static void print(PrintStream ps, List<HubConnectorDescription> hcdList) {
+    public static void print(PrintStream ps, List<HubConnectorDescription> hcdList) {
         if(hcdList == null || hcdList.isEmpty()) {
             ps.println("no hub descriptions available");
         }
@@ -23,7 +23,7 @@ public class HubDescriptionPrinter {
         }
     }
 
-    static void print(PrintStream ps, HubConnectorDescription hcd) {
+    public static void print(PrintStream ps, HubConnectorDescription hcd) {
         try {
             CharSequence hostname = hcd.getHostName();
             int portNumber = hcd.getPortNumber();
@@ -47,7 +47,7 @@ public class HubDescriptionPrinter {
         }
     }
 
-    static void printConnectedHubs(PrintStream ps, HubConnectionManager hubConnectionManager) {
+    public static void printConnectedHubs(PrintStream ps, HubConnectionManager hubConnectionManager) {
         ps.println("connected hubs:");
         print(ps, hubConnectionManager.getConnectedHubs());
     }
