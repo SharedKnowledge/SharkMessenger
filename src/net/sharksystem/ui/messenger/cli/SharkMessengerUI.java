@@ -64,24 +64,25 @@ public class SharkMessengerUI {
         }
 
         UICommand command = this.commands.get(commandIdentifier);
-        if (command.rememberCommand()) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(command.getIdentifier());
-            // append parameter
-            for (String parameter : cmd) {
-                sb.append(" ");
-                sb.append(parameter);
-            }
-            this.addCommandToHistory(sb.toString());
-        }
 
         // Interactive mode uses the old Questionaire to obtain its arguments.
         if (isInteractive) {
             command.startCommandExecution();
         } else {
-            boolean initializedExecution = command.initializeExecution(cmd);
-            if(!initializedExecution) {
+            boolean executed = command.execute(cmd);
+            if(!executed) {
                 this.errStream.println("Arguments invalid for command: " + commandIdentifier);
+            } else {
+                if (command.rememberCommand()) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(command.getIdentifier());
+                    // append parameter
+                    for (String parameter : cmd) {
+                        sb.append(" ");
+                        sb.append(parameter);
+                    }
+                    this.addCommandToHistory(sb.toString());
+                }
             }
         }
     }
@@ -296,6 +297,14 @@ public class SharkMessengerUI {
                     userInputString = this.bufferedReader.readLine();
                 } else {
                     userInputString = commandsBuffer;
+                }
+
+                if(userInputString == null || userInputString.length() == 0) {
+                    running = false;
+                    this.errStream.println("no further input - going to wait a sec and exit.");
+                    // give app a moment so finish threads.
+                    Thread.sleep(1000);
+                    System.exit(1);
                 }
 
                 int indexComma = userInputString.indexOf(",");

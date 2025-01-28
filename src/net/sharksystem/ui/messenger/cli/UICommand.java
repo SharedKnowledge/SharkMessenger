@@ -95,7 +95,7 @@ public abstract class UICommand {
      *         not be prepared correctly.
      * @throws Exception Any exception that might be thrown during the execution process.
      */
-    public final boolean initializeExecution(List<String> arguments) throws Exception {
+    public final boolean execute(List<String> arguments) throws Exception {
         if (!handleArguments(arguments)) {
             return false;
         }

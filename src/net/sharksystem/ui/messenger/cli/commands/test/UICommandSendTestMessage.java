@@ -121,7 +121,7 @@ public class UICommandSendTestMessage extends UICommand {
                     + this.message.getValue();
             arguments.set(3, msg);
 
-            sendCommand.initializeExecution(arguments);
+            sendCommand.execute(arguments);
         }
     }
 

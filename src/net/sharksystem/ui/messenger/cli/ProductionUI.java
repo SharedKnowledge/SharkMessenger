@@ -18,8 +18,7 @@ import net.sharksystem.ui.messenger.cli.commands.persons.UICommandListPersons;
 import net.sharksystem.ui.messenger.cli.commands.persons.UICommandRenamePerson;
 import net.sharksystem.ui.messenger.cli.commands.persons.UICommandSetSigningFailure;
 import net.sharksystem.ui.messenger.cli.commands.pki.*;
-import net.sharksystem.ui.messenger.cli.commands.testing.UICommandSaveLog;
-import net.sharksystem.ui.messenger.cli.commands.testing.UICommandShowLog;
+import net.sharksystem.ui.messenger.cli.commands.testing.*;
 import net.sharksystem.ui.messenger.cli.commands.tcp.UICommandCloseTCP;
 import net.sharksystem.ui.messenger.cli.commands.tcp.UICommandConnectTCP;
 import net.sharksystem.ui.messenger.cli.commands.tcp.UICommandOpenTCP;
@@ -120,10 +119,7 @@ public class ProductionUI {
                 new SharkMessengerApp(peerName, syncWithOthersInSeconds, System.out, System.err);
 
         // basics
-        smUI.addCommand(new UICommandWait(sharkMessengerApp, smUI, "wait", false));
-        smUI.addCommand(new UICommandEcho(sharkMessengerApp, smUI, "echo", false));
-        smUI.addCommand(new UICommandMarkStep(sharkMessengerApp, smUI, "markstep", false));
-        smUI.addCommand(new UICommandExit(sharkMessengerApp, smUI, "exit", false));
+        smUI.addCommand(new UICommandExit(sharkMessengerApp, smUI, "exit", true));
         smUI.addCommand(new UICommandDestroyPeer(sharkMessengerApp, smUI, "destroyPeer", false));
         smUI.addCommand(new UICommandStatus(sharkMessengerApp, smUI, "status", false));
 
@@ -139,24 +135,24 @@ public class ProductionUI {
         smUI.addCommand(new UICommandDecryptFile(sharkMessengerApp, smUI, "decryptFile", true));
 
         // TCP connection management
-        smUI.addCommand(new UICommandOpenTCP(sharkMessengerApp, smUI, "openTCP", false));
-        smUI.addCommand(new UICommandConnectTCP(sharkMessengerApp, smUI, "connectTCP", false));
-        smUI.addCommand(new UICommandCloseTCP(sharkMessengerApp, smUI, "closeTCP", false));
+        smUI.addCommand(new UICommandOpenTCP(sharkMessengerApp, smUI, "openTCP", true));
+        smUI.addCommand(new UICommandConnectTCP(sharkMessengerApp, smUI, "connectTCP", true));
+        smUI.addCommand(new UICommandCloseTCP(sharkMessengerApp, smUI, "closeTCP", true));
         smUI.addCommand(new UICommandShowOpenTCPPorts(sharkMessengerApp, smUI, "showOpenTCPPorts", false));
 
         // encounter control
         smUI.addCommand(new UICommandShowEncounter(sharkMessengerApp, smUI, "lsEncounter", false));
 
         // Persons
-        smUI.addCommand(new UICommandListPersons(sharkMessengerApp, smUI, "lsPersons", true));
+        smUI.addCommand(new UICommandListPersons(sharkMessengerApp, smUI, "lsPersons", false));
         smUI.addCommand(new UICommandSetSigningFailure(sharkMessengerApp, smUI, "setSF", true));
         smUI.addCommand(new UICommandRenamePerson(sharkMessengerApp, smUI, "rnPerson", true));
 
         // PKI
-        smUI.addCommand(new UICommandListCertificates(sharkMessengerApp, smUI, "lsCerts", true));
-        smUI.addCommand(new UICommandShowCertificatesByIssuer(sharkMessengerApp, smUI, "certByIssuer", true));
-        smUI.addCommand(new UICommandShowCertificatesBySubject(sharkMessengerApp, smUI, "certBySubject", true));
-        smUI.addCommand(new UICommandShowPendingCredentials(sharkMessengerApp, smUI, "lsCredentials", true));
+        smUI.addCommand(new UICommandListCertificates(sharkMessengerApp, smUI, "lsCerts", false));
+        smUI.addCommand(new UICommandShowCertificatesByIssuer(sharkMessengerApp, smUI, "certByIssuer", false));
+        smUI.addCommand(new UICommandShowCertificatesBySubject(sharkMessengerApp, smUI, "certBySubject", false));
+        smUI.addCommand(new UICommandShowPendingCredentials(sharkMessengerApp, smUI, "lsCredentials", false));
         smUI.addCommand(new UICommandSendCredentialMessage(sharkMessengerApp, smUI, "sendCredential", true));
         smUI.addCommand(new UICommandAcceptCredential(sharkMessengerApp, smUI, "acceptCredential", true));
         smUI.addCommand(new UICommandRefuseCredential(sharkMessengerApp, smUI, "refuseCredential", true));
@@ -164,6 +160,9 @@ public class ProductionUI {
         // Tests
         smUI.addCommand(new UICommandSaveLog(sharkMessengerApp, smUI, "saveLog", false));
         smUI.addCommand(new UICommandShowLog(sharkMessengerApp, smUI, "showLog", false));
+        smUI.addCommand(new UICommandWait(sharkMessengerApp, smUI, "wait", true));
+        smUI.addCommand(new UICommandEcho(sharkMessengerApp, smUI, "echo", true));
+        smUI.addCommand(new UICommandMarkStep(sharkMessengerApp, smUI, "markstep", true));
 
         // hub access
         smUI.addCommand(new UICommandConnectHub(sharkMessengerApp, smUI, "connectHub", true));
@@ -172,14 +171,14 @@ public class ProductionUI {
         smUI.addCommand(new UICommandConnectHubFromDescriptionList(sharkMessengerApp, smUI, "connectHubFromList", true));
 
         // hub description management
-        smUI.addCommand(new UICommandListHubDescriptions(sharkMessengerApp, smUI, "lsHubDescr", true));
+        smUI.addCommand(new UICommandListHubDescriptions(sharkMessengerApp, smUI, "lsHubDescr", false));
         smUI.addCommand(new UICommandAddHubDescription(sharkMessengerApp, smUI,"addHubDescr", true));
         smUI.addCommand(new UICommandRemoveHubDescription(sharkMessengerApp, smUI, "rmHubDescr", true));
 
         // hub management
         smUI.addCommand(new UICommandStartHub(sharkMessengerApp, smUI, "startHub", true));
         smUI.addCommand(new UICommandStopHub(sharkMessengerApp, smUI, "stopHub", true));
-        smUI.addCommand(new UICommandListHub(sharkMessengerApp, smUI, "lsHubs", true));
+        smUI.addCommand(new UICommandListHub(sharkMessengerApp, smUI, "lsHubs", false));
 
 
         System.out.println("press ? or anything else to get a command list");

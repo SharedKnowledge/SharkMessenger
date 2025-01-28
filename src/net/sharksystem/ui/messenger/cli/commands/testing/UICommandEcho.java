@@ -1,4 +1,4 @@
-package net.sharksystem.ui.messenger.cli.commands.basics;
+package net.sharksystem.ui.messenger.cli.commands.testing;
 
 import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
 import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
