@@ -9,13 +9,13 @@ import net.sharksystem.utils.Log;
 import java.io.IOException;
 import java.util.*;
 
-public class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerManager
-        implements SharkMessengerComponent, ASAPMessageReceivedListener {
+public class SharkNetMessengerComponentImpl extends SharkNetMessagesReceivedListenerManager
+        implements SharkNetMessengerComponent, ASAPMessageReceivedListener {
 
     private final SharkPKIComponent sharkPKIComponent;
     private ASAPPeer asapPeer;
 
-    public SharkMessengerComponentImpl(SharkPKIComponent sharkPKIComponent) {
+    public SharkNetMessengerComponentImpl(SharkPKIComponent sharkPKIComponent) {
         this.sharkPKIComponent = sharkPKIComponent;
     }
 
@@ -24,37 +24,37 @@ public class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerMa
         this.asapPeer = asapPeer;
         Log.writeLog(this, "MAKE URI LISTENER PUBLIC AGAIN. Thank you :)");
         this.asapPeer.addASAPMessageReceivedListener(
-                SharkMessengerComponent.SHARK_MESSENGER_FORMAT,
+                SharkNetMessengerComponent.SHARK_MESSENGER_FORMAT,
                 this);
 
     }
 
 
-    private void checkComponentRunning() throws SharkMessengerException {
+    private void checkComponentRunning() throws SharkNetMessengerException {
         if(this.asapPeer == null || this.sharkPKIComponent == null)
-            throw new SharkMessengerException("peer not started an/or pki not initialized");
+            throw new SharkNetMessengerException("peer not started an/or pki not initialized");
     }
 
     @Override
-    public void sendSharkMessage(byte[] content, CharSequence uri, boolean sign) throws IOException, SharkMessengerException {
+    public void sendSharkMessage(CharSequence contentType, byte[] content, CharSequence uri, boolean sign) throws IOException, SharkNetMessengerException {
         HashSet<CharSequence> set = new HashSet<>();
-        this.sendSharkMessage(content, uri, set, sign, false);
+        this.sendSharkMessage(contentType, content, uri, set, sign, false);
     }
 
     @Override
-    public void sendSharkMessage(byte[] content, CharSequence uri,
+    public void sendSharkMessage(CharSequence contentType, byte[] content, CharSequence uri,
                                  CharSequence receiver, boolean sign,
-                                 boolean encrypt) throws IOException, SharkMessengerException {
+                                 boolean encrypt) throws IOException, SharkNetMessengerException {
         HashSet<CharSequence> set = new HashSet<>();
         set.add(receiver);
-        this.sendSharkMessage(content, uri, set, sign, encrypt);
+        this.sendSharkMessage(contentType, content, uri, set, sign, encrypt);
     }
 
     @Override
-    public void sendSharkMessage(byte[] content, CharSequence uri,
+    public void sendSharkMessage(CharSequence contentType, byte[] content, CharSequence uri,
                                  Set<CharSequence> selectedRecipients, boolean sign,
                                  boolean encrypt)
-            throws SharkMessengerException, IOException {
+            throws SharkNetMessengerException, IOException {
 
         this.checkComponentRunning();
 
@@ -65,7 +65,8 @@ public class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerMa
                 for(CharSequence receiver : selectedRecipients) {
                     this.asapPeer.sendASAPMessage(SHARK_MESSENGER_FORMAT, uri,
                             // we have at most one receiver - this method can handle all combinations
-                            InMemoSharkMessage.serializeMessage(
+                            InMemoSharkNetMessage.serializeMessage(
+                                    contentType,
                                     content,
                                     this.asapPeer.getPeerID(),
                                     receiver,
@@ -75,7 +76,8 @@ public class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerMa
             } else {
                 this.asapPeer.sendASAPMessage(SHARK_MESSENGER_FORMAT, uri,
                     // we have at most one receiver - this method can handle all combinations
-                    InMemoSharkMessage.serializeMessage(
+                    InMemoSharkNetMessage.serializeMessage(
+                            contentType,
                             content,
                             this.asapPeer.getPeerID(),
                             selectedRecipients,
@@ -83,103 +85,103 @@ public class SharkMessengerComponentImpl extends SharkMessagesReceivedListenerMa
                             this.sharkPKIComponent.getASAPKeyStore()));
             }
         } catch (ASAPException e) {
-            throw new SharkMessengerException("when serialising and sending message: " + e.getLocalizedMessage(), e);
+            throw new SharkNetMessengerException("when serialising and sending message: " + e.getLocalizedMessage(), e);
         }
     }
 
-    public SharkMessengerClosedChannel createClosedChannel(CharSequence uri, CharSequence name)
-            throws IOException, SharkMessengerException {
+    public SharkNetMessengerClosedChannel createClosedChannel(CharSequence uri, CharSequence name)
+            throws IOException, SharkNetMessengerException {
 
         this.checkComponentRunning();
         throw new SharkNotSupportedException("not yet implemented");
     }
 
-    public SharkMessengerChannel getChannel(CharSequence uri) throws SharkMessengerException, IOException {
+    public SharkNetMessengerChannel getChannel(CharSequence uri) throws SharkNetMessengerException, IOException {
         try {
             ASAPStorage asapStorage =
-                    this.asapPeer.getASAPStorage(SharkMessengerComponent.SHARK_MESSENGER_FORMAT);
+                    this.asapPeer.getASAPStorage(SharkNetMessengerComponent.SHARK_MESSENGER_FORMAT);
 
             ASAPChannel channel = asapStorage.getChannel(uri);
 
-            return new SharkMessengerChannelImpl(this.asapPeer, this.sharkPKIComponent, channel);
+            return new SharkNetMessengerChannelImpl(this.asapPeer, this.sharkPKIComponent, channel);
         }
         catch(ASAPException asapException) {
-            throw new SharkMessengerException(asapException);
+            throw new SharkNetMessengerException(asapException);
         }
     }
 
-    public SharkMessengerChannel getChannel(int position) throws SharkMessengerException, IOException {
+    public SharkNetMessengerChannel getChannel(int position) throws SharkNetMessengerException, IOException {
         try {
             CharSequence uri = this.getChannelUris().get(position);
             return this.getChannel(uri);
         }
         catch(IndexOutOfBoundsException ioe) {
-            throw new SharkMessengerException("channel position is out of bound: " +  + position);
+            throw new SharkNetMessengerException("channel position is out of bound: " +  + position);
         }
     }
 
-    public SharkMessengerChannel createChannel(CharSequence uri, CharSequence name)
-            throws SharkMessengerException, IOException {
+    public SharkNetMessengerChannel createChannel(CharSequence uri, CharSequence name)
+            throws SharkNetMessengerException, IOException {
         return this.createChannel(uri, name, true);
     }
 
-    public SharkMessengerChannel createChannel(CharSequence uri, CharSequence name, boolean mustNotAlreadyExist)
-            throws SharkMessengerException, IOException {
+    public SharkNetMessengerChannel createChannel(CharSequence uri, CharSequence name, boolean mustNotAlreadyExist)
+            throws SharkNetMessengerException, IOException {
 
         this.checkComponentRunning();
 
         try {
             this.getChannel(uri); // already exists ?
             // yes exists
-            if(mustNotAlreadyExist) throw new SharkMessengerException("channel already exists");
+            if(mustNotAlreadyExist) throw new SharkNetMessengerException("channel already exists");
         }
-        catch(SharkMessengerException asapException) {
+        catch(SharkNetMessengerException asapException) {
             // does not exist yet - or it is okay
         }
 
         // create
         try {
             ASAPStorage asapStorage =
-                    this.asapPeer.getASAPStorage(SharkMessengerComponent.SHARK_MESSENGER_FORMAT);
+                    this.asapPeer.getASAPStorage(SharkNetMessengerComponent.SHARK_MESSENGER_FORMAT);
 
             asapStorage.createChannel(uri);
             ASAPChannel channel = asapStorage.getChannel(uri);
 
-            return new SharkMessengerChannelImpl(this.asapPeer, this.sharkPKIComponent, channel, name);
+            return new SharkNetMessengerChannelImpl(this.asapPeer, this.sharkPKIComponent, channel, name);
         }
         catch(ASAPException asapException) {
-            throw new SharkMessengerException(asapException);
+            throw new SharkNetMessengerException(asapException);
         }
     }
 
 
     @Override
-    public List<CharSequence> getChannelUris() throws IOException, SharkMessengerException {
+    public List<CharSequence> getChannelUris() throws IOException, SharkNetMessengerException {
         try {
-            return this.asapPeer.getASAPStorage(SharkMessengerComponent.SHARK_MESSENGER_FORMAT).getChannelURIs();
+            return this.asapPeer.getASAPStorage(SharkNetMessengerComponent.SHARK_MESSENGER_FORMAT).getChannelURIs();
         } catch(ASAPException asapException) {
-                throw new SharkMessengerException(asapException);
+                throw new SharkNetMessengerException(asapException);
         }
     }
 
     @Override
-    public void removeChannel(CharSequence uri) throws IOException, SharkMessengerException {
+    public void removeChannel(CharSequence uri) throws IOException, SharkNetMessengerException {
         try {
-            this.asapPeer.getASAPStorage(SharkMessengerComponent.SHARK_MESSENGER_FORMAT).removeChannel(uri);
+            this.asapPeer.getASAPStorage(SharkNetMessengerComponent.SHARK_MESSENGER_FORMAT).removeChannel(uri);
         } catch(ASAPException asapException) {
-            throw new SharkMessengerException(asapException);
+            throw new SharkNetMessengerException(asapException);
         }
     }
 
-    public int size() throws IOException, SharkMessengerException {
+    public int size() throws IOException, SharkNetMessengerException {
         try {
             ASAPStorage asapStorage =
-                    this.asapPeer.getASAPStorage(SharkMessengerComponent.SHARK_MESSENGER_FORMAT);
+                    this.asapPeer.getASAPStorage(SharkNetMessengerComponent.SHARK_MESSENGER_FORMAT);
 
             return asapStorage.getChannelURIs().size();
         }
         catch(ASAPException asapException) {
-            throw new SharkMessengerException(asapException);
+            throw new SharkNetMessengerException(asapException);
         }
     }
 

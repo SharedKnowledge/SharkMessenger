@@ -2,14 +2,14 @@ package net.sharksystem.ui.messenger.cli.commands.pki;
 
 import java.util.List;
 
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.UICommand;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
 
 public class UICommandCreateNewKeyPair extends UICommand {
 
-    public UICommandCreateNewKeyPair(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandCreateNewKeyPair(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                      String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
     }

@@ -2,8 +2,8 @@ package net.sharksystem.ui.messenger.cli.commands.hubaccess;
 
 import java.util.List;
 
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaireBuilder;
 import net.sharksystem.ui.messenger.cli.UICommand;
@@ -12,7 +12,7 @@ import net.sharksystem.ui.messenger.cli.UICommand;
  * List stored hub description.
  */
 public class UICommandListHubDescriptions extends UICommand {
-    public UICommandListHubDescriptions(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandListHubDescriptions(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                         String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
     }

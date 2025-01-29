@@ -1,6 +1,6 @@
 package net.sharksystem.ui.messenger.cli.commandarguments;
 
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
 
 /**
  * An argument for CLICCommands. It has the logic for parsing any user input (String) to the wished object type
@@ -9,13 +9,13 @@ import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
  */
 public abstract class UICommandArgument<T> {
 
-    private final SharkMessengerApp sharkMessengerApp;
+    private final SharkNetMessengerApp sharkMessengerApp;
 
-    UICommandArgument(SharkMessengerApp sharkMessengerApp) {
+    UICommandArgument(SharkNetMessengerApp sharkMessengerApp) {
         this.sharkMessengerApp = sharkMessengerApp;
     }
 
-    protected SharkMessengerApp getSharkMessengerApp() {
+    protected SharkNetMessengerApp getSharkMessengerApp() {
         return this.sharkMessengerApp;
     }
 

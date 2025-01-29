@@ -1,9 +1,9 @@
 package net.sharksystem.ui.messenger.cli.commands.messenger;
 
-import net.sharksystem.app.messenger.SharkMessengerComponent;
-import net.sharksystem.app.messenger.SharkMessengerException;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.app.messenger.SharkNetMessengerComponent;
+import net.sharksystem.app.messenger.SharkNetMessengerException;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaireBuilder;
 import net.sharksystem.ui.messenger.cli.UICommand;
@@ -23,7 +23,7 @@ public class UICommandListChannels extends UICommand {
      * @param identifier        The identifier of the command.
      * @param rememberCommand   If the command should be saved in the history log.
      */
-    public UICommandListChannels(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandListChannels(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                  String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
     }
@@ -36,10 +36,10 @@ public class UICommandListChannels extends UICommand {
     @Override
     protected void execute() throws Exception {
         try {
-            SharkMessengerComponent messengerComponent = this.getSharkMessengerApp().getSharkMessengerComponent();
+            SharkNetMessengerComponent messengerComponent = this.getSharkMessengerApp().getSharkMessengerComponent();
 
             new ChannelPrinter().getChannelDescriptions(messengerComponent);
-        } catch (SharkMessengerException | IOException e) {
+        } catch (SharkNetMessengerException | IOException e) {
             this.printErrorMessage(e.getLocalizedMessage());
         }
     }

@@ -6,14 +6,14 @@ import net.sharksystem.ui.messenger.cli.commandarguments.UICommandIntegerArgumen
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaireBuilder;
 import net.sharksystem.hub.peerside.HubConnectorDescription;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.UICommand;
 
 public class UICommandRemoveHubDescription extends UICommand {
     private UICommandIntegerArgument hubIndex;
 
-    public UICommandRemoveHubDescription(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandRemoveHubDescription(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                          String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.hubIndex = new UICommandIntegerArgument(sharkMessengerApp);

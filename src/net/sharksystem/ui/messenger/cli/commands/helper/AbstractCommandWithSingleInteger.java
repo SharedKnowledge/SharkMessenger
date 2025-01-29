@@ -2,8 +2,8 @@ package net.sharksystem.ui.messenger.cli.commands.helper;
 
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandIntegerArgument;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.UICommand;
 
 import java.util.List;
@@ -14,8 +14,8 @@ public abstract class AbstractCommandWithSingleInteger extends UICommand {
     private int theValue;
     private UICommandIntegerArgument integerArgument;
 
-    public AbstractCommandWithSingleInteger(SharkMessengerApp sharkMessengerApp,
-                                            SharkMessengerUI sharkMessengerUI, String identifier, boolean rememberCommand,
+    public AbstractCommandWithSingleInteger(SharkNetMessengerApp sharkMessengerApp,
+                                            SharkNetMessengerUI sharkMessengerUI, String identifier, boolean rememberCommand,
                                             boolean optional, int defaultValue) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
 
@@ -25,7 +25,7 @@ public abstract class AbstractCommandWithSingleInteger extends UICommand {
         this.theValue = defaultValue;
     }
 
-    public AbstractCommandWithSingleInteger(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public AbstractCommandWithSingleInteger(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                             String identifier, boolean rememberCommand) {
         this(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand, false, -1);
     }

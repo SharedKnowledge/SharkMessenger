@@ -4,12 +4,12 @@ import java.util.Collection;
 
 import net.sharksystem.asap.ASAPSecurityException;
 import net.sharksystem.asap.pki.ASAPCertificate;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 
 public class UICommandShowCertificatesBySubject extends AbstractCommandProduceCertificateListByPeerID {
-    public UICommandShowCertificatesBySubject(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
-                                             String identifier, boolean rememberCommand) {
+    public UICommandShowCertificatesBySubject(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
+                                              String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
     }
 

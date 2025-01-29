@@ -3,8 +3,8 @@ package net.sharksystem.ui.messenger.cli.commands.persons;
 import net.sharksystem.asap.ASAPException;
 import net.sharksystem.asap.persons.PersonValues;
 import net.sharksystem.pki.SharkPKIComponent;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.UICommand;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaireBuilder;
@@ -19,7 +19,7 @@ public class UICommandRenamePerson extends UICommand {
     private String personName;
     private String personNewName;
 
-    public UICommandRenamePerson(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandRenamePerson(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                  String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.personNameArgument = new UICommandStringArgument(sharkMessengerApp);

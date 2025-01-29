@@ -2,8 +2,8 @@ package net.sharksystem.ui.messenger.cli.commands.test;
 
 import net.sharksystem.SharkException;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.UICommand;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class UICommandResetMessageCounter extends UICommand {
      * @param identifier        The identifier of the command.
      * @param rememberCommand   If the command should be saved in the history log.
      */
-    public UICommandResetMessageCounter(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI, String identifier, boolean rememberCommand) throws SharkException {
+    public UICommandResetMessageCounter(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI, String identifier, boolean rememberCommand) throws SharkException {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.sender = sharkMessengerApp.getSharkPeer().getPeerID().toString();
         this.peerName = sharkMessengerApp.getSharkPeer().getPeerID().toString();

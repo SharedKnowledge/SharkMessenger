@@ -1,11 +1,11 @@
 package net.sharksystem.ui.messenger.cli.commands.testing;
 
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.commands.helper.AbstractCommandWithSingleInteger;
 
 public class UICommandWait extends AbstractCommandWithSingleInteger {
-    public UICommandWait(SharkMessengerApp sharkMessengerApp, SharkMessengerUI smUI, String wait, boolean b) {
+    public UICommandWait(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI smUI, String wait, boolean b) {
         super(sharkMessengerApp, smUI, wait, b);
     }
 

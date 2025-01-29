@@ -1,8 +1,8 @@
 package net.sharksystem.ui.messenger.cli.commands.tcp;
 
 import net.sharksystem.ui.messenger.cli.commands.helper.AbstractCommandWithSingleInteger;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 
 import java.io.IOException;
 
@@ -10,7 +10,7 @@ import java.io.IOException;
  * Close a TCP connection to another peer.
  */
 public class UICommandCloseTCP extends AbstractCommandWithSingleInteger {
-    public UICommandCloseTCP(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI, String identifier, boolean rememberCommand) {
+    public UICommandCloseTCP(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI, String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
     }
 

@@ -32,18 +32,18 @@ public abstract class UICommand {
     /**
      * The controller
      */
-    private final SharkMessengerApp sharkMessengerApp;
-    private final SharkMessengerUI sharkMessengerUI;
+    private final SharkNetMessengerApp sharkMessengerApp;
+    private final SharkNetMessengerUI sharkMessengerUI;
     private PrintStream printStream;
 
     protected void printTODOReimplement() {
         this.printStream.println("TODO - reimplement: " + this.getClass().getSimpleName());
     }
 
-    protected SharkMessengerApp getSharkMessengerApp() {
+    protected SharkNetMessengerApp getSharkMessengerApp() {
         return this.sharkMessengerApp;
     }
-    protected SharkMessengerUI getSharkMessengerUI() {
+    protected SharkNetMessengerUI getSharkMessengerUI() {
         return this.sharkMessengerUI;
     }
 
@@ -56,7 +56,7 @@ public abstract class UICommand {
      * @param identifier The identifier of the command.
      * @param rememberCommand If the command should be saved in the history log.
      */
-    public UICommand(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommand(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                      String identifier, boolean rememberCommand) {
         this.sharkMessengerApp = sharkMessengerApp;
         this.sharkMessengerUI = sharkMessengerUI;

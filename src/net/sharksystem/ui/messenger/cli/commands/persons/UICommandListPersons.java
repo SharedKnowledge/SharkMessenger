@@ -1,15 +1,15 @@
 package net.sharksystem.ui.messenger.cli.commands.persons;
 
 import net.sharksystem.asap.persons.PersonValues;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.commands.helper.AbstractCommandNoParameter;
 import net.sharksystem.pki.PKIHelper;
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.ui.messenger.cli.commands.pki.PKIPrinter;
 
 public class UICommandListPersons extends AbstractCommandNoParameter {
-    public UICommandListPersons(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandListPersons(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                 String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
     }

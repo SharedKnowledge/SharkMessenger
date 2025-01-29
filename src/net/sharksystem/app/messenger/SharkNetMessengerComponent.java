@@ -96,16 +96,10 @@ import java.util.Set;
  * @author Thomas Schwotzer
  *
  */
-@ASAPFormats(formats = {SharkMessengerComponent.SHARK_MESSENGER_FORMAT})
-public interface SharkMessengerComponent extends SharkComponent {
+@ASAPFormats(formats = {SharkNetMessengerComponent.SHARK_MESSENGER_FORMAT})
+public interface SharkNetMessengerComponent extends SharkComponent {
     String CHANNEL_DEFAULT_NAME = "<no name set>";
     String UNIVERSAL_CHANNEL_URI = "sharkMsg://...";
-
-    /*
-        TODO: that is the Shark - Shared Knowledge. Find a way to allow projects to set its own application format
-        and make this the end of all thinking. What we have here is Shark. Finally, it is.
-     */
-
     String SHARK_MESSENGER_FORMAT = "shark/messenger";
 
     // behaviour flags
@@ -129,28 +123,28 @@ public interface SharkMessengerComponent extends SharkComponent {
      * @param sign      message will be signed yes / no
      * @param encrypt   message will be encrypted for receiver(s) yes / no. A message with multiple
      *                  receiver is sent a multiple copies, each encrypted with receiver' public key.
-     * @throws SharkMessengerException no all certificates available to encrypt. Empty receiver list but
+     * @throws SharkNetMessengerException no all certificates available to encrypt. Empty receiver list but
      *                                 encrypted flag set
      * @since 1.0
      */
-    void sendSharkMessage(byte[] content, CharSequence uri, Set<CharSequence> receiver,
-                          boolean sign, boolean encrypt) throws SharkMessengerException, IOException;
+    void sendSharkMessage(CharSequence contentType, byte[] content, CharSequence uri, Set<CharSequence> receiver,
+                          boolean sign, boolean encrypt) throws SharkNetMessengerException, IOException;
 
     /**
      * Variant. Just a single receiver
-     * @see #sendSharkMessage(byte[], CharSequence, CharSequence, boolean, boolean)
+     * @see #sendSharkMessage(CharSequence, byte[], CharSequence, CharSequence, boolean, boolean)
      * @since 1.0
      */
-    void sendSharkMessage(byte[] content, CharSequence uri, CharSequence receiver,
-                          boolean sign, boolean encrypt) throws SharkMessengerException, IOException;
+    void sendSharkMessage(CharSequence contentType, byte[] content, CharSequence uri, CharSequence receiver,
+                          boolean sign, boolean encrypt) throws SharkNetMessengerException, IOException;
 
     /**
      * Variant. No receiver specified - send to anybody
-     * @see #sendSharkMessage(byte[], CharSequence, CharSequence, boolean, boolean)
+     * @see #sendSharkMessage(CharSequence, byte[], CharSequence, CharSequence, boolean, boolean)
      * @since 1.0
      */
-    void sendSharkMessage(byte[] content, CharSequence uri, boolean sign)
-            throws SharkMessengerException, IOException;
+    void sendSharkMessage(CharSequence contentType, byte[] content, CharSequence uri, boolean sign)
+            throws SharkNetMessengerException, IOException;
 
     /**
      * Create a new channel.
@@ -158,39 +152,39 @@ public interface SharkMessengerComponent extends SharkComponent {
      * @param uri  Channel identifier
      * @param name Channel (human readable) name
      * @throws IOException
-     * @throws SharkMessengerException channel already exists
+     * @throws SharkNetMessengerException channel already exists
      * @since 1.1
      */
-    SharkMessengerClosedChannel createClosedChannel(CharSequence uri, CharSequence name)
-            throws IOException, SharkMessengerException;
+    SharkNetMessengerClosedChannel createClosedChannel(CharSequence uri, CharSequence name)
+            throws IOException, SharkNetMessengerException;
 
     /**
      * Remove a new channel.
      *
      * @param uri  Channel identifier
      * @throws IOException
-     * @throws SharkMessengerException unknown channel uri
+     * @throws SharkNetMessengerException unknown channel uri
      * @since 1.1
      */
-    void removeChannel(CharSequence uri) throws IOException, SharkMessengerException;
+    void removeChannel(CharSequence uri) throws IOException, SharkNetMessengerException;
 
     /**
      * Produces an object reference to a messenger channel with specified uri - throws an exception otherwise
      *
      * @param uri
      * @return
-     * @throws SharkMessengerException channel does not exist
+     * @throws SharkNetMessengerException channel does not exist
      */
-    SharkMessengerChannel getChannel(CharSequence uri) throws SharkMessengerException, IOException;
+    SharkNetMessengerChannel getChannel(CharSequence uri) throws SharkNetMessengerException, IOException;
 
     /**
      * Android support - give channels a number starting with 0
      * @param position
      * @return
-     * @throws SharkMessengerException
+     * @throws SharkNetMessengerException
      * @throws IOException
      */
-    SharkMessengerChannel getChannel(int position) throws SharkMessengerException, IOException;
+    SharkNetMessengerChannel getChannel(int position) throws SharkNetMessengerException, IOException;
 
     /**
      * Create a new channel.
@@ -198,22 +192,22 @@ public interface SharkMessengerComponent extends SharkComponent {
      * @param name user friendly name
      * @param mustNotAlreadyExist if true - an exception is thrown if a channel with this uri already exists
      * @return
-     * @throws SharkMessengerException
+     * @throws SharkNetMessengerException
      * @throws IOException
      */
-    SharkMessengerChannel createChannel(CharSequence uri, CharSequence name, boolean mustNotAlreadyExist)
-            throws SharkMessengerException, IOException;
+    SharkNetMessengerChannel createChannel(CharSequence uri, CharSequence name, boolean mustNotAlreadyExist)
+            throws SharkNetMessengerException, IOException;
 
     /**
      * Create a new channel. No other channel with this uri already exists
      * @param uri
      * @param name
      * @return
-     * @throws SharkMessengerException
+     * @throws SharkNetMessengerException
      * @throws IOException
      */
-    SharkMessengerChannel createChannel(CharSequence uri, CharSequence name)
-            throws SharkMessengerException, IOException;
+    SharkNetMessengerChannel createChannel(CharSequence uri, CharSequence name)
+            throws SharkNetMessengerException, IOException;
 
     /**
      * Produces a list of active channel uris
@@ -222,13 +216,13 @@ public interface SharkMessengerComponent extends SharkComponent {
      * @throws IOException
      * @since 1.1
      */
-    List<CharSequence> getChannelUris() throws IOException, SharkMessengerException;
+    List<CharSequence> getChannelUris() throws IOException, SharkNetMessengerException;
 
     /**
      * Get a collection of messages of a channel.
      * @param uri
      * @return
-     * @throws SharkMessengerException no such channel
+     * @throws SharkNetMessengerException no such channel
      * @throws IOException problems when reading
      */
 //    Collection<SharkMessage> getSharkMessages(CharSequence uri) throws SharkMessengerException, IOException;
@@ -238,14 +232,14 @@ public interface SharkMessengerComponent extends SharkComponent {
      * @param listener
      * @since 1.0
      */
-    void addSharkMessagesReceivedListener(SharkMessagesReceivedListener listener);
+    void addSharkMessagesReceivedListener(SharkNetMessagesReceivedListener listener);
 
     /**
      *
      * @param listener
      * @since 1.0
      */
-    void removeSharkMessagesReceivedListener(SharkMessagesReceivedListener listener);
+    void removeSharkMessagesReceivedListener(SharkNetMessagesReceivedListener listener);
 
     SharkPKIComponent getSharkPKI();
 }

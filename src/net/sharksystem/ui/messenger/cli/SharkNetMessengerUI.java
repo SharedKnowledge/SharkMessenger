@@ -10,13 +10,13 @@ import java.util.*;
  * This class contains the UI logic and is the interface between user
  * and application.
  */
-public class SharkMessengerUI {
+public class SharkNetMessengerUI {
 
     private static final String UNDERLINE = "---------\n";
     private static boolean isInteractive = false;
 
     private final Map<String, UICommand> commands = new HashMap<>();
-    private final List<String> commandParameterStrings = new ArrayList<>();
+    private List<String> commandParameterStrings = new ArrayList<>();
     private final PrintStream outStream;
     private final PrintStream errStream;
     private final BufferedReader bufferedReader;
@@ -25,7 +25,7 @@ public class SharkMessengerUI {
     /**
      * Use for string input in unittests or no input
      */
-    public SharkMessengerUI(
+    public SharkNetMessengerUI(
             String batchCommands, InputStream is, PrintStream out, PrintStream err) {
         this.parsedCommands.addAll(Arrays.asList(batchCommands.trim().split(System.lineSeparator())));
         this.outStream = out;
@@ -38,7 +38,7 @@ public class SharkMessengerUI {
      *
      * @throws FileNotFoundException
      */
-    public SharkMessengerUI(File file, InputStream is, PrintStream out, PrintStream err) throws FileNotFoundException {
+    public SharkNetMessengerUI(File file, InputStream is, PrintStream out, PrintStream err) throws FileNotFoundException {
         this(new BufferedReader(new InputStreamReader(new FileInputStream(file)))
                 .lines().reduce("", (a, b) -> a + System.lineSeparator() + b), is, out, err
         );
@@ -299,9 +299,9 @@ public class SharkMessengerUI {
                     userInputString = commandsBuffer;
                 }
 
-                if(userInputString == null || userInputString.length() == 0) {
+                if(userInputString == null) {
                     running = false;
-                    this.errStream.println("no further input - going to wait a sec and exit.");
+                    this.errStream.println("input null - going to wait a sec and exit.");
                     // give app a moment so finish threads.
                     Thread.sleep(1000);
                     System.exit(1);
@@ -356,5 +356,9 @@ public class SharkMessengerUI {
             }
         }
         return cmd;
+    }
+
+    public void clearCommandHistory() {
+        this.commandParameterStrings = new ArrayList<>();
     }
 }

@@ -1,13 +1,13 @@
 package net.sharksystem.ui.messenger.cli.commands.testing;
 
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaireBuilder;
 import net.sharksystem.ui.messenger.cli.UICommand;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
@@ -20,7 +20,7 @@ public class UICommandSaveLog extends UICommand {
 
     private final UICommandStringArgument fileName;
 
-    public UICommandSaveLog(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandSaveLog(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                             String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.fileName = new UICommandStringArgument(sharkMessengerApp);

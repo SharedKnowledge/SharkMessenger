@@ -1,22 +1,18 @@
 package net.sharksystem.ui.messenger.cli.commands.external;
 
-import net.sharksystem.asap.ASAPException;
 import net.sharksystem.asap.crypto.ASAPCryptoAlgorithms;
-import net.sharksystem.asap.persons.PersonValues;
 import net.sharksystem.pki.SharkPKIComponent;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.UICommand;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaireBuilder;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandStringArgument;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.List;
-import java.util.Set;
 
 public class UICommandDecryptFile extends UICommand {
     private final UICommandStringArgument inputFileNameArgument;
@@ -24,7 +20,7 @@ public class UICommandDecryptFile extends UICommand {
     private String inputFileName;
     private String outputFileName;
 
-    public UICommandDecryptFile(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandDecryptFile(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                 String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.inputFileNameArgument = new UICommandStringArgument(sharkMessengerApp);

@@ -3,8 +3,8 @@ package net.sharksystem.ui.messenger.cli.commands.test;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.UICommand;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandBooleanArgument;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
@@ -17,7 +17,7 @@ public class UICommandExecuteCommands extends UICommand {
 
     private final UICommandBooleanArgument inSteps;
 
-    public UICommandExecuteCommands(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandExecuteCommands(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                     String identifier, boolean rememberCommand) {
 
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
@@ -56,7 +56,7 @@ public class UICommandExecuteCommands extends UICommand {
             return;
         }
 
-        SharkMessengerUI smUI = this.getSharkMessengerUI();
+        SharkNetMessengerUI smUI = this.getSharkMessengerUI();
         List<String> commands = smUI.getParsedCommands();
 
         for (String command : commands) {
@@ -67,7 +67,7 @@ public class UICommandExecuteCommands extends UICommand {
     private void executeInSteps() throws Exception {
         InputStreamReader isr = new InputStreamReader(System.in);
 
-        SharkMessengerUI smUI = this.getSharkMessengerUI();
+        SharkNetMessengerUI smUI = this.getSharkMessengerUI();
         List<String> commands = smUI.getParsedCommands();
 
         for (String command : commands) {

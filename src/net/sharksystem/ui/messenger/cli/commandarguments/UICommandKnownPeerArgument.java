@@ -2,14 +2,14 @@ package net.sharksystem.ui.messenger.cli.commandarguments;
 
 import net.sharksystem.asap.ASAPSecurityException;
 import net.sharksystem.asap.persons.PersonValues;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
 
 /**
  * An argument for SharkPeers
  */
 public class UICommandKnownPeerArgument extends UICommandArgument<PersonValues> {
 
-    public UICommandKnownPeerArgument(SharkMessengerApp sharkMessengerApp) {
+    public UICommandKnownPeerArgument(SharkNetMessengerApp sharkMessengerApp) {
         super(sharkMessengerApp);
     }
 

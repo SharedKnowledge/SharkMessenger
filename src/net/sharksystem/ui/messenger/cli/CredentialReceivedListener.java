@@ -3,8 +3,8 @@ package net.sharksystem.ui.messenger.cli;
 import net.sharksystem.pki.CredentialMessage;
 import net.sharksystem.pki.SharkCredentialReceivedListener;
 
-public class CredentialReceivedListener extends SharkMessengerAppListener implements SharkCredentialReceivedListener {
-    public CredentialReceivedListener(SharkMessengerApp sharkMessengerApp) {
+public class CredentialReceivedListener extends SharkNetMessengerAppListener implements SharkCredentialReceivedListener {
+    public CredentialReceivedListener(SharkNetMessengerApp sharkMessengerApp) {
         super(sharkMessengerApp);
     }
 

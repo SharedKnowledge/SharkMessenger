@@ -7,7 +7,7 @@ import net.sharksystem.utils.Log;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class SharkMessengerChannelImpl implements SharkMessengerChannel {
+public class SharkNetMessengerChannelImpl implements SharkNetMessengerChannel {
     private static final String KEY_NAME_SHARK_MESSENGER_CHANNEL_NAME = "sharkMessengerChannelName";
     private static final String KEY_AGE_SHARK_MESSENGER_CHANNEL_NAME = "sharkMessengerAge";
 
@@ -16,7 +16,7 @@ public class SharkMessengerChannelImpl implements SharkMessengerChannel {
     private final SharkPKIComponent pkiComponent;
     private CharSequence channelName;
 
-    public SharkMessengerChannelImpl(ASAPPeer asapPeer, SharkPKIComponent pkiComponent, ASAPChannel asapChannel) {
+    public SharkNetMessengerChannelImpl(ASAPPeer asapPeer, SharkPKIComponent pkiComponent, ASAPChannel asapChannel) {
         this.asapPeer = asapPeer;
         this.pkiComponent = pkiComponent;
         this.asapChannel = asapChannel;
@@ -29,10 +29,10 @@ public class SharkMessengerChannelImpl implements SharkMessengerChannel {
      * @param asapChannel
      * @param channelName
      */
-    public SharkMessengerChannelImpl(ASAPPeer asapPeer,
-                SharkPKIComponent pkiComponent,
-                ASAPChannel asapChannel,
-                CharSequence channelName) throws IOException {
+    public SharkNetMessengerChannelImpl(ASAPPeer asapPeer,
+                                        SharkPKIComponent pkiComponent,
+                                        ASAPChannel asapChannel,
+                                        CharSequence channelName) throws IOException {
 
         this(asapPeer, pkiComponent, asapChannel);
 
@@ -40,7 +40,7 @@ public class SharkMessengerChannelImpl implements SharkMessengerChannel {
             asapChannel.putExtraData(KEY_NAME_SHARK_MESSENGER_CHANNEL_NAME, channelName.toString());
         } else {
             asapChannel.putExtraData(KEY_NAME_SHARK_MESSENGER_CHANNEL_NAME,
-                    SharkMessengerComponent.CHANNEL_DEFAULT_NAME);
+                    SharkNetMessengerComponent.CHANNEL_DEFAULT_NAME);
         }
     }
 
@@ -49,13 +49,13 @@ public class SharkMessengerChannelImpl implements SharkMessengerChannel {
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
-    public void setAge(SharkCommunicationAge channelAge) {
+    public void setAge(SharkNetCommunicationAge channelAge) {
         Log.writeLog(this, "not yet implemented");
     }
 
     @Override
-    public SharkCommunicationAge getAge() {
-        return SharkCommunicationAge.UNDEFINED;
+    public SharkNetCommunicationAge getAge() {
+        return SharkNetCommunicationAge.UNDEFINED;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class SharkMessengerChannelImpl implements SharkMessengerChannel {
     boolean readNameFromExtraData = false;
     public CharSequence getName() throws IOException {
         if(!readNameFromExtraData) {
-            this.channelName = SharkMessengerComponent.CHANNEL_DEFAULT_NAME; // default
+            this.channelName = SharkNetMessengerComponent.CHANNEL_DEFAULT_NAME; // default
             this.readNameFromExtraData = true; // remember
 
             // find a name
@@ -97,19 +97,19 @@ public class SharkMessengerChannelImpl implements SharkMessengerChannel {
     }
 
     @Override
-    public SharkMessageList getMessages(boolean sentMessagesOnly, boolean ordered)
-            throws SharkMessengerException, IOException {
+    public SharkNetMessageList getMessages(boolean sentMessagesOnly, boolean ordered)
+            throws SharkNetMessengerException, IOException {
 
         try {
-            return new SharkMessageListImpl(this.pkiComponent, this.asapChannel, sentMessagesOnly, ordered);
+            return new SharkNetMessageListImpl(this.pkiComponent, this.asapChannel, sentMessagesOnly, ordered);
         }
         catch(ASAPException e) {
-            throw new SharkMessengerException(e.getLocalizedMessage(), e);
+            throw new SharkNetMessengerException(e.getLocalizedMessage(), e);
         }
     }
 
     @Override
-    public SharkMessageList getMessages() throws SharkMessengerException, IOException {
+    public SharkNetMessageList getMessages() throws SharkNetMessengerException, IOException {
         return this.getMessages(false, true);
     }
 }

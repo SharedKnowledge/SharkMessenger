@@ -1,8 +1,10 @@
 package net.sharksystem.ui.messenger.cli.commands.messenger;
 
+import net.sharksystem.SharkException;
 import net.sharksystem.app.messenger.*;
 import net.sharksystem.asap.ASAPException;
 import net.sharksystem.asap.ASAPHop;
+import net.sharksystem.asap.persons.PersonValues;
 import net.sharksystem.asap.utils.DateTimeHelper;
 import net.sharksystem.ui.messenger.cli.commands.pki.PKIPrinter;
 import net.sharksystem.pki.SharkPKIComponent;
@@ -13,8 +15,8 @@ import java.util.List;
 import java.util.Set;
 
 public class ChannelPrinter {
-    public String getChannelDescription(SharkMessengerChannel channel)
-            throws IOException, SharkMessengerException {
+    public String getChannelDescription(SharkNetMessengerChannel channel)
+            throws IOException, SharkNetMessengerException {
 
         StringBuilder sb = new StringBuilder();
 
@@ -25,7 +27,7 @@ public class ChannelPrinter {
         sb.append(" | #messages: ");
         sb.append(channel.getMessages().size());
         sb.append(" | age: ");
-        SharkCommunicationAge age = channel.getAge();
+        SharkNetCommunicationAge age = channel.getAge();
         switch (age) {
             case BRONZE_AGE: sb.append("bronze"); break;
             case STONE_AGE: sb.append("stone"); break;
@@ -36,8 +38,8 @@ public class ChannelPrinter {
         return sb.toString();
     }
 
-    public String getChannelDescriptions(SharkMessengerComponent messengerComponent)
-                throws IOException, SharkMessengerException {
+    public String getChannelDescriptions(SharkNetMessengerComponent messengerComponent)
+                throws IOException, SharkNetMessengerException {
 
         StringBuilder sb = new StringBuilder();
 
@@ -52,7 +54,7 @@ public class ChannelPrinter {
             int i = 1;
             for (CharSequence channelUri : channelUris) {
                 sb.append(i++ + ": ");
-                SharkMessengerChannel channel = messengerComponent.getChannel(channelUri);
+                SharkNetMessengerChannel channel = messengerComponent.getChannel(channelUri);
                 sb.append(this.getChannelDescription(channel));
                 sb.append("\n");
             }
@@ -67,9 +69,8 @@ public class ChannelPrinter {
         else return "no";
     }
 
-    private static final String CHANNEL_PRINTER_LINE_SEPARATOR = "\n--------------------------------------------------------------------------------\n";
-    public String getMessagesASString(SharkPKIComponent pki, String channelUri, SharkMessageList messages)
-            throws IOException, SharkMessengerException, ASAPException {
+    public String getMessagesASString(SharkPKIComponent pki, String channelUri, SharkNetMessageList messages)
+            throws IOException, SharkNetMessengerException, ASAPException {
 
         StringBuilder sb = new StringBuilder();
 
@@ -81,33 +82,67 @@ public class ChannelPrinter {
         else {
             sb.append("\n");
             for (int i = 0; i < messages.size(); i++) {
-                sb.append("#" + i);
-                sb.append(CHANNEL_PRINTER_LINE_SEPARATOR);
-                SharkMessage message = messages.getSharkMessage(i, true);
+                sb.append("#");
+                sb.append(i+1);
+                sb.append(" ---------------------------------------------------------------------------------\n");
+                SharkNetMessage message = messages.getSharkMessage(i, true);
                 sb.append(this.getMessageDetails(pki, message));
-                sb.append(CHANNEL_PRINTER_LINE_SEPARATOR);
+                sb.append("\n/#");
+                sb.append(i+1);
+                sb.append(" --------------------------------------------------------------------------------\n");
             }
         }
         return sb.toString();
     }
 
-    public String getMessageDetails(SharkPKIComponent pki, SharkMessage message)
+    public String getMessageDetails(SharkPKIComponent pki, SharkNetMessage message)
             throws IOException, ASAPException {
-
         StringBuilder sb = new StringBuilder();
+        // content type
+        CharSequence contentType = message.getContentType();
+        sb.append("content type: ");
+        sb.append(contentType);
+        sb.append(" | ");
+
         // content
         byte[] content = message.getContent();
         if (content.length < 1) {
             sb.append("no content\n");
-        } else {
-            sb.append("message content interpreted as String: ");
+        } else if(contentType.toString().equalsIgnoreCase(SharkNetMessage.SN_CONTENT_TYPE_ASAP_CHARACTER_SEQUENCE.toString())) {
+            sb.append("'");
             sb.append(SerializationHelper.bytes2characterSequence(content).toString());
+            sb.append("'\n");
+        } else {
+            sb.append("no parser for this type, cannot parse those byte: ");
+            sb.append(contentType.length());
             sb.append("\n");
         }
 
         // sender
         sb.append("sender: ");
-        sb.append(message.getSender().toString());
+        CharSequence senderID = message.getSender();
+        boolean look4sender = true;
+        if(pki.getOwnerID().toString().equalsIgnoreCase(senderID.toString())) {
+            look4sender = false;
+            sb.append("you");
+        } else {
+            sb.append(senderID);
+        }
+
+        if(look4sender) {
+            try {
+                PersonValues personValuesByID = pki.getPersonValuesByID(senderID);
+                if (personValuesByID != null) {
+                    CharSequence senderName = personValuesByID.getName();
+                    sb.append(" (");
+                    sb.append(senderName);
+                    sb.append(")");
+                }
+            } catch (SharkException se) {
+                // ignore
+            }
+        }
+
         // recipients
         sb.append(" | recipients: ");
         Set<CharSequence> recipients = message.getRecipients();

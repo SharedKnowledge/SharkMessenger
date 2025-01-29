@@ -1,8 +1,8 @@
 package net.sharksystem.messenger;
 
 import net.sharksystem.SharkException;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.commands.hubaccess.UICommandAddHubDescription;
 import net.sharksystem.ui.messenger.cli.commands.hubaccess.UICommandConnectHubFromDescriptionList;
 import net.sharksystem.ui.messenger.cli.commands.hubaccess.UICommandListConnectedHubs;
@@ -11,7 +11,7 @@ import net.sharksystem.ui.messenger.cli.commands.hubaccess.UICommandRemoveHubDes
 import net.sharksystem.ui.messenger.cli.commands.messenger.UICommandCreateChannel;
 import net.sharksystem.ui.messenger.cli.commands.messenger.UICommandListChannels;
 import net.sharksystem.ui.messenger.cli.commands.messenger.UICommandRemoveChannelByIndex;
-import net.sharksystem.ui.messenger.cli.commands.messenger.UICommandSendMessageExtended;
+import net.sharksystem.ui.messenger.cli.commands.messenger.UICommandSendMessage;
 import net.sharksystem.ui.messenger.cli.commands.messenger.UICommandSetChannelAge;
 import net.sharksystem.ui.messenger.cli.commands.pki.UICommandSendCredentialMessage;
 import net.sharksystem.ui.messenger.cli.commands.pki.UICommandCreateNewKeyPair;
@@ -72,10 +72,10 @@ public class ReproduceAndDebug {
         return this.aliceSettings;
     }
 
-    private SharkMessengerUI initializeSharkMessengerUI(SharkMessengerApp sharkMessengerApp, String batchCommands)
+    private SharkNetMessengerUI initializeSharkMessengerUI(SharkNetMessengerApp sharkMessengerApp, String batchCommands)
             throws SharkException, IOException {
 
-        SharkMessengerUI smUI = new SharkMessengerUI(batchCommands, System.in, System.out, System.err);
+        SharkNetMessengerUI smUI = new SharkNetMessengerUI(batchCommands, System.in, System.out, System.err);
 
         // Add test received listener.
         sharkMessengerApp.getSharkMessengerComponent().addSharkMessagesReceivedListener(
@@ -87,7 +87,7 @@ public class ReproduceAndDebug {
         //smUI.addCommand(new UICommandExit(sharkMessengerApp, smUI, "exit", false));
 
         // messages
-        smUI.addCommand(new UICommandSendMessageExtended(sharkMessengerApp, smUI, "sendMessage", true));
+        smUI.addCommand(new UICommandSendMessage(sharkMessengerApp, smUI, "sendMessage", true));
 
         // channels
         smUI.addCommand(new UICommandListChannels(sharkMessengerApp, smUI, "lsChannel", true));
@@ -145,10 +145,10 @@ public class ReproduceAndDebug {
                 System.lineSeparator() +
                 "mkChannel test://t1 channel1 false";
 
-        SharkMessengerApp smaAlice = new SharkMessengerApp(ALICE, System.out, System.err);
-        SharkMessengerApp smaBob = new SharkMessengerApp(BOB, System.out, System.err);
-        SharkMessengerUI smUIAlice = this.initializeSharkMessengerUI(smaAlice, cmdLogAlice);
-        SharkMessengerUI smUIBob = this.initializeSharkMessengerUI(smaBob, cmdLogBob);
+        SharkNetMessengerApp smaAlice = new SharkNetMessengerApp(ALICE, System.out, System.err);
+        SharkNetMessengerApp smaBob = new SharkNetMessengerApp(BOB, System.out, System.err);
+        SharkNetMessengerUI smUIAlice = this.initializeSharkMessengerUI(smaAlice, cmdLogAlice);
+        SharkNetMessengerUI smUIBob = this.initializeSharkMessengerUI(smaBob, cmdLogBob);
 
         // The Command execution is not alternating as in the original scenario but the chunk storage problem still can
         // be reconstructed.
@@ -177,10 +177,10 @@ public class ReproduceAndDebug {
         String cmdBob4th = "mkChannel test://t1 channel1 false";
         String cmdAlice5th = "sendMessage 0 false false hi_bob bob";
 
-        SharkMessengerApp smaAlice = new SharkMessengerApp(ALICE, System.out, System.err);
-        SharkMessengerApp smaBob = new SharkMessengerApp(BOB, System.out, System.err);
-        SharkMessengerUI smUIAlice = this.initializeSharkMessengerUI(smaAlice, "");
-        SharkMessengerUI smUIBob = this.initializeSharkMessengerUI(smaBob, "");
+        SharkNetMessengerApp smaAlice = new SharkNetMessengerApp(ALICE, System.out, System.err);
+        SharkNetMessengerApp smaBob = new SharkNetMessengerApp(BOB, System.out, System.err);
+        SharkNetMessengerUI smUIAlice = this.initializeSharkMessengerUI(smaAlice, "");
+        SharkNetMessengerUI smUIBob = this.initializeSharkMessengerUI(smaBob, "");
 
         smUIAlice.handleUserInput(cmdAlice1st);
         smUIBob.handleUserInput(cmdBob2nd);
@@ -227,10 +227,10 @@ public class ReproduceAndDebug {
         String cmdBob4th = "mkChannel test://t1 channel1 false";
         String cmdAlice5th = "sendMessageTest 25 30 0 false false hi_bob bob";
 
-        SharkMessengerApp smaAlice = new SharkMessengerApp(ALICE, System.out, System.err);
-        SharkMessengerApp smaBob = new SharkMessengerApp(BOB, System.out, System.err);
-        SharkMessengerUI smUIAlice = this.initializeSharkMessengerUI(smaAlice, "");
-        SharkMessengerUI smUIBob = this.initializeSharkMessengerUI(smaBob, "");
+        SharkNetMessengerApp smaAlice = new SharkNetMessengerApp(ALICE, System.out, System.err);
+        SharkNetMessengerApp smaBob = new SharkNetMessengerApp(BOB, System.out, System.err);
+        SharkNetMessengerUI smUIAlice = this.initializeSharkMessengerUI(smaAlice, "");
+        SharkNetMessengerUI smUIBob = this.initializeSharkMessengerUI(smaBob, "");
 
         smUIAlice.handleUserInput(cmdAlice1st);
         smUIBob.handleUserInput(cmdBob2nd);

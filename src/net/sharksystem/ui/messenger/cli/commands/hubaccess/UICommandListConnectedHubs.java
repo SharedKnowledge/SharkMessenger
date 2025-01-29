@@ -2,11 +2,11 @@ package net.sharksystem.ui.messenger.cli.commands.hubaccess;
 
 import net.sharksystem.SharkException;
 import net.sharksystem.asap.utils.DateTimeHelper;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
 import net.sharksystem.ui.messenger.cli.commands.helper.Printer;
 import net.sharksystem.hub.HubConnectionManager;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaireBuilder;
 import net.sharksystem.ui.messenger.cli.UICommand;
 import net.sharksystem.hub.peerside.HubConnector;
@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class UICommandListConnectedHubs extends UICommand {
-    public UICommandListConnectedHubs(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandListConnectedHubs(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                       String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
     }

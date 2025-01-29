@@ -114,9 +114,9 @@ public class ProductionUI {
         if(isBack) System.out.println("Welcome back " + peerName);
         else System.out.println("Welcome " + peerName);
 
-        SharkMessengerUI smUI = new SharkMessengerUI("", System.in, System.out, System.err);
-        SharkMessengerApp sharkMessengerApp =
-                new SharkMessengerApp(peerName, syncWithOthersInSeconds, System.out, System.err);
+        SharkNetMessengerUI smUI = new SharkNetMessengerUI("", System.in, System.out, System.err);
+        SharkNetMessengerApp sharkMessengerApp =
+                new SharkNetMessengerApp(peerName, syncWithOthersInSeconds, System.out, System.err);
 
         // basics
         smUI.addCommand(new UICommandExit(sharkMessengerApp, smUI, "exit", true));
@@ -127,7 +127,7 @@ public class ProductionUI {
         smUI.addCommand(new UICommandListChannels(sharkMessengerApp, smUI, "lsChannel", true));
         smUI.addCommand(new UICommandCreateChannel(sharkMessengerApp, smUI, "mkChannel", true));
         smUI.addCommand(new UICommandRemoveChannelByIndex(sharkMessengerApp, smUI, "rmChannel", true));
-        smUI.addCommand(new UICommandSendMessageExtended(sharkMessengerApp, smUI, "sendMessage", true));
+        smUI.addCommand(new UICommandSendMessage(sharkMessengerApp, smUI, "sendMessage", true));
         smUI.addCommand(new UICommandListMessages(sharkMessengerApp, smUI, "lsMessages", true));
 
         // external io
@@ -160,6 +160,7 @@ public class ProductionUI {
         // Tests
         smUI.addCommand(new UICommandSaveLog(sharkMessengerApp, smUI, "saveLog", false));
         smUI.addCommand(new UICommandShowLog(sharkMessengerApp, smUI, "showLog", false));
+        smUI.addCommand(new UICommandClearLog(sharkMessengerApp, smUI, "clearLog", false));
         smUI.addCommand(new UICommandWait(sharkMessengerApp, smUI, "wait", true));
         smUI.addCommand(new UICommandEcho(sharkMessengerApp, smUI, "echo", true));
         smUI.addCommand(new UICommandMarkStep(sharkMessengerApp, smUI, "markstep", true));

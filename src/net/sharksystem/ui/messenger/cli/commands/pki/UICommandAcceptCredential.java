@@ -1,11 +1,11 @@
 package net.sharksystem.ui.messenger.cli.commands.pki;
 
 import net.sharksystem.ui.messenger.cli.commands.helper.AbstractCommandWithSingleInteger;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 
 public class UICommandAcceptCredential extends AbstractCommandWithSingleInteger {
-    public UICommandAcceptCredential(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandAcceptCredential(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                      String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
     }

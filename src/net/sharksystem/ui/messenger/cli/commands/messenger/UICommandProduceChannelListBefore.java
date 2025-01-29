@@ -1,15 +1,15 @@
 package net.sharksystem.ui.messenger.cli.commands.messenger;
 
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.UICommand;
-import net.sharksystem.app.messenger.SharkMessengerComponent;
-import net.sharksystem.app.messenger.SharkMessengerException;
+import net.sharksystem.app.messenger.SharkNetMessengerComponent;
+import net.sharksystem.app.messenger.SharkNetMessengerException;
 
 import java.io.IOException;
 
 public abstract class UICommandProduceChannelListBefore extends UICommand {
-    public UICommandProduceChannelListBefore(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandProduceChannelListBefore(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                              String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
     }
@@ -17,9 +17,9 @@ public abstract class UICommandProduceChannelListBefore extends UICommand {
     protected void runBefore() {
         // produce channel list
         try {
-            SharkMessengerComponent messengerComponent = this.getSharkMessengerApp().getSharkMessengerComponent();
+            SharkNetMessengerComponent messengerComponent = this.getSharkMessengerApp().getSharkMessengerComponent();
             new ChannelPrinter().getChannelDescriptions(messengerComponent);
-        } catch (IOException | SharkMessengerException e) {
+        } catch (IOException | SharkNetMessengerException e) {
             this.printErrorMessage(e.getLocalizedMessage());
         }
     }

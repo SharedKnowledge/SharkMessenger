@@ -1,14 +1,12 @@
 package net.sharksystem.ui.messenger.cli.commands.hubmanagement;
 
 import net.sharksystem.hub.hubside.ASAPTCPHub;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.UICommand;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandBooleanArgument;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandIntegerArgument;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
-import net.sharksystem.ui.messenger.cli.commandarguments.UICommandStringArgument;
-import net.sharksystem.ui.messenger.cli.commands.helper.AbstractCommandWithSingleInteger;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,7 +19,7 @@ public class UICommandStartHub extends UICommand {
     private boolean newConnection;
     private int maxIdleInSeconds;
 
-    public UICommandStartHub(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandStartHub(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                              String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.portArgument = new UICommandIntegerArgument(sharkMessengerApp);

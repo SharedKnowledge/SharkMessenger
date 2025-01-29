@@ -1,15 +1,15 @@
 package net.sharksystem.ui.messenger.cli.commands.pki;
 
 import net.sharksystem.asap.pki.ASAPCertificate;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.commands.helper.AbstractCommandNoParameter;
 import net.sharksystem.pki.SharkPKIComponent;
 
 import java.util.Set;
 
 public class UICommandListCertificates extends AbstractCommandNoParameter {
-    public UICommandListCertificates(SharkMessengerApp sharkMessengerApp, SharkMessengerUI smUI, String lsCerts, boolean b) {
+    public UICommandListCertificates(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI smUI, String lsCerts, boolean b) {
         super(sharkMessengerApp, smUI, lsCerts, b);
     }
 

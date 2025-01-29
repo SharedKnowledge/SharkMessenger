@@ -18,8 +18,8 @@ import net.sharksystem.hub.HubConnectionManager;
 import net.sharksystem.hub.HubConnectionManagerImpl;
 import net.sharksystem.hub.NewHubConnectedListener;
 import net.sharksystem.hub.hubside.ASAPTCPHub;
-import net.sharksystem.app.messenger.SharkMessengerComponent;
-import net.sharksystem.app.messenger.SharkMessengerComponentFactory;
+import net.sharksystem.app.messenger.SharkNetMessengerComponent;
+import net.sharksystem.app.messenger.SharkNetMessengerComponentFactory;
 import net.sharksystem.hub.peerside.HubConnectorDescription;
 import net.sharksystem.pki.*;
 import net.sharksystem.ui.messenger.cli.commands.hubaccess.HubDescriptionPrinter;
@@ -36,7 +36,7 @@ import java.util.*;
  * Proposed and suggested pattern for Shark app. Implement a central entity (could even be a singleton)
  * that provides access to any component that is part of this application
  */
-public class SharkMessengerApp implements SharkPeerEncounterChangedListener, NewHubConnectedListener {
+public class SharkNetMessengerApp implements SharkPeerEncounterChangedListener, NewHubConnectedListener {
     private static final CharSequence PEER_ID_KEY = "peerIDKey";
     private final SharkPeerFS sharkPeerFS;
 
@@ -44,7 +44,7 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener, New
     private static final CharSequence KEYSTORE_MEMENTO_KEY = "keyStoreMemento";
 
     //private static final CharSequence ROOTFOLDER = "sharkMessengerDataStorage";
-    private final SharkMessengerComponent messengerComponent;
+    private final SharkNetMessengerComponent messengerComponent;
     private final SharkPKIComponent pkiComponent;
     private final HubConnectionManager hubConnectionManager;
     private final ASAPEncounterManager encounterManager;
@@ -56,7 +56,7 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener, New
     private PrintStream errStream;
     private CharSequence peerID;
 
-    public SharkMessengerApp(String peerName, PrintStream out, PrintStream err)
+    public SharkNetMessengerApp(String peerName, PrintStream out, PrintStream err)
             throws SharkException, IOException {
         this(peerName, 60*10, out, err);
     }
@@ -70,7 +70,7 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener, New
      * @throws SharkException
      * @throws IOException
      */
-    public SharkMessengerApp(String peerName, int syncWithOthersInSeconds, PrintStream out, PrintStream err)
+    public SharkNetMessengerApp(String peerName, int syncWithOthersInSeconds, PrintStream out, PrintStream err)
             throws SharkException, IOException {
 
         this.peerDataFolderName = "./" + peerName;
@@ -98,11 +98,11 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener, New
         this.sharkPeerFS.addComponent(pkiComponentFactory, SharkPKIComponent.class);
 
         // get messenger factory with pki component as parameter.
-        SharkMessengerComponentFactory messengerComponentFactory = new SharkMessengerComponentFactory(
+        SharkNetMessengerComponentFactory messengerComponentFactory = new SharkNetMessengerComponentFactory(
                 (SharkPKIComponent) sharkPeerFS.getComponent(SharkPKIComponent.class));
 
         // tell peer
-        this.sharkPeerFS.addComponent(messengerComponentFactory, SharkMessengerComponent.class);
+        this.sharkPeerFS.addComponent(messengerComponentFactory, SharkNetMessengerComponent.class);
 
         // all component in place - create asap peer and launch the system
         ASAPPeer asapPeer = new ASAPPeerFS(this.peerID, this.peerDataFolderName, this.sharkPeerFS.getSupportedFormats());
@@ -114,8 +114,8 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener, New
         this.sharkPeerFS.start(asapPeer);
 
         // get component to add listener
-        this.messengerComponent = (SharkMessengerComponent) this.sharkPeerFS.
-                getComponent(SharkMessengerComponent.class);
+        this.messengerComponent = (SharkNetMessengerComponent) this.sharkPeerFS.
+                getComponent(SharkNetMessengerComponent.class);
         this.messengerComponent.addSharkMessagesReceivedListener(new MessageReceivedListener(this));
 
         // get component to add listener
@@ -173,7 +173,7 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener, New
         return this.sharkPeerFS;
     }
 
-    public SharkMessengerComponent getSharkMessengerComponent() {
+    public SharkNetMessengerComponent getSharkMessengerComponent() {
         return this.messengerComponent;
     }
 
@@ -195,12 +195,12 @@ public class SharkMessengerApp implements SharkPeerEncounterChangedListener, New
     }
 
     /////////////////// settings
-    private SharkMessengerSettings settings = new Settings();
-    public SharkMessengerSettings getSettings() {
+    private SharkNetMessengerSettings settings = new Settings();
+    public SharkNetMessengerSettings getSettings() {
         return this.settings;
     }
 
-    private class Settings implements SharkMessengerSettings {
+    private class Settings implements SharkNetMessengerSettings {
         private boolean rememberNewHubConnections = true;
         private boolean hubReconnect = true;
         public boolean getRememberNewHubConnections() {

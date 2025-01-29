@@ -3,6 +3,7 @@ package net.sharksystem.app.messenger;
 import net.sharksystem.asap.ASAPException;
 import net.sharksystem.asap.ASAPHop;
 import net.sharksystem.asap.ASAPSecurityException;
+import net.sharksystem.asap.utils.ASAPSerialization;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,15 +17,48 @@ import java.util.Set;
  * messenger peer which are allowed to
  * transfer, to route message. That is a direct point-to-point communication.
  *
- * @see SharkMessengerChannel
+ * @see SharkNetMessengerChannel
  */
-public interface SharkMessage {
+public interface SharkNetMessage {
     String ANY_RECEIVER = "SHARK_ANY_PEER";
     String ANONYMOUS = "SHARK_ANONYMOUS";
     int SIGNED_MASK = 0x1;
     int ENCRYPTED_MASK = 0x2;
 
+    /** messages contains plain bytes - no further format known */
+    public static final CharSequence SN_CONTENT_TYPE_ASAP_BYTES = "sn/bytes";
+
+    /** messages contains a character sequences; can be deserialized by ASAPSerialization.readCharacterSequenceParameter
+     * @see ASAPSerialization
+     * */
+    public static final CharSequence SN_CONTENT_TYPE_ASAP_CHARACTER_SEQUENCE = "sn/asapCS";
+
+    /** messages contains a character sequences; can be deserialized by
+     * ASAPSerialization.readCharacterSequenceSetParameter
+     * @see ASAPSerialization
+     * */
+    public static final CharSequence SN_CONTENT_TYPE_ASAP_CHARACTER_SEQUENCE_SET = "sn/asapCSList";
+
+    /** messages contains a byte array (byte[]); can be deserialized by
+     * ASAPSerialization.readByteArray2Dim
+     * @see ASAPSerialization
+     * */
+    public static final CharSequence SN_CONTENT_TYPE_ASAP_BYTE_ARRAY = "sn/asapByteA";
+
+    /** messages contains a two-dimensional byte array (byte[][]); can be deserialized by
+     * ASAPSerialization.readByteArray2Dim
+     * @see ASAPSerialization
+     * */
+    public static final CharSequence SN_CONTENT_TYPE_ASAP_TWO_DIMENSIONAL_BYTE_ARRAY = "sn/asapByteA2";
+
     /**
+     * Content type - describes content structure. A few type that can easily handled by ASAPSerialization are
+     * declared as constants in this interface.
+     * @return content type
+     * @throws ASAPSecurityException
+     * @see ASAPSerialization
+     */
+    CharSequence getContentType() throws ASAPSecurityException;    /**
      * Content - can be encrypted and signed
      * @return
      * @throws ASAPSecurityException if message could not be encrypted
@@ -99,7 +133,7 @@ public interface SharkMessage {
      * @throws IOException
      * @throws ASAPSecurityException if message could not be encrypted
      */
-    boolean isLaterThan(SharkMessage message) throws ASAPException, ASAPSecurityException, IOException;
+    boolean isLaterThan(SharkNetMessage message) throws ASAPException, ASAPSecurityException, IOException;
 
     /**
      * A message can be received directly from a sender or it was routed. This method provides the route. The first

@@ -1,13 +1,13 @@
 package net.sharksystem.ui.messenger.cli.commandarguments;
 
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
 
 /**
  * Predefined argument for long input
  */
 public class UICommandLongArgument extends UICommandArgument<Long> {
 
-    public UICommandLongArgument(SharkMessengerApp sharkMessengerApp) {
+    public UICommandLongArgument(SharkNetMessengerApp sharkMessengerApp) {
         super(sharkMessengerApp);
     }
     

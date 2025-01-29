@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sharksystem.SharkException;
-import net.sharksystem.ui.messenger.cli.commands.messenger.UICommandSendMessageExtended;
-import net.sharksystem.app.messenger.SharkMessengerComponent;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.commands.messenger.UICommandSendMessage;
+import net.sharksystem.app.messenger.SharkNetMessengerComponent;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.UICommand;
 import net.sharksystem.ui.messenger.cli.commandarguments.*;
 
@@ -29,7 +29,7 @@ public class UICommandSendTestMessage extends UICommand {
     private final UICommandStringArgument receivers;
     private final String peerName;
 
-    public UICommandSendTestMessage(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandSendTestMessage(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                     String identifier, boolean rememberCommand) throws SharkException {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
 
@@ -91,7 +91,7 @@ public class UICommandSendTestMessage extends UICommand {
 
     @Override
     protected void execute() throws Exception {
-        UICommand sendCommand = new UICommandSendMessageExtended(getSharkMessengerApp(),
+        UICommand sendCommand = new UICommandSendMessage(getSharkMessengerApp(),
                 getSharkMessengerUI(), getIdentifier(), false);
 
         // messageCounter provides message IDs
@@ -106,7 +106,7 @@ public class UICommandSendTestMessage extends UICommand {
         arguments.add(this.receivers.getValue());
 
         // information for the messageCounter
-        SharkMessengerComponent messenger = getSharkMessengerApp().getSharkMessengerComponent();
+        SharkNetMessengerComponent messenger = getSharkMessengerApp().getSharkMessengerComponent();
         String channelUri = messenger.getChannel(this.channelIndex.getValue()).getURI().toString();
         String content = this.message.getValue();
         String receivers = this.receivers.getValue();

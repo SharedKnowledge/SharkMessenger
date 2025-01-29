@@ -3,8 +3,8 @@ package net.sharksystem.ui.messenger.cli.commands.tcp;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandIntegerArgument;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandStringArgument;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.UICommand;
 
 import java.io.IOException;
@@ -19,7 +19,7 @@ public class UICommandConnectTCP extends UICommand {
 
     private final UICommandStringArgument hostName;
 
-    public UICommandConnectTCP(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI, String identifier, boolean rememberCommand) {
+    public UICommandConnectTCP(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI, String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
 
         this.portNumber = new UICommandIntegerArgument(sharkMessengerApp);

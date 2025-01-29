@@ -12,12 +12,12 @@ import net.sharksystem.SharkException;
 import net.sharksystem.asap.ASAPException;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandStringArgument;
-import net.sharksystem.app.messenger.SharkMessage;
-import net.sharksystem.app.messenger.SharkMessageList;
-import net.sharksystem.app.messenger.SharkMessengerComponent;
-import net.sharksystem.app.messenger.SharkMessengerException;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.app.messenger.SharkNetMessage;
+import net.sharksystem.app.messenger.SharkNetMessageList;
+import net.sharksystem.app.messenger.SharkNetMessengerComponent;
+import net.sharksystem.app.messenger.SharkNetMessengerException;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.UICommand;
 
 /**
@@ -32,7 +32,7 @@ public class UICommandSaveTestResults extends UICommand {
     private final CharSequence peerName;
     private final UICommandStringArgument testID;
 
-    public UICommandSaveTestResults(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandSaveTestResults(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                     String identifier, boolean rememberCommand) throws SharkException {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.peerName = sharkMessengerApp.getSharkPeer().getPeerID();
@@ -56,7 +56,7 @@ public class UICommandSaveTestResults extends UICommand {
     }
 
     @Override
-    protected void execute() throws IOException, SharkMessengerException, ASAPException {
+    protected void execute() throws IOException, SharkNetMessengerException, ASAPException {
         String sendFilePath = this.testID.getValue() + SEND_SEPERATOR + peerName + FILE_EXTENSION;
         String receivedFilePath = this.testID.getValue() + RECEIVED_SEPERATOR + peerName + FILE_EXTENSION;
 
@@ -81,14 +81,14 @@ public class UICommandSaveTestResults extends UICommand {
     }
 
     private void writeReceivedMessagesToFile(String pathName)
-            throws IOException, SharkMessengerException, ASAPException {
+            throws IOException, SharkNetMessengerException, ASAPException {
 
         final String HEADER = "sender,receiver,uri,id,creationTime,receivedTime";
 
         Path path = Paths.get(pathName);
         Files.write(path, HEADER.getBytes());
 
-        SharkMessengerComponent messenger = super.getSharkMessengerApp().getSharkMessengerComponent();
+        SharkNetMessengerComponent messenger = super.getSharkMessengerApp().getSharkMessengerComponent();
         List<CharSequence> uris = messenger.getChannelUris();
         TestMessageReceivedListener listener = TestMessageReceivedListener.getInstance();
 
@@ -96,9 +96,9 @@ public class UICommandSaveTestResults extends UICommand {
             String channelHeader = System.lineSeparator() + "Listener : Total messages for "+ uri +": "+ listener.getMessageCount(uri);
             Files.write(path, channelHeader.getBytes(), StandardOpenOption.APPEND);
             
-            SharkMessageList messageList = messenger.getChannel(uri).getMessages();
+            SharkNetMessageList messageList = messenger.getChannel(uri).getMessages();
             for (int i = 0; i < messageList.size(); i++) {
-                SharkMessage message = messageList.getSharkMessage(i, true);
+                SharkNetMessage message = messageList.getSharkMessage(i, true);
                 int messageID = Integer.parseInt(getIDFromContent(message.getContent()));
                 // Write only messages where this peer is a recipient.
                 if (message.getRecipients().contains(this.peerName)) {

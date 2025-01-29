@@ -3,9 +3,9 @@ package net.sharksystem.messenger;
 import net.sharksystem.SharkException;
 import net.sharksystem.SharkPeer;
 import net.sharksystem.SharkTestPeerFS;
-import net.sharksystem.app.messenger.SharkMessengerComponent;
-import net.sharksystem.app.messenger.SharkMessengerComponentFactory;
-import net.sharksystem.app.messenger.SharkMessengerComponentImpl;
+import net.sharksystem.app.messenger.SharkNetMessengerComponent;
+import net.sharksystem.app.messenger.SharkNetMessengerComponentFactory;
+import net.sharksystem.app.messenger.SharkNetMessengerComponentImpl;
 import net.sharksystem.asap.pki.ASAPCertificate;
 import net.sharksystem.pki.*;
 import org.junit.jupiter.api.Assertions;
@@ -32,15 +32,15 @@ public class TestHelper {
     protected SharkTestPeerFS claraPeer;
     protected SharkTestPeerFS davidPeer;
 
-    protected SharkMessengerComponent aliceMessenger;
-    protected SharkMessengerComponent bobMessenger;
-    protected SharkMessengerComponent claraMessenger;
-    protected SharkMessengerComponent davidMessenger;
+    protected SharkNetMessengerComponent aliceMessenger;
+    protected SharkNetMessengerComponent bobMessenger;
+    protected SharkNetMessengerComponent claraMessenger;
+    protected SharkNetMessengerComponent davidMessenger;
 
-    protected SharkMessengerComponentImpl aliceMessengerImpl;
-    protected SharkMessengerComponentImpl bobMessengerImpl;
-    protected SharkMessengerComponentImpl claraMessengerImpl;
-    protected SharkMessengerComponentImpl davidMessengerImpl;
+    protected SharkNetMessengerComponentImpl aliceMessengerImpl;
+    protected SharkNetMessengerComponentImpl bobMessengerImpl;
+    protected SharkNetMessengerComponentImpl claraMessengerImpl;
+    protected SharkNetMessengerComponentImpl davidMessengerImpl;
 
     public TestHelper(String testName) {
         this.subRootFolder = TestConstants.ROOT_DIRECTORY + testName + "/";
@@ -131,14 +131,14 @@ public class TestHelper {
         System.out.println("**                          PKI works                             **");
         System.out.println("********************************************************************");
 
-        this.aliceMessenger = (SharkMessengerComponent) this.alicePeer.getComponent(SharkMessengerComponent.class);
-        this.bobMessenger = (SharkMessengerComponent) this.bobPeer.getComponent(SharkMessengerComponent.class);
-        this.claraMessenger = (SharkMessengerComponent) this.claraPeer.getComponent(SharkMessengerComponent.class);
+        this.aliceMessenger = (SharkNetMessengerComponent) this.alicePeer.getComponent(SharkNetMessengerComponent.class);
+        this.bobMessenger = (SharkNetMessengerComponent) this.bobPeer.getComponent(SharkNetMessengerComponent.class);
+        this.claraMessenger = (SharkNetMessengerComponent) this.claraPeer.getComponent(SharkNetMessengerComponent.class);
 
         // set up backdoors
-        this.aliceMessengerImpl = (SharkMessengerComponentImpl) this.aliceMessenger;
-        this.bobMessengerImpl = (SharkMessengerComponentImpl) this.bobMessenger;
-        this.claraMessengerImpl = (SharkMessengerComponentImpl) this.claraMessenger;
+        this.aliceMessengerImpl = (SharkNetMessengerComponentImpl) this.aliceMessenger;
+        this.bobMessengerImpl = (SharkNetMessengerComponentImpl) this.bobMessenger;
+        this.claraMessengerImpl = (SharkNetMessengerComponentImpl) this.claraMessenger;
     }
 
     /**
@@ -263,16 +263,16 @@ public class TestHelper {
         System.out.println("**                          PKI works                             **");
         System.out.println("********************************************************************");
 
-        this.aliceMessenger = (SharkMessengerComponent) this.alicePeer.getComponent(SharkMessengerComponent.class);
-        this.bobMessenger = (SharkMessengerComponent) this.bobPeer.getComponent(SharkMessengerComponent.class);
-        this.claraMessenger = (SharkMessengerComponent) this.claraPeer.getComponent(SharkMessengerComponent.class);
-        this.davidMessenger = (SharkMessengerComponent) this.davidPeer.getComponent(SharkMessengerComponent.class);
+        this.aliceMessenger = (SharkNetMessengerComponent) this.alicePeer.getComponent(SharkNetMessengerComponent.class);
+        this.bobMessenger = (SharkNetMessengerComponent) this.bobPeer.getComponent(SharkNetMessengerComponent.class);
+        this.claraMessenger = (SharkNetMessengerComponent) this.claraPeer.getComponent(SharkNetMessengerComponent.class);
+        this.davidMessenger = (SharkNetMessengerComponent) this.davidPeer.getComponent(SharkNetMessengerComponent.class);
 
         // set up backdoors
-        this.aliceMessengerImpl = (SharkMessengerComponentImpl) this.aliceMessenger;
-        this.bobMessengerImpl = (SharkMessengerComponentImpl) this.bobMessenger;
-        this.claraMessengerImpl = (SharkMessengerComponentImpl) this.claraMessenger;
-        this.davidMessengerImpl = (SharkMessengerComponentImpl) this.davidMessenger;
+        this.aliceMessengerImpl = (SharkNetMessengerComponentImpl) this.aliceMessenger;
+        this.bobMessengerImpl = (SharkNetMessengerComponentImpl) this.bobMessenger;
+        this.claraMessengerImpl = (SharkNetMessengerComponentImpl) this.claraMessenger;
+        this.davidMessengerImpl = (SharkNetMessengerComponentImpl) this.davidMessenger;
     }
 
     /**
@@ -288,11 +288,11 @@ public class TestHelper {
         // register this component with shark peer - note: we use interface SharkPeer
         sharkPeer.addComponent(certificateComponentFactory, SharkPKIComponent.class);
 
-        SharkMessengerComponentFactory messengerFactory =
-                new SharkMessengerComponentFactory(
+        SharkNetMessengerComponentFactory messengerFactory =
+                new SharkNetMessengerComponentFactory(
                         (SharkPKIComponent) sharkPeer.getComponent(SharkPKIComponent.class)
                 );
 
-        sharkPeer.addComponent(messengerFactory, SharkMessengerComponent.class);
+        sharkPeer.addComponent(messengerFactory, SharkNetMessengerComponent.class);
     }
 }

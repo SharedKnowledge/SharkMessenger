@@ -1,12 +1,12 @@
 package net.sharksystem.ui.messenger.cli.commandarguments;
 
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
 
 /**
  * Predefined argument for boolean
  */
 public class UICommandBooleanArgument extends UICommandArgument<Boolean> {
-    public UICommandBooleanArgument(SharkMessengerApp sharkMessengerApp) {
+    public UICommandBooleanArgument(SharkNetMessengerApp sharkMessengerApp) {
         super(sharkMessengerApp);
     }
 

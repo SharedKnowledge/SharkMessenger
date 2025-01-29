@@ -3,15 +3,15 @@ package net.sharksystem.ui.messenger.cli.commands.encounter;
 import net.sharksystem.asap.ASAPEncounterManagerAdmin;
 import net.sharksystem.asap.ASAPException;
 import net.sharksystem.asap.utils.DateTimeHelper;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.commands.helper.AbstractCommandNoParameter;
 
 import java.util.Iterator;
 import java.util.List;
 
 public class UICommandShowEncounter extends AbstractCommandNoParameter {
-    public UICommandShowEncounter(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandShowEncounter(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                   String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
     }
@@ -31,14 +31,14 @@ public class UICommandShowEncounter extends AbstractCommandNoParameter {
             }
         }
 
-        List<SharkMessengerApp.EncounterLog> encounterLogs =
+        List<SharkNetMessengerApp.EncounterLog> encounterLogs =
                 this.getSharkMessengerApp().getEncounterLogs();
 
         if(encounterLogs.size() < 1) {
             sb.append("no previous encounter\n");
         } else {
             sb.append("previous encounter:\n");
-            for(SharkMessengerApp.EncounterLog encounterLog : encounterLogs) {
+            for(SharkNetMessengerApp.EncounterLog encounterLog : encounterLogs) {
                 sb.append("peer: ");
                 sb.append(encounterLog.peerID);
                 try {

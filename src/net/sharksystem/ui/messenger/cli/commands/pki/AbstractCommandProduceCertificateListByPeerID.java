@@ -7,8 +7,8 @@ import net.sharksystem.asap.persons.PersonValues;
 import net.sharksystem.asap.pki.ASAPCertificate;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandStringArgument;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.UICommand;
 import net.sharksystem.pki.PKIHelper;
 
@@ -20,7 +20,7 @@ public abstract class AbstractCommandProduceCertificateListByPeerID extends UICo
     private final UICommandStringArgument peer;
     private String peerID = null;
 
-    public AbstractCommandProduceCertificateListByPeerID(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public AbstractCommandProduceCertificateListByPeerID(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                                          String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
 

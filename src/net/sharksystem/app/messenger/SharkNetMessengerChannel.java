@@ -29,10 +29,10 @@ import java.io.IOException;
  *
  * @author Thomas Schwotzer
  */
-public interface SharkMessengerChannel {
-    void setAge(SharkCommunicationAge channelAge);
+public interface SharkNetMessengerChannel {
+    void setAge(SharkNetCommunicationAge channelAge);
 
-    SharkCommunicationAge getAge();
+    SharkNetCommunicationAge getAge();
 
     /**
      * Return the URI of this channel.
@@ -54,7 +54,7 @@ public interface SharkMessengerChannel {
      *                distributed  and not synchronized clocks. It is not safe)
      * @return
      */
-    SharkMessageList getMessages(boolean sentMessagesOnly, boolean ordered) throws SharkMessengerException, IOException;
+    SharkNetMessageList getMessages(boolean sentMessagesOnly, boolean ordered) throws SharkNetMessengerException, IOException;
 
     /**
      * Return a list of all messages (sent and received) ordered by timestamp. For comments of time stamp
@@ -62,5 +62,5 @@ public interface SharkMessengerChannel {
      * @see #getMessages(boolean, boolean)
      * @return
      */
-    SharkMessageList getMessages() throws SharkMessengerException, IOException;
+    SharkNetMessageList getMessages() throws SharkNetMessengerException, IOException;
 }

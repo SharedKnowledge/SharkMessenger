@@ -3,13 +3,11 @@ package net.sharksystem.ui.messenger.cli.commands.hubaccess;
 import java.util.List;
 
 import net.sharksystem.hub.peerside.HubConnectorDescription;
-import net.sharksystem.hub.peerside.TCPHubConnectorDescriptionImpl;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandIntegerArgument;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
 import net.sharksystem.ui.messenger.cli.UICommand;
-import net.sharksystem.ui.messenger.cli.commandarguments.UICommandStringArgument;
 
 public class UICommandDisconnectHub extends UICommand {
     private final UICommandIntegerArgument hubIndex;
@@ -22,7 +20,7 @@ public class UICommandDisconnectHub extends UICommand {
      * @param identifier        The identifier of the command.
      * @param rememberCommand   If the command should be saved in the history log.
      */
-    public UICommandDisconnectHub(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI, String identifier, boolean rememberCommand) {
+    public UICommandDisconnectHub(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI, String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
 
         this.hubIndex = new UICommandIntegerArgument(sharkMessengerApp);

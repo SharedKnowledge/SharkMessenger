@@ -1,15 +1,15 @@
 package net.sharksystem.ui.messenger.cli.commands.messenger;
 
 import net.sharksystem.ui.messenger.cli.commands.helper.AbstractCommandWithSingleInteger;
-import net.sharksystem.app.messenger.SharkMessengerComponent;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.app.messenger.SharkNetMessengerComponent;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 
 /**
  * This command removes a channel from the peers known channels.
  */
 public class UICommandRemoveChannelByIndex extends AbstractCommandWithSingleInteger {
-    public UICommandRemoveChannelByIndex(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandRemoveChannelByIndex(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                          String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
     }
@@ -18,7 +18,7 @@ public class UICommandRemoveChannelByIndex extends AbstractCommandWithSingleInte
     public void execute() throws Exception {
         // we start with 1 in UI
         int channelIndex = this.getIntegerArgument() - 1;
-        SharkMessengerComponent sharkMessengerComponent = this.getSharkMessengerApp().getSharkMessengerComponent();
+        SharkNetMessengerComponent sharkMessengerComponent = this.getSharkMessengerApp().getSharkMessengerComponent();
         CharSequence uri = sharkMessengerComponent.getChannel(channelIndex).getURI();
         sharkMessengerComponent.removeChannel(uri);
         this.getSharkMessengerApp().tellUI("channel removed - index most probably changed");

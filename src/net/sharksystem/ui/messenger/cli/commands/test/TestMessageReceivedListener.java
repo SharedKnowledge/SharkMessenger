@@ -1,11 +1,11 @@
 package net.sharksystem.ui.messenger.cli.commands.test;
 
 import net.sharksystem.asap.ASAPSecurityException;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.app.messenger.SharkMessagesReceivedListener;
-import net.sharksystem.app.messenger.SharkMessage;
-import net.sharksystem.app.messenger.SharkMessageList;
-import net.sharksystem.app.messenger.SharkMessengerException;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.app.messenger.SharkNetMessagesReceivedListener;
+import net.sharksystem.app.messenger.SharkNetMessage;
+import net.sharksystem.app.messenger.SharkNetMessageList;
+import net.sharksystem.app.messenger.SharkNetMessengerException;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -15,8 +15,8 @@ import java.util.Map;
 /**
  * This class is a listener specificially for testing purposes.
  */
-public class TestMessageReceivedListener implements SharkMessagesReceivedListener {
-    private final SharkMessengerApp sharkMessengerApp;
+public class TestMessageReceivedListener implements SharkNetMessagesReceivedListener {
+    private final SharkNetMessengerApp sharkMessengerApp;
     private static TestMessageReceivedListener instance;
 
     // <channelURI, <messageID, timeStamp>>
@@ -27,7 +27,7 @@ public class TestMessageReceivedListener implements SharkMessagesReceivedListene
      * only time it is created.
      * @param sharkMessengerApp
      */
-    public TestMessageReceivedListener(SharkMessengerApp sharkMessengerApp) {
+    public TestMessageReceivedListener(SharkNetMessengerApp sharkMessengerApp) {
         this.sharkMessengerApp = sharkMessengerApp;
         this.receivedMessages = new HashMap<>();
         instance = this;
@@ -61,17 +61,17 @@ public class TestMessageReceivedListener implements SharkMessagesReceivedListene
         }
 
         try {
-            SharkMessageList messages = this.sharkMessengerApp.getSharkMessengerComponent().getChannel(uri).getMessages();
+            SharkNetMessageList messages = this.sharkMessengerApp.getSharkMessengerComponent().getChannel(uri).getMessages();
 
             // When multiple messages are received as a block (possible when connection
             // reestablished) they should receive the same time stamp.
             long currentTime = System.currentTimeMillis();
             for (int i = messages.size()-1; i >= messageCounter; i--){
-                SharkMessage message = messages.getSharkMessage(i, true);
+                SharkNetMessage message = messages.getSharkMessage(i, true);
                 int id = getIDFromContent(message.getContent());
                 receivedMessages.get(uri).put(id, currentTime);
             }
-        } catch (SharkMessengerException | IOException e) {
+        } catch (SharkNetMessengerException | IOException e) {
             System.out.println("TODO: exception in MessageReceivedListener:" + e.getLocalizedMessage());
             e.printStackTrace();
         } catch (ASAPSecurityException e) {

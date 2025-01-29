@@ -1,11 +1,11 @@
 package net.sharksystem.ui.messenger.cli.commands.testing;
 
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.commands.helper.AbstractCommandWithSingleString;
 
 public class UICommandMarkStep extends AbstractCommandWithSingleString {
-    public UICommandMarkStep(SharkMessengerApp sharkMessengerApp, SharkMessengerUI smUI, String echo, boolean b) {
+    public UICommandMarkStep(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI smUI, String echo, boolean b) {
         super(sharkMessengerApp, smUI, echo, b);
     }
 

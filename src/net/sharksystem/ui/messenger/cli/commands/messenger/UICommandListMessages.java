@@ -2,11 +2,11 @@ package net.sharksystem.ui.messenger.cli.commands.messenger;
 
 import net.sharksystem.SharkException;
 import net.sharksystem.ui.messenger.cli.commands.helper.AbstractCommandWithSingleInteger;
-import net.sharksystem.app.messenger.SharkMessageList;
-import net.sharksystem.app.messenger.SharkMessengerChannel;
-import net.sharksystem.app.messenger.SharkMessengerComponent;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.app.messenger.SharkNetMessageList;
+import net.sharksystem.app.messenger.SharkNetMessengerChannel;
+import net.sharksystem.app.messenger.SharkNetMessengerComponent;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 
 import java.io.IOException;
 
@@ -16,7 +16,7 @@ import java.io.IOException;
 public class UICommandListMessages extends AbstractCommandWithSingleInteger {
     public static final int DEFAULT_CHANNEL_INDEX = 1;
 
-    public UICommandListMessages(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandListMessages(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                  String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand, true, DEFAULT_CHANNEL_INDEX);
     }
@@ -25,8 +25,8 @@ public class UICommandListMessages extends AbstractCommandWithSingleInteger {
     public void execute() throws Exception {
         try {
             int channelIndex = this.getIntegerArgument() - 1; // we start with 1 in UI and 0 inside
-            SharkMessengerComponent messenger = this.getSharkMessengerApp().getSharkMessengerComponent();
-            SharkMessengerChannel channel = null;
+            SharkNetMessengerComponent messenger = this.getSharkMessengerApp().getSharkMessengerComponent();
+            SharkNetMessengerChannel channel = null;
             try {
                 channel = messenger.getChannel(channelIndex);
             }
@@ -35,7 +35,7 @@ public class UICommandListMessages extends AbstractCommandWithSingleInteger {
                 return;
             }
 
-            SharkMessageList messages = channel.getMessages();
+            SharkNetMessageList messages = channel.getMessages();
             if(messages == null || messages.size() <1) {
                 this.getSharkMessengerApp().tellUI("no messages in channel " + channelIndex);
                 return;

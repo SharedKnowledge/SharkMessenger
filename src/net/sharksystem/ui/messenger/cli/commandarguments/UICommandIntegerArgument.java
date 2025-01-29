@@ -1,13 +1,13 @@
 package net.sharksystem.ui.messenger.cli.commandarguments;
 
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
 
 /**
  * Predefined argument for integer input
  */
 public class UICommandIntegerArgument extends UICommandArgument<Integer> {
     
-    public UICommandIntegerArgument(SharkMessengerApp sharkMessengerApp) {
+    public UICommandIntegerArgument(SharkNetMessengerApp sharkMessengerApp) {
         super(sharkMessengerApp);
     }
 

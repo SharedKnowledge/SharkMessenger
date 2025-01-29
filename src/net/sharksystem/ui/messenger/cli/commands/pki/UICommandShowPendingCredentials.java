@@ -1,7 +1,7 @@
 package net.sharksystem.ui.messenger.cli.commands.pki;
 
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.commands.helper.AbstractCommandNoParameter;
 import net.sharksystem.pki.CredentialMessage;
 import net.sharksystem.pki.PKIHelper;
@@ -9,7 +9,7 @@ import net.sharksystem.pki.PKIHelper;
 import java.util.List;
 
 public class UICommandShowPendingCredentials extends AbstractCommandNoParameter {
-    public UICommandShowPendingCredentials(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandShowPendingCredentials(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                            String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
     }

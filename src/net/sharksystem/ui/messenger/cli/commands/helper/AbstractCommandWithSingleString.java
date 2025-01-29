@@ -1,7 +1,7 @@
 package net.sharksystem.ui.messenger.cli.commands.helper;
 
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.UICommand;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandStringArgument;
@@ -14,12 +14,12 @@ public abstract class AbstractCommandWithSingleString extends UICommand {
     private String derString;
     private UICommandStringArgument stringArgument;
 
-    public AbstractCommandWithSingleString(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public AbstractCommandWithSingleString(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                            String identifier, boolean rememberCommand) {
         this(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand, false, null);
     }
 
-    public AbstractCommandWithSingleString(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public AbstractCommandWithSingleString(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                            String identifier, boolean rememberCommand, boolean optional, String defaultString) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
 

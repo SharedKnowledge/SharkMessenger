@@ -4,13 +4,11 @@ import java.util.List;
 import java.util.Set;
 
 import net.sharksystem.asap.persons.PersonValues;
-import net.sharksystem.pki.PKIHelper;
 import net.sharksystem.pki.SharkPKIComponent;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.UICommand;
 import net.sharksystem.ui.messenger.cli.commandarguments.*;
-import net.sharksystem.ui.messenger.cli.commands.pki.PKIPrinter;
 
 public class UICommandSetSigningFailure extends UICommand {
     private final UICommandStringArgument subjectNameArgument;
@@ -18,7 +16,7 @@ public class UICommandSetSigningFailure extends UICommand {
     private String subjectName;
     private int newSigningFailure;
 
-    public UICommandSetSigningFailure(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandSetSigningFailure(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                       String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.subjectNameArgument = new UICommandStringArgument(sharkMessengerApp);

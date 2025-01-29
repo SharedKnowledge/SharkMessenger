@@ -1,9 +1,8 @@
 package net.sharksystem.ui.messenger.cli.commands.hubaccess;
 
-import net.sharksystem.SharkException;
 import net.sharksystem.hub.hubside.ASAPTCPHub;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.UICommand;
 import net.sharksystem.hub.peerside.HubConnectorDescription;
 import net.sharksystem.hub.peerside.TCPHubConnectorDescriptionImpl;
@@ -12,7 +11,6 @@ import net.sharksystem.ui.messenger.cli.commandarguments.UICommandIntegerArgumen
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandStringArgument;
 
-import java.io.PrintStream;
 import java.util.List;
 
 public class UICommandConnectHub extends UICommand {
@@ -23,7 +21,7 @@ public class UICommandConnectHub extends UICommand {
     private int hubPort;
     private boolean createNewChannel;
 
-    public UICommandConnectHub(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandConnectHub(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
 

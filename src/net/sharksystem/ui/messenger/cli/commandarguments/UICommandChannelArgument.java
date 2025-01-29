@@ -1,17 +1,17 @@
 package net.sharksystem.ui.messenger.cli.commandarguments;
 
 import net.sharksystem.SharkException;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.app.messenger.SharkMessengerChannel;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.app.messenger.SharkNetMessengerChannel;
 
 import java.io.IOException;
 
 /**
  * Predefined argument for a SharkMessengerChannel retrieved through its uri and a peer
  */
-public class UICommandChannelArgument extends UICommandArgument<SharkMessengerChannel> {
+public class UICommandChannelArgument extends UICommandArgument<SharkNetMessengerChannel> {
 
-    public UICommandChannelArgument(SharkMessengerApp sharkMessengerApp) {
+    public UICommandChannelArgument(SharkNetMessengerApp sharkMessengerApp) {
         super(sharkMessengerApp);
     }
 

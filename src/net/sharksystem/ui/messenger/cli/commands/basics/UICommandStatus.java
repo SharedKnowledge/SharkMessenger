@@ -2,15 +2,15 @@ package net.sharksystem.ui.messenger.cli.commands.basics;
 
 import net.sharksystem.asap.crypto.ASAPCryptoAlgorithms;
 import net.sharksystem.asap.utils.DateTimeHelper;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.commands.helper.AbstractCommandNoParameter;
 
 /**
  * Command for terminating the messenger.
  */
 public class UICommandStatus extends AbstractCommandNoParameter {
-    public UICommandStatus(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandStatus(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                            String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
     }
@@ -39,7 +39,7 @@ public class UICommandStatus extends AbstractCommandNoParameter {
         sb.append(DateTimeHelper.long2DateString(
                 this.getSharkMessengerApp().getSharkPKIComponent().getKeysCreationTime()));
 
-        sb.append("\n\tpublic key fingerprint:\n\t");
+        sb.append("\n\tpublic key fingerprint:\t");
         sb.append(ASAPCryptoAlgorithms.getFingerprint(
                 this.getSharkMessengerApp().getSharkPKIComponent().getASAPKeyStore().getPublicKey()));
 

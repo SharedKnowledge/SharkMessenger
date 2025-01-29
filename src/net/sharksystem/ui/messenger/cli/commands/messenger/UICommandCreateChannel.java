@@ -1,10 +1,10 @@
 package net.sharksystem.ui.messenger.cli.commands.messenger;
 
 import net.sharksystem.SharkException;
-import net.sharksystem.app.messenger.SharkMessengerComponent;
-import net.sharksystem.app.messenger.SharkMessengerException;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.app.messenger.SharkNetMessengerComponent;
+import net.sharksystem.app.messenger.SharkNetMessengerException;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.UICommand;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaireBuilder;
@@ -23,7 +23,7 @@ public class UICommandCreateChannel extends UICommand {
     private String channelUri = null;
     private String channelName = null;
 
-    public UICommandCreateChannel(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandCreateChannel(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                   String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
 
@@ -45,7 +45,7 @@ public class UICommandCreateChannel extends UICommand {
         String channelName = this.channelNameArgument.getValue();
 
         try {
-            SharkMessengerComponent sharkMessengerComponent = this.getSharkMessengerApp().getSharkMessengerComponent();
+            SharkNetMessengerComponent sharkMessengerComponent = this.getSharkMessengerApp().getSharkMessengerComponent();
             try {
                 sharkMessengerComponent.getChannel(channelURI);
                 this.getSharkMessengerApp().tellUI("nothing to do; channel already exists: " + channelURI);
@@ -53,7 +53,7 @@ public class UICommandCreateChannel extends UICommand {
             catch (SharkException se) {
                 sharkMessengerComponent.createChannel(channelURI, channelName, true);
             }
-        } catch (SharkMessengerException | IOException e) {
+        } catch (SharkNetMessengerException | IOException e) {
             this.printErrorMessage(e.getLocalizedMessage());
         }
     }

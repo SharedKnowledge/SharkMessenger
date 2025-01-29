@@ -1,20 +1,18 @@
 package net.sharksystem.ui.messenger.cli.commands.testing;
 
-import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
-
-import java.util.List;
-
 import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.UICommand;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
 
-/**
- * Command for displaying the log history to the user.
- */
-public class UICommandShowLog extends UICommand {
+import java.util.List;
 
-    public UICommandShowLog(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
-                            String identifier, boolean rememberCommand) {
+/**
+ * Command for saving the log in a file.
+ */
+public class UICommandClearLog extends UICommand {
+    public UICommandClearLog(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
+                             String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
     }
 
@@ -25,19 +23,14 @@ public class UICommandShowLog extends UICommand {
 
     @Override
     public void execute() throws Exception {
-        List<String> commandHistory = this.getSharkMessengerUI().getCommandHistory();
-        StringBuilder sb = new StringBuilder();
-        for (String command : commandHistory) {
-            sb.append(command);
-            sb.append(System.lineSeparator());
-        }
-        getSharkMessengerUI().getOutStream().println(sb);
+        this.getSharkMessengerUI().clearCommandHistory();
+        this.getSharkMessengerApp().tellUI("log cleared");
     }
 
     @Override
     public String getDescription() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Prints a log message with all executed commands in the right order.");
+        sb.append("Clear the log.");
         return sb.toString();
     }
 
@@ -48,5 +41,4 @@ public class UICommandShowLog extends UICommand {
     protected boolean handleArguments(List<String> arguments) {
         return true;
     }
-
 }

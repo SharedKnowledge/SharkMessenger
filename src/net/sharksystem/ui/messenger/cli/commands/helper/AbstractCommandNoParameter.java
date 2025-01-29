@@ -1,7 +1,7 @@
 package net.sharksystem.ui.messenger.cli.commands.helper;
 
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.UICommand;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
 
@@ -11,7 +11,7 @@ import java.util.List;
  * Command for terminating the messenger.
  */
 public abstract class AbstractCommandNoParameter extends UICommand {
-    public AbstractCommandNoParameter(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public AbstractCommandNoParameter(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                       String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
     }

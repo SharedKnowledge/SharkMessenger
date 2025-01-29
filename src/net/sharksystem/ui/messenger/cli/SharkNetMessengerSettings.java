@@ -1,6 +1,6 @@
 package net.sharksystem.ui.messenger.cli;
 
-public interface SharkMessengerSettings {
+public interface SharkNetMessengerSettings {
     /**
      * A hub can be remembered whenever a successful connection was established
      * @return remember or not

@@ -1,5 +1,6 @@
 package net.sharksystem.app.messenger;
 
+import net.sharksystem.SharkException;
 import net.sharksystem.asap.ASAPException;
 import net.sharksystem.asap.ASAPHop;
 import net.sharksystem.asap.ASAPSecurityException;
@@ -19,7 +20,8 @@ import java.util.Set;
  * null (to anybody), one or more recipients. A message can be signed. A message that is for a single recipient
  * can be encrypted.
  */
-public class InMemoSharkMessage implements SharkMessage {
+public class InMemoSharkNetMessage implements SharkNetMessage {
+    private CharSequence snContentType;
     private ASAPCryptoAlgorithms.EncryptedMessagePackage encryptedMessagePackage;
     private byte[] snContent;
     private CharSequence snSender;
@@ -32,15 +34,18 @@ public class InMemoSharkMessage implements SharkMessage {
 
     /**
      * Received
-     * @param message
+     *
+     * @param snContentType
+     * @param content
      * @param sender
      * @param verified
      * @param encrypted
      */
-    private InMemoSharkMessage(byte[] message, CharSequence sender,
-                               Set<CharSequence> snRecipients, long creationTime,
-                               boolean signed, boolean verified, boolean encrypted, List<ASAPHop> hopsList) {
-        this.snContent = message;
+    private InMemoSharkNetMessage(CharSequence snContentType, byte[] content, CharSequence sender,
+                                  Set<CharSequence> snRecipients, long creationTime,
+                                  boolean signed, boolean verified, boolean encrypted, List<ASAPHop> hopsList) {
+        this.snContentType = snContentType;
+        this.snContent = content;
         this.snSender = sender;
         this.signed = signed;
         this.verified = verified;
@@ -50,8 +55,8 @@ public class InMemoSharkMessage implements SharkMessage {
         this.hopsList = hopsList;
     }
 
-    private InMemoSharkMessage(ASAPCryptoAlgorithms.EncryptedMessagePackage encryptedMessagePackage,
-                               List<ASAPHop> hopsList) {
+    private InMemoSharkNetMessage(ASAPCryptoAlgorithms.EncryptedMessagePackage encryptedMessagePackage,
+                                  List<ASAPHop> hopsList) {
         this.encryptedMessagePackage = encryptedMessagePackage;
         this.snRecipients = new HashSet<>();
         this.snRecipients.add(encryptedMessagePackage.getReceiver());
@@ -60,7 +65,8 @@ public class InMemoSharkMessage implements SharkMessage {
         this.encrypted = true;
     }
 
-    public static byte[] serializeMessage(byte[] content, CharSequence sender, CharSequence recipient)
+    public static byte[] serializeMessage(CharSequence contentType, byte[] content,
+                                          CharSequence sender, CharSequence recipient)
             throws IOException, ASAPException {
 
         Set<CharSequence> recipients = null;
@@ -69,18 +75,18 @@ public class InMemoSharkMessage implements SharkMessage {
             recipients.add(recipient);
         }
 
-        return InMemoSharkMessage.serializeMessage(content, sender, recipients,
+        return InMemoSharkNetMessage.serializeMessage(contentType, content, sender, recipients,
                 false, false, null);
     }
 
-    public static byte[] serializeMessage(byte[] content, CharSequence sender, Set<CharSequence> recipients)
+    public static byte[] serializeMessage(CharSequence contentType, byte[] content, CharSequence sender, Set<CharSequence> recipients)
             throws IOException, ASAPException {
 
-        return InMemoSharkMessage.serializeMessage(content, sender, recipients,
+        return InMemoSharkNetMessage.serializeMessage(contentType, content, sender, recipients,
                 false, false, null);
     }
 
-    public static byte[] serializeMessage(byte[] content, CharSequence sender, CharSequence recipient,
+    public static byte[] serializeMessage(CharSequence contentType, byte[] content, CharSequence sender, CharSequence recipient,
                                    boolean sign, boolean encrypt,
                                    ASAPKeyStore ASAPKeyStore)
             throws IOException, ASAPException {
@@ -91,12 +97,26 @@ public class InMemoSharkMessage implements SharkMessage {
             recipients.add(recipient);
         }
 
-        return InMemoSharkMessage.serializeMessage(content, sender, recipients,
+        return InMemoSharkNetMessage.serializeMessage(contentType, content, sender, recipients,
                 sign, encrypt, ASAPKeyStore);
 
     }
 
-    public static byte[] serializeMessage(byte[] content, CharSequence sender, Set<CharSequence> receiver,
+    public static final byte SHARK_MESSAGE_SERIALIZATION_VERSION = 1;
+    /**
+     * supports shark message version 1
+     * @param contentType
+     * @param content
+     * @param sender
+     * @param receiver
+     * @param sign
+     * @param encrypt
+     * @param asapKeyStore
+     * @return
+     * @throws IOException
+     * @throws ASAPException
+     */
+    public static byte[] serializeMessage(CharSequence contentType, byte[] content, CharSequence sender, Set<CharSequence> receiver,
         boolean sign, boolean encrypt, ASAPKeyStore asapKeyStore)
             throws IOException, ASAPException {
 
@@ -108,17 +128,21 @@ public class InMemoSharkMessage implements SharkMessage {
             if(encrypt) throw new ASAPSecurityException("impossible to encrypt a message without a receiver");
             // else
             receiver = new HashSet<>();
-            receiver.add(SharkMessage.ANY_RECEIVER);
+            receiver.add(SharkNetMessage.ANY_RECEIVER);
         }
 
         if(sender == null) {
-            sender = SharkMessage.ANONYMOUS;
+            sender = SharkNetMessage.ANONYMOUS;
         }
 
         /////////// produce serialized structure
 
         // merge content, sender and recipient
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ///// serialization version
+        ASAPSerialization.writeByteParameter(SHARK_MESSAGE_SERIALIZATION_VERSION, baos);
+        ///// content type
+        ASAPSerialization.writeCharSequenceParameter(contentType, baos);
         ///// content
         ASAPSerialization.writeByteArray(content, baos);
         ///// sender
@@ -157,6 +181,14 @@ public class InMemoSharkMessage implements SharkMessage {
         ASAPSerialization.writeByteArray(content, baos);
 
         return baos.toByteArray();
+    }
+
+    @Override
+    public CharSequence getContentType() throws ASAPSecurityException {
+        if(this.encryptedMessagePackage != null) {
+            throw new ASAPSecurityException("content could not be encrypted");
+        }
+        return this.snContentType;
     }
 
     @Override
@@ -215,7 +247,7 @@ public class InMemoSharkMessage implements SharkMessage {
     }
 
     @Override
-    public boolean isLaterThan(SharkMessage message) throws ASAPException, IOException {
+    public boolean isLaterThan(SharkNetMessage message) throws ASAPException, IOException {
         if(this.encryptedMessagePackage != null) {
             throw new ASAPSecurityException("content could not be encrypted");
         }
@@ -232,15 +264,15 @@ public class InMemoSharkMessage implements SharkMessage {
     //                                    factory methods                                   //
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    public static InMemoSharkMessage parseMessage(byte[] message, List<ASAPHop> hopsList, ASAPKeyStore asapKeyStore)
-            throws IOException, ASAPException {
+    public static InMemoSharkNetMessage parseMessage(byte[] message, List<ASAPHop> hopsList, ASAPKeyStore asapKeyStore)
+            throws IOException, SharkException {
 
         ByteArrayInputStream bais = new ByteArrayInputStream(message);
         byte flags = ASAPSerialization.readByte(bais);
         byte[] tmpMessage = ASAPSerialization.readByteArray(bais);
 
-        boolean signed = (flags & SharkMessage.SIGNED_MASK) != 0;
-        boolean encrypted = (flags & SharkMessage.ENCRYPTED_MASK) != 0;
+        boolean signed = (flags & SharkNetMessage.SIGNED_MASK) != 0;
+        boolean encrypted = (flags & SharkNetMessage.ENCRYPTED_MASK) != 0;
 
         if (encrypted) {
             // decrypt
@@ -250,7 +282,7 @@ public class InMemoSharkMessage implements SharkMessage {
 
             // for me?
             if (!asapKeyStore.isOwner(encryptedMessagePackage.getReceiver())) {
-                return new InMemoSharkMessage(encryptedMessagePackage, hopsList);
+                return new InMemoSharkNetMessage(encryptedMessagePackage, hopsList);
                 //throw new ASAPException("SharkNetMessage: message not for me");
             }
 
@@ -272,8 +304,15 @@ public class InMemoSharkMessage implements SharkMessage {
         ///////////////// produce object form serialized bytes
         bais = new ByteArrayInputStream(tmpMessage);
 
+        ///// read serialization version
+        byte version = ASAPSerialization.readByteParameter(bais);
+        if(version != SHARK_MESSAGE_SERIALIZATION_VERSION) {
+            throw new SharkException("cannot parse Shark Message Version " + version);
+        }
+        ///// content type
+        CharSequence snContentType = ASAPSerialization.readCharSequenceParameter(bais);
         ////// content
-        byte[] snMessage = ASAPSerialization.readByteArray(bais);
+        byte[] snContent = ASAPSerialization.readByteArray(bais);
         ////// sender
         String snSender = ASAPSerialization.readCharSequenceParameter(bais);
         ////// recipients
@@ -293,14 +332,15 @@ public class InMemoSharkMessage implements SharkMessage {
         }
 
         // replace special sn symbols
-        return new InMemoSharkMessage(snMessage, snSender, snReceivers, creationTime, signed, verified, encrypted, hopsList);
+        return new InMemoSharkNetMessage(
+                snContentType, snContent, snSender, snReceivers, creationTime, signed, verified, encrypted, hopsList);
     }
 
     public boolean isAnonymousSender(CharSequence peerID) {
-        return peerID.toString().equalsIgnoreCase(SharkMessage.ANONYMOUS);
+        return peerID.toString().equalsIgnoreCase(SharkNetMessage.ANONYMOUS);
     }
 
     public boolean isAnyRecipient(CharSequence peerID) {
-        return peerID.toString().equalsIgnoreCase(SharkMessage.ANY_RECEIVER);
+        return peerID.toString().equalsIgnoreCase(SharkNetMessage.ANY_RECEIVER);
     }
 }

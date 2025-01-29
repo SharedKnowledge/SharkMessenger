@@ -6,16 +6,16 @@ import net.sharksystem.ui.messenger.cli.commandarguments.UICommandChannelArgumen
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaireBuilder;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandStringArgument;
-import net.sharksystem.app.messenger.SharkCommunicationAge;
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.app.messenger.SharkNetCommunicationAge;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.UICommand;
 
 public class UICommandSetChannelAge extends UICommand {
     private final UICommandChannelArgument channel;
     private final UICommandStringArgument channelAge;
 
-    public UICommandSetChannelAge(SharkMessengerApp sharkMessengerApp, SharkMessengerUI sharkMessengerUI,
+    public UICommandSetChannelAge(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
                                   String identifier, boolean rememberCommand) {
         super(sharkMessengerApp, sharkMessengerUI, identifier, rememberCommand);
         this.channel = new UICommandChannelArgument(sharkMessengerApp);
@@ -32,7 +32,7 @@ public class UICommandSetChannelAge extends UICommand {
 
     @Override
     public void execute() throws Exception {
-        SharkCommunicationAge age = SharkCommunicationAge.valueOf(this.channelAge.getValue());
+        SharkNetCommunicationAge age = SharkNetCommunicationAge.valueOf(this.channelAge.getValue());
         this.channel.getValue().setAge(age);
     }
 

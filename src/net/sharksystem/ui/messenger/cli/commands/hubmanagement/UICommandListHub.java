@@ -1,14 +1,14 @@
 package net.sharksystem.ui.messenger.cli.commands.hubmanagement;
 
-import net.sharksystem.ui.messenger.cli.SharkMessengerApp;
-import net.sharksystem.ui.messenger.cli.SharkMessengerUI;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.commands.helper.AbstractCommandNoParameter;
 import net.sharksystem.ui.messenger.cli.commands.helper.Printer;
 
 import java.util.Set;
 
 public class UICommandListHub extends AbstractCommandNoParameter {
-    public UICommandListHub(SharkMessengerApp sharkMessengerApp, SharkMessengerUI smUI, String lsHubs, boolean b) {
+    public UICommandListHub(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI smUI, String lsHubs, boolean b) {
         super(sharkMessengerApp, smUI, lsHubs, b);
     }
 

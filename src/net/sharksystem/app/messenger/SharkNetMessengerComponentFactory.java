@@ -5,15 +5,15 @@ import net.sharksystem.SharkComponentFactory;
 import net.sharksystem.SharkPeer;
 import net.sharksystem.pki.SharkPKIComponent;
 
-public class SharkMessengerComponentFactory implements SharkComponentFactory {
+public class SharkNetMessengerComponentFactory implements SharkComponentFactory {
     private final SharkPKIComponent pkiComponent;
 
-    public SharkMessengerComponentFactory(SharkPKIComponent pkiComponent) {
+    public SharkNetMessengerComponentFactory(SharkPKIComponent pkiComponent) {
         this.pkiComponent = pkiComponent;
     }
 
     @Override
     public SharkComponent getComponent(SharkPeer sharkPeer) {
-        return new SharkMessengerComponentImpl(pkiComponent);
+        return new SharkNetMessengerComponentImpl(pkiComponent);
     }
 }

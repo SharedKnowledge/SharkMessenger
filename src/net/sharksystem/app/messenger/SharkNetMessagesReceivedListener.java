@@ -1,6 +1,6 @@
 package net.sharksystem.app.messenger;
 
-public interface SharkMessagesReceivedListener {
+public interface SharkNetMessagesReceivedListener {
     /**
      * New messages arrived
      * @param uri channel uri
