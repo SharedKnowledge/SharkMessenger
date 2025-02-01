@@ -6,7 +6,7 @@ import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.commands.helper.AbstractCommandNoParameter;
 import net.sharksystem.pki.PKIHelper;
 import net.sharksystem.pki.SharkPKIComponent;
-import net.sharksystem.ui.messenger.cli.commands.pki.PKIPrinter;
+import net.sharksystem.ui.messenger.cli.commands.pki.PKIUtils;
 
 public class UICommandListPersons extends AbstractCommandNoParameter {
     public UICommandListPersons(SharkNetMessengerApp sharkMessengerApp, SharkNetMessengerUI sharkMessengerUI,
@@ -35,7 +35,7 @@ public class UICommandListPersons extends AbstractCommandNoParameter {
             sb.append(" | iA:  ");
             sb.append(identityAssurance);
             sb.append(" (");
-            sb.append(PKIPrinter.getIAExplainText(identityAssurance));
+            sb.append(PKIUtils.getIAExplainText(identityAssurance));
             sb.append(")");
         }
         if(!first) {

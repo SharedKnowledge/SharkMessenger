@@ -1,17 +1,23 @@
 package net.sharksystem.ui.messenger.cli.commands.pki;
 
+import net.sharksystem.SharkException;
+import net.sharksystem.app.messenger.SharkNetMessengerException;
+import net.sharksystem.asap.ASAPException;
 import net.sharksystem.asap.ASAPSecurityException;
 import net.sharksystem.asap.crypto.ASAPCryptoAlgorithms;
+import net.sharksystem.asap.persons.PersonValues;
 import net.sharksystem.asap.pki.ASAPCertificate;
 import net.sharksystem.asap.utils.DateTimeHelper;
 import net.sharksystem.pki.SharkPKIComponent;
+import net.sharksystem.ui.messenger.cli.SharkNetMessengerApp;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.Set;
 
-public class PKIPrinter {
+public class PKIUtils {
     private final SharkPKIComponent pki;
 
-    public PKIPrinter(SharkPKIComponent pki) {
+    public PKIUtils(SharkPKIComponent pki) {
         this.pki = pki;
     }
 
@@ -33,7 +39,7 @@ public class PKIPrinter {
         }
         sb.append(ia);
         sb.append(" (");
-        sb.append(PKIPrinter.getIAExplainText(ia));
+        sb.append(PKIUtils.getIAExplainText(ia));
         sb.append(") ");
 
         return sb.toString();
@@ -80,5 +86,14 @@ public class PKIPrinter {
         }
 
         return sb.toString();
+    }
+
+    public static PersonValues getUniquePersonValues(String peerID, SharkNetMessengerApp app)
+            throws SharkNetMessengerException, ASAPException {
+        Set<PersonValues> personValuesByName = app.getSharkPKIComponent().getPersonValuesByName(peerID);
+        if(personValuesByName.size() > 1) {
+            throw new SharkNetMessengerException("problem: more than one persons found with name " + peerID);
+        }
+        return personValuesByName.iterator().next();
     }
 }

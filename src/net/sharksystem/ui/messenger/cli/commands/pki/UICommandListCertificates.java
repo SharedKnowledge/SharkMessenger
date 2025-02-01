@@ -31,7 +31,7 @@ public class UICommandListCertificates extends AbstractCommandNoParameter {
                 else sb.append("\n");
                 sb.append(i++);
                 sb.append(": \n");
-                sb.append(new PKIPrinter(pki).getCertificateAsString(certificate));
+                sb.append(new PKIUtils(pki).getCertificateAsString(certificate));
             }
             sb.append("\n");
             this.getSharkMessengerApp().tellUI(sb.toString());

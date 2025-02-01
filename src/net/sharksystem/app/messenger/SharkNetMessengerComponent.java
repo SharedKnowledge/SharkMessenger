@@ -99,7 +99,8 @@ import java.util.Set;
 @ASAPFormats(formats = {SharkNetMessengerComponent.SHARK_MESSENGER_FORMAT})
 public interface SharkNetMessengerComponent extends SharkComponent {
     String CHANNEL_DEFAULT_NAME = "<no name set>";
-    String UNIVERSAL_CHANNEL_URI = "sharkMsg://...";
+    String GENERAL_CHANNEL_URI = "sn://universal";
+    String GENERAL_CHANNEL_NAME = "sharkNet";
     String SHARK_MESSENGER_FORMAT = "shark/messenger";
 
     // behaviour flags
@@ -127,23 +128,23 @@ public interface SharkNetMessengerComponent extends SharkComponent {
      *                                 encrypted flag set
      * @since 1.0
      */
-    void sendSharkMessage(CharSequence contentType, byte[] content, CharSequence uri, Set<CharSequence> receiver,
+    void sendSharkMessage(String contentType, byte[] content, CharSequence uri, Set<CharSequence> receiver,
                           boolean sign, boolean encrypt) throws SharkNetMessengerException, IOException;
 
     /**
      * Variant. Just a single receiver
-     * @see #sendSharkMessage(CharSequence, byte[], CharSequence, CharSequence, boolean, boolean)
+     * @see #sendSharkMessage(String, byte[], CharSequence, CharSequence, boolean, boolean)
      * @since 1.0
      */
-    void sendSharkMessage(CharSequence contentType, byte[] content, CharSequence uri, CharSequence receiver,
+    void sendSharkMessage(String contentType, byte[] content, CharSequence uri, CharSequence receiver,
                           boolean sign, boolean encrypt) throws SharkNetMessengerException, IOException;
 
     /**
      * Variant. No receiver specified - send to anybody
-     * @see #sendSharkMessage(CharSequence, byte[], CharSequence, CharSequence, boolean, boolean)
+     * @see #sendSharkMessage(String, byte[], CharSequence, CharSequence, boolean, boolean)
      * @since 1.0
      */
-    void sendSharkMessage(CharSequence contentType, byte[] content, CharSequence uri, boolean sign)
+    void sendSharkMessage(String contentType, byte[] content, CharSequence uri, boolean sign)
             throws SharkNetMessengerException, IOException;
 
     /**

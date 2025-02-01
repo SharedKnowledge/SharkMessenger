@@ -16,18 +16,21 @@ public class UICommandRemoveChannelByIndex extends AbstractCommandWithSingleInte
 
     @Override
     public void execute() throws Exception {
+        this.getSharkMessengerApp().tellUI("not yet implemented; not supported in version 1 anyway.");
+        /*
         // we start with 1 in UI
         int channelIndex = this.getIntegerArgument() - 1;
         SharkNetMessengerComponent sharkMessengerComponent = this.getSharkMessengerApp().getSharkMessengerComponent();
         CharSequence uri = sharkMessengerComponent.getChannel(channelIndex).getURI();
         sharkMessengerComponent.removeChannel(uri);
         this.getSharkMessengerApp().tellUI("channel removed - index most probably changed");
+         */
     }
 
     @Override
     public String getDescription() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Removes a channel by index.");
+        sb.append("Removes a channel by index (not supported in version 1. not implemented yet.");
         return sb.toString();
     }
 }

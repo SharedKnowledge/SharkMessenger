@@ -35,13 +35,8 @@ public class UICommandListChannels extends UICommand {
 
     @Override
     protected void execute() throws Exception {
-        try {
-            SharkNetMessengerComponent messengerComponent = this.getSharkMessengerApp().getSharkMessengerComponent();
-
-            new ChannelPrinter().getChannelDescriptions(messengerComponent);
-        } catch (SharkNetMessengerException | IOException e) {
-            this.printErrorMessage(e.getLocalizedMessage());
-        }
+        SharkNetMessengerComponent messengerComponent = this.getSharkMessengerApp().getSharkMessengerComponent();
+        this.getSharkMessengerApp().tellUI(ChannelPrinter.getChannelDescriptions(messengerComponent));
     }
 
     @Override

@@ -36,7 +36,7 @@ import net.sharksystem.utils.Log;
  * (I have no idea if that class serves any reason any longer. thsc, Aug'24)
  */
 public class ProductionUI {
-    public static final String SETTINGSFILENAME = ".sharkMessengerSessionSettings";
+    public static final String SETTINGSFILENAME = ".sharkNetMessengerSessionSettings";
     public static final String PEERNAME_KEY = "peername";
     public static final String SYNC_WITH_OTHERS_IN_SECONDS_KEY = "syncWithOthersInSeconds";
 
@@ -75,7 +75,7 @@ public class ProductionUI {
 
         }
 
-        System.out.println("Welcome to SharkMessenger version 0.1");
+        System.out.println("Welcome to SharkNetMessenger version 0.1");
         if(peerName == null) {
             try {
             byte[] storedPeerNameBytes = sessionSettings.getExtra(PEERNAME_KEY);

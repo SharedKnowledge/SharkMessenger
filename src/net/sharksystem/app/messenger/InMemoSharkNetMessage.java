@@ -128,7 +128,7 @@ public class InMemoSharkNetMessage implements SharkNetMessage {
             if(encrypt) throw new ASAPSecurityException("impossible to encrypt a message without a receiver");
             // else
             receiver = new HashSet<>();
-            receiver.add(SharkNetMessage.ANY_RECEIVER);
+            receiver.add(SharkNetMessage.ANY_SHARKNET_PEER);
         }
 
         if(sender == null) {
@@ -341,6 +341,6 @@ public class InMemoSharkNetMessage implements SharkNetMessage {
     }
 
     public boolean isAnyRecipient(CharSequence peerID) {
-        return peerID.toString().equalsIgnoreCase(SharkNetMessage.ANY_RECEIVER);
+        return peerID.toString().equalsIgnoreCase(SharkNetMessage.ANY_SHARKNET_PEER);
     }
 }

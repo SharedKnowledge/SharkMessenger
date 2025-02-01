@@ -1,8 +1,6 @@
 package net.sharksystem.app.messenger;
 
-import net.sharksystem.asap.ASAPException;
-import net.sharksystem.asap.ASAPHop;
-import net.sharksystem.asap.ASAPSecurityException;
+import net.sharksystem.asap.*;
 import net.sharksystem.asap.utils.ASAPSerialization;
 
 import java.io.IOException;
@@ -20,36 +18,36 @@ import java.util.Set;
  * @see SharkNetMessengerChannel
  */
 public interface SharkNetMessage {
-    String ANY_RECEIVER = "SHARK_ANY_PEER";
-    String ANONYMOUS = "SHARK_ANONYMOUS";
+    String ANY_SHARKNET_PEER = "ANY_SHARKNET_PEER";
+    String ANONYMOUS = "ANONYMOUS_SHARKNET_PEER";
     int SIGNED_MASK = 0x1;
     int ENCRYPTED_MASK = 0x2;
 
     /** messages contains plain bytes - no further format known */
-    public static final CharSequence SN_CONTENT_TYPE_ASAP_BYTES = "sn/bytes";
+    String SN_CONTENT_TYPE_ASAP_BYTES = "sn/bytes";
 
     /** messages contains a character sequences; can be deserialized by ASAPSerialization.readCharacterSequenceParameter
      * @see ASAPSerialization
      * */
-    public static final CharSequence SN_CONTENT_TYPE_ASAP_CHARACTER_SEQUENCE = "sn/asapCS";
+    String SN_CONTENT_TYPE_ASAP_CHARACTER_SEQUENCE = "sn/characters";
 
     /** messages contains a character sequences; can be deserialized by
      * ASAPSerialization.readCharacterSequenceSetParameter
      * @see ASAPSerialization
      * */
-    public static final CharSequence SN_CONTENT_TYPE_ASAP_CHARACTER_SEQUENCE_SET = "sn/asapCSList";
+    String SN_CONTENT_TYPE_ASAP_CHARACTER_SEQUENCE_SET = "sn/characterSet";
 
     /** messages contains a byte array (byte[]); can be deserialized by
      * ASAPSerialization.readByteArray2Dim
      * @see ASAPSerialization
      * */
-    public static final CharSequence SN_CONTENT_TYPE_ASAP_BYTE_ARRAY = "sn/asapByteA";
+    String SN_CONTENT_TYPE_ASAP_BYTE_ARRAY = "sn/byteArray";
 
     /** messages contains a two-dimensional byte array (byte[][]); can be deserialized by
      * ASAPSerialization.readByteArray2Dim
      * @see ASAPSerialization
      * */
-    public static final CharSequence SN_CONTENT_TYPE_ASAP_TWO_DIMENSIONAL_BYTE_ARRAY = "sn/asapByteA2";
+    String SN_CONTENT_TYPE_ASAP_TWO_DIMENSIONAL_BYTE_ARRAY = "sn/2dimByteArray";
 
     /**
      * Content type - describes content structure. A few type that can easily handled by ASAPSerialization are

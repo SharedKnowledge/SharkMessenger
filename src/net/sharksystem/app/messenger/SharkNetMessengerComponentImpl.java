@@ -22,11 +22,20 @@ public class SharkNetMessengerComponentImpl extends SharkNetMessagesReceivedList
     @Override
     public void onStart(ASAPPeer asapPeer) throws SharkException {
         this.asapPeer = asapPeer;
+
+        // make sure the default channel exists.
+        try {
+            this.createChannel(
+                SharkNetMessengerComponent.GENERAL_CHANNEL_URI,
+                SharkNetMessengerComponent.GENERAL_CHANNEL_NAME);
+        } catch (IOException ex) {
+            throw new SharkException(ex);
+        }
+
         Log.writeLog(this, "MAKE URI LISTENER PUBLIC AGAIN. Thank you :)");
         this.asapPeer.addASAPMessageReceivedListener(
                 SharkNetMessengerComponent.SHARK_MESSENGER_FORMAT,
                 this);
-
     }
 
 
@@ -36,13 +45,13 @@ public class SharkNetMessengerComponentImpl extends SharkNetMessagesReceivedList
     }
 
     @Override
-    public void sendSharkMessage(CharSequence contentType, byte[] content, CharSequence uri, boolean sign) throws IOException, SharkNetMessengerException {
+    public void sendSharkMessage(String contentType, byte[] content, CharSequence uri, boolean sign) throws IOException, SharkNetMessengerException {
         HashSet<CharSequence> set = new HashSet<>();
         this.sendSharkMessage(contentType, content, uri, set, sign, false);
     }
 
     @Override
-    public void sendSharkMessage(CharSequence contentType, byte[] content, CharSequence uri,
+    public void sendSharkMessage(String contentType, byte[] content, CharSequence uri,
                                  CharSequence receiver, boolean sign,
                                  boolean encrypt) throws IOException, SharkNetMessengerException {
         HashSet<CharSequence> set = new HashSet<>();
@@ -51,7 +60,7 @@ public class SharkNetMessengerComponentImpl extends SharkNetMessagesReceivedList
     }
 
     @Override
-    public void sendSharkMessage(CharSequence contentType, byte[] content, CharSequence uri,
+    public void sendSharkMessage(String contentType, byte[] content, CharSequence uri,
                                  Set<CharSequence> selectedRecipients, boolean sign,
                                  boolean encrypt)
             throws SharkNetMessengerException, IOException {

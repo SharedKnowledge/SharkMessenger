@@ -4,9 +4,10 @@ import net.sharksystem.SharkException;
 import net.sharksystem.app.messenger.*;
 import net.sharksystem.asap.ASAPException;
 import net.sharksystem.asap.ASAPHop;
+import net.sharksystem.asap.ASAPSecurityException;
 import net.sharksystem.asap.persons.PersonValues;
 import net.sharksystem.asap.utils.DateTimeHelper;
-import net.sharksystem.ui.messenger.cli.commands.pki.PKIPrinter;
+import net.sharksystem.ui.messenger.cli.commands.pki.PKIUtils;
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.utils.SerializationHelper;
 
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 public class ChannelPrinter {
-    public String getChannelDescription(SharkNetMessengerChannel channel)
+    public static String getChannelDescription(SharkNetMessengerChannel channel)
             throws IOException, SharkNetMessengerException {
 
         StringBuilder sb = new StringBuilder();
@@ -38,7 +39,7 @@ public class ChannelPrinter {
         return sb.toString();
     }
 
-    public String getChannelDescriptions(SharkNetMessengerComponent messengerComponent)
+    public static String getChannelDescriptions(SharkNetMessengerComponent messengerComponent)
                 throws IOException, SharkNetMessengerException {
 
         StringBuilder sb = new StringBuilder();
@@ -55,7 +56,7 @@ public class ChannelPrinter {
             for (CharSequence channelUri : channelUris) {
                 sb.append(i++ + ": ");
                 SharkNetMessengerChannel channel = messengerComponent.getChannel(channelUri);
-                sb.append(this.getChannelDescription(channel));
+                sb.append(getChannelDescription(channel));
                 sb.append("\n");
             }
             sb.append("\n");
@@ -98,11 +99,19 @@ public class ChannelPrinter {
     public String getMessageDetails(SharkPKIComponent pki, SharkNetMessage message)
             throws IOException, ASAPException {
         StringBuilder sb = new StringBuilder();
-        // content type
-        CharSequence contentType = message.getContentType();
-        sb.append("content type: ");
-        sb.append(contentType);
-        sb.append(" | ");
+
+        CharSequence contentType = null;
+        try {
+            // content type
+            contentType = message.getContentType();
+            sb.append("content type: ");
+            sb.append(contentType);
+            sb.append(" | ");
+        }
+        catch(ASAPSecurityException ase) {
+            // happens if message cannot be decrypted we are not receiver.
+            return "message cannot be decrypted - we are not receiver or lost private key";
+        }
 
         // content
         byte[] content = message.getContent();
@@ -176,7 +185,7 @@ public class ChannelPrinter {
             sb.append(this.returnYesNo(message.verified()));
             if(message.verified()) {
                 sb.append(" | ");
-                sb.append(new PKIPrinter(pki).getIAString(message.getSender()));
+                sb.append(new PKIUtils(pki).getIAString(message.getSender()));
             }
         }
 

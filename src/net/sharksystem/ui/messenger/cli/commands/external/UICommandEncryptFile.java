@@ -10,6 +10,7 @@ import net.sharksystem.ui.messenger.cli.UICommand;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaire;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandQuestionnaireBuilder;
 import net.sharksystem.ui.messenger.cli.commandarguments.UICommandStringArgument;
+import net.sharksystem.ui.messenger.cli.commands.pki.PKIUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -51,12 +52,7 @@ public class UICommandEncryptFile extends UICommand {
         // find person to rename
         PersonValues targetPeerValues = null;
         try {
-            personValuesByName = pki.getPersonValuesByName(this.targetPeerName);
-            targetPeerValues = personValuesByName.iterator().next();
-            if(personValuesByName.size() > 1) {
-                this.getSharkMessengerApp().tellUIError("problem: more than one persons found with name " + this.targetPeerName);
-                return;
-            }
+            targetPeerValues = PKIUtils.getUniquePersonValues(this.targetPeerName, this.getSharkMessengerApp());
         }
         catch(ASAPException ae) {
             this.getSharkMessengerApp().tellUIError("no person found with name " + this.targetPeerName);
