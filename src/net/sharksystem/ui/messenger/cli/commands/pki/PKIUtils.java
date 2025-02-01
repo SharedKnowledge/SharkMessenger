@@ -2,6 +2,7 @@ package net.sharksystem.ui.messenger.cli.commands.pki;
 
 import net.sharksystem.SharkException;
 import net.sharksystem.app.messenger.SharkNetMessengerException;
+import net.sharksystem.asap.ASAPEncounterConnectionType;
 import net.sharksystem.asap.ASAPException;
 import net.sharksystem.asap.ASAPSecurityException;
 import net.sharksystem.asap.crypto.ASAPCryptoAlgorithms;
@@ -85,6 +86,16 @@ public class PKIUtils {
             sb.append(e.getLocalizedMessage());
         }
 
+        sb.append("\ncredentials received via ");
+        ASAPEncounterConnectionType connectionType = cert.getConnectionTypeCredentialsReceived();
+        sb.append(connectionType);
+        sb.append(" | ");
+        if(connectionType != ASAPEncounterConnectionType.AD_HOC_LAYER_2_NETWORK) {
+            sb.append("hope identity was checked carefully.");
+        } else {
+            sb.append("direct encounter - well done");
+
+        }
         return sb.toString();
     }
 
