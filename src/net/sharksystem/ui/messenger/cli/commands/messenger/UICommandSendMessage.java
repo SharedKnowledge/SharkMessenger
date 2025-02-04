@@ -11,8 +11,7 @@ import net.sharksystem.ui.messenger.cli.SharkNetMessengerUI;
 import net.sharksystem.ui.messenger.cli.commandarguments.*;
 import net.sharksystem.ui.messenger.cli.commands.pki.PKIUtils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -92,6 +91,7 @@ public class UICommandSendMessage extends UICommandProduceChannelListBefore {
 
             // produce content bytes
             byte[] contentBytes = null;
+            String effectiveFormat = SharkNetMessage.SN_CONTENT_TYPE_ASAP_CHARACTER_SEQUENCE;
             switch(this.contentType) {
                 default:
                     StringBuilder sb = new StringBuilder();
@@ -99,14 +99,23 @@ public class UICommandSendMessage extends UICommandProduceChannelListBefore {
                     sb.append(this.contentType);
                     sb.append(" - but convert into bytes with ASAPSerialization");
                     this.getSharkMessengerApp().tellUI(sb.toString());
+
                 case SharkNetMessage.SN_CONTENT_TYPE_ASAP_CHARACTER_SEQUENCE:
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     ASAPSerialization.writeCharSequenceParameter(this.content, baos);
                     contentBytes = baos.toByteArray();
                     break;
+
+                case SharkNetMessage.SN_CONTENT_TYPE_FILE:
+                    effectiveFormat = SharkNetMessage.SN_CONTENT_TYPE_FILE;
+                    baos = new ByteArrayOutputStream();
+                    SNMessagesSerializer.serializeFile(this.content, baos);
+                    contentBytes = baos.toByteArray();
+                    break;
+
             }
             // send message
-            messenger.sendSharkMessage(SharkNetMessage.SN_CONTENT_TYPE_ASAP_CHARACTER_SEQUENCE,
+            messenger.sendSharkMessage(effectiveFormat,
                     contentBytes, channelURI, receiverID, this.sign, this.encrypt);
         } catch (SharkException | IOException e) {
             this.printErrorMessage(e.getLocalizedMessage());

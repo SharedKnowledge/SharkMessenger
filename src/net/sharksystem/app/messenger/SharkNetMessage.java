@@ -50,6 +50,12 @@ public interface SharkNetMessage {
     String SN_CONTENT_TYPE_ASAP_TWO_DIMENSIONAL_BYTE_ARRAY = "sn/2dimByteArray";
 
     /**
+     * message contains a serialized file. It is serialized with ASAPSerialization like this:
+     * <ul><li>file name (CharacterSequence), file length (long), file content (byte[])</li></ul>
+     */
+    String SN_CONTENT_TYPE_FILE = "sn/file";
+
+    /**
      * Content type - describes content structure. A few type that can easily handled by ASAPSerialization are
      * declared as constants in this interface.
      * @return content type

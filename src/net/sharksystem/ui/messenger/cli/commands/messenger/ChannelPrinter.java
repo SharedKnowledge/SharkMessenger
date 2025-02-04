@@ -11,6 +11,8 @@ import net.sharksystem.ui.messenger.cli.commands.pki.PKIUtils;
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.utils.SerializationHelper;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -121,6 +123,34 @@ public class ChannelPrinter {
             sb.append("'");
             sb.append(SerializationHelper.bytes2characterSequence(content).toString());
             sb.append("'\n");
+        } else if(contentType.toString().equalsIgnoreCase(SharkNetMessage.SN_CONTENT_TYPE_FILE.toString())) {
+            try {
+                SNMessagesSerializer.SNFileMessage snFileMessage =
+                        SNMessagesSerializer.deserializeFile(message.getContent());
+                sb.append("file: ");
+                sb.append(snFileMessage.getFileName());
+                sb.append(" (");
+                sb.append(snFileMessage.getSize());
+                sb.append(" bytes)");
+                try {
+                    File localFile = new File(snFileMessage.getFileName());
+                    if(localFile.exists()) {
+                        sb.append(" | already saved");
+                    } else {
+                        FileOutputStream fos = new FileOutputStream(localFile);
+                        fos.write(snFileMessage.getFileContent());
+                        fos.close();
+                        sb.append(" | saved to disc");
+                    }
+                }
+                catch(IOException ie) {
+                    sb.append(" | cannot access file: " + ie.getLocalizedMessage());
+                }
+                sb.append("\n");
+            } catch (SharkException e) {
+                sb.append("problems: " + e.getLocalizedMessage());
+                sb.append("\n");
+            }
         } else {
             sb.append("no parser for this type, cannot parse those byte: ");
             sb.append(contentType.length());
