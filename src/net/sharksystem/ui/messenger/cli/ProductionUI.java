@@ -10,6 +10,8 @@ import net.sharksystem.ui.messenger.cli.commands.basics.*;
 import net.sharksystem.ui.messenger.cli.commands.encounter.UICommandShowEncounter;
 import net.sharksystem.ui.messenger.cli.commands.external.UICommandDecryptFile;
 import net.sharksystem.ui.messenger.cli.commands.external.UICommandEncryptFile;
+import net.sharksystem.ui.messenger.cli.commands.external.UICommandProduceSignature;
+import net.sharksystem.ui.messenger.cli.commands.external.UICommandVerifySignedFile;
 import net.sharksystem.ui.messenger.cli.commands.hubmanagement.UICommandListHub;
 import net.sharksystem.ui.messenger.cli.commands.hubmanagement.UICommandStartHub;
 import net.sharksystem.ui.messenger.cli.commands.hubmanagement.UICommandStopHub;
@@ -132,6 +134,8 @@ public class ProductionUI {
         smUI.addCommand(new UICommandListMessages(sharkMessengerApp, smUI, "lsMessages", true));
 
         // external io
+        smUI.addCommand(new UICommandProduceSignature(sharkMessengerApp, smUI, "signFile", true));
+        smUI.addCommand(new UICommandVerifySignedFile(sharkMessengerApp, smUI, "verifyFile", true));
         smUI.addCommand(new UICommandEncryptFile(sharkMessengerApp, smUI, "encryptFile", true));
         smUI.addCommand(new UICommandDecryptFile(sharkMessengerApp, smUI, "decryptFile", true));
 

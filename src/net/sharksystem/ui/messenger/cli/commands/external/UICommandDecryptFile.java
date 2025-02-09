@@ -66,13 +66,6 @@ public class UICommandDecryptFile extends UICommand {
         return sb.toString();
     }
 
-    /**
-     * @param arguments in following order:
-     * <ol>
-     *  <li>subject - peerID</li>
-     *  <li>failureRate - int</li>
-     * </ol>
-     */
     @Override
     protected boolean handleArguments(List<String> arguments) {
         if(arguments.size() < 2) {
