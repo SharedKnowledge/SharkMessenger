@@ -125,6 +125,7 @@ public class ProductionUI {
         smUI.addCommand(new UICommandExit(sharkMessengerApp, smUI, "exit", true));
         smUI.addCommand(new UICommandDestroyPeer(sharkMessengerApp, smUI, "destroyPeer", false));
         smUI.addCommand(new UICommandStatus(sharkMessengerApp, smUI, "status", false));
+        smUI.addCommand(new UICommandHelp(sharkMessengerApp, smUI, "help", false));
 
         // simple messenger
         smUI.addCommand(new UICommandListChannels(sharkMessengerApp, smUI, "lsChannel", true));
