@@ -473,12 +473,20 @@ public class SharkNetMessengerApp implements SharkPeerEncounterChangedListener, 
         this.errStream = errStream;
     }
 
+    private String enhanceMessageBeforePrinting(String msg) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(DateTimeHelper.long2ExactTimeString(System.currentTimeMillis()));
+        sb.append(": ");
+        sb.append(msg);
+        return sb.toString();
+    }
+
     public void tellUI(String message) {
-        this.outStream.println(message);
+        this.outStream.println(this.enhanceMessageBeforePrinting(message));
     }
 
     public void tellUIError(String message) {
-        this.errStream.println(message);
+        this.errStream.println(this.enhanceMessageBeforePrinting(message));
     }
 
 }
