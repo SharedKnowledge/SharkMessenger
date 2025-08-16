@@ -1,13 +1,19 @@
 package ASAPEngineTestSuite.output;
 
+import ASAPEngineTestSuite.ScenarioIndex;
 import ASAPEngineTestSuite.testScenarios.ScenarioTCPChain;
 import ASAPEngineTestSuite.testScenarios.ScenarioTCPStar;
+import ASAPEngineTestSuite.testScenarios.TestComponents;
 import ASAPEngineTestSuite.utils.CommandListToFile;
 import ASAPEngineTestSuite.utils.ScenarioParamAllocation;
 import ASAPEngineTestSuite.utils.TestHost;
+import ASAPEngineTestSuite.ScenarioIndex;
+import jdk.incubator.vector.VectorOperators;
 
 import java.io.File;
 import java.io.IOException;
+
+import static ASAPEngineTestSuite.utils.ScenarioParamAllocation.DEFAULT_SCENARIO_INDEX;
 
 /**
  * This class is responsible for generating the command list for the peers based on the provided info sheet.
@@ -21,7 +27,7 @@ public class TestScriptOutput {
 		"\nAlternatively: java -jar SkriptGenerator.jar <Host IP address (or localhost)> <scenario index> <peer count> [optional: <file size> <file name>]";
 	public static final String FILE_NONEXISTENT = "File does not exist. Please check the file path or list parameters manually.";
 
-	public static int scenarioIndex = 0;
+	public static int scenarioIndex = DEFAULT_SCENARIO_INDEX.ordinal();
 	/**
 	 * output.Main method to run the SkriptGenerator.
 	 * It generates the command list for the peers based on the provided info sheet or command line arguments.
@@ -35,6 +41,7 @@ public class TestScriptOutput {
 		TestHost testHost = new TestHost();
 
 		if (args.length == 0) {
+			//run with default?
 			System.out.println(USAGE_STRING);
 			return;
 		}
@@ -44,6 +51,9 @@ public class TestScriptOutput {
 			if (!file.exists()) {
 				System.out.println(FILE_NONEXISTENT);
 				return;
+			}
+			if (filePath.equals("default")) {
+			//TODO
 			}
 			parseInfosheet(filePath, testHost);
 		}
@@ -56,6 +66,7 @@ public class TestScriptOutput {
 		CommandListToFile commandlistToFile;
 		ScenarioParamAllocation scenarioParamAllocation;
 		String hostIP;
+
 		commandlistToFile = new CommandListToFile(filePath);
 		scenarioParamAllocation = commandlistToFile.getScenarioParamAllocation();
 		hostIP = scenarioParamAllocation.getHostIPAddress();
@@ -88,15 +99,20 @@ public class TestScriptOutput {
 	}
 
 	private static void scenarioScriptPrinter(CommandListToFile clf, int scenarioIndex, int peerCount) {
-		if (scenarioIndex == 0) {
+
+
 			ScenarioTCPStar testScenarioTCPStar = new ScenarioTCPStar(clf);
 			testScenarioTCPStar.testScenarioCommandsToFile(peerCount);
-			System.out.println("Scenario TCP Star commands generated for " + peerCount + " peers. (To be executed by the child Peers)");
-		}
+			System.out.println("Scenario TCP Star commands generated for " + peerCount + " peers.");
+
+
+	}
 		if (scenarioIndex == 1) {
-			ScenarioTCPChain testScenarioTCPChain = new ScenarioTCPChain(clf);
-			testScenarioTCPChain.testScenarioCommandsToFile(peerCount);
-			System.out.println("Scenario TCP Chain commands generated for " + peerCount + " peers. (To be executed by the child Peers)");
-		}
+		ScenarioTCPChain testScenarioTCPChain = new ScenarioTCPChain(clf);
+		testScenarioTCPChain.testScenarioCommandsToFile(peerCount);
+		System.out.println("Scenario TCP Chain commands generated for " + peerCount + " peers. (To be executed by the child Peers)");
+	}
+
+
 	}
 }

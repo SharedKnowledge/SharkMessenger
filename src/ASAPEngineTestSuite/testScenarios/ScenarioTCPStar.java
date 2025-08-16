@@ -1,5 +1,6 @@
 package ASAPEngineTestSuite.testScenarios;
 
+import ASAPEngineTestSuite.ScenarioIndex;
 import ASAPEngineTestSuite.utils.CommandListToFile;
 import ASAPEngineTestSuite.utils.fileUtils.FileUtils;
 
@@ -8,9 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class ScenarioTCPStar extends TestComponents {
-	//private static final int SCENARIO_INDEX = 0;
-	final CommandListToFile commandListToFile;
-
+	private final ScenarioIndex si;
 	/**
 	 * The TCP port used by peer1 to listen for incoming connections.
 	 */
@@ -22,7 +21,8 @@ public class ScenarioTCPStar extends TestComponents {
 	 * @param commandListToFile the CommandListToFile instance containing the scenario parameters
 	 */
 	public ScenarioTCPStar(CommandListToFile commandListToFile) {
-		this.commandListToFile = commandListToFile;
+		super(commandListToFile);
+		si = ScenarioIndex.TCP_STAR;
 	}
 
 	/**
@@ -36,35 +36,48 @@ public class ScenarioTCPStar extends TestComponents {
 		if (peerIndex < 1 || peerIndex > getPeerCount()) {
 			throw new IllegalArgumentException("Invalid peer index: " + peerIndex);
 		}
-		String filename = peerIndex + "_" + commandListToFile.getScenarioParamAllocation().getFileNameToBeSent();
+		String filename = peerIndex + "_" + getCommandListToFile().getScenarioParamAllocation().getFileNameToBeSent();
 
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(CommandListToFile.SEND_MESSAGE)
-			.append(" ")
-			.append(filename)
-			.append(" ")
-			.append(CommandListToFile.FORMAT_DESC_FILE)
-			.append(System.lineSeparator());
+		sendMessage(stringBuilder, filename);
 		if (peerIndex == 1) {
-			stringBuilder.append(CommandListToFile.OPEN_TCP).append(' ')
-				.append(TCP_PORT_PEER1)
-				.append(System.lineSeparator())
-				.append(CommandListToFile.WAIT).append(' ')
-				.append(150000);}
+			waitAndOpenPort(1, stringBuilder);
+		}
 		if (peerIndex > 1) {
-			stringBuilder
-				.append(CommandListToFile.CONNECT_TCP).append(' ')
-				.append("ADDRESS_PEER1").append(' ')
-				.append(TCP_PORT_PEER1)
-				.append(System.lineSeparator())
-				.append(CommandListToFile.WAIT).append(' ')
-				.append(10000);
+			waitAndConnect(peerIndex, stringBuilder);
 			//wait for the host to open the TCP port
 		}
 		stringBuilder
 			.append(System.lineSeparator())
 			.append(CommandListToFile.EXIT);
 		return stringBuilder.toString();
+	}
+
+	public void waitAndConnect(int peerindex, StringBuilder stringBuilder) {
+		stringBuilder
+			.append(CommandListToFile.CONNECT_TCP).append(' ')
+			.append("ADDRESS_PEER1").append(' ')
+			.append(TCP_PORT_PEER1)
+			.append(System.lineSeparator())
+			.append(CommandListToFile.WAIT).append(' ')
+			.append(10000);
+	}
+
+	public void waitAndOpenPort(int peerindex, StringBuilder stringBuilder) {
+		stringBuilder.append(CommandListToFile.OPEN_TCP).append(' ')
+			.append(TCP_PORT_PEER1)
+			.append(System.lineSeparator())
+			.append(CommandListToFile.WAIT).append(' ')
+			.append(150000);
+	}
+
+	public void sendMessage(StringBuilder stringBuilder, String filename) {
+		stringBuilder.append(CommandListToFile.SEND_MESSAGE)
+			.append(" ")
+			.append(filename)
+			.append(" ")
+			.append(CommandListToFile.FORMAT_DESC_FILE)
+			.append(System.lineSeparator());
 	}
 
 	public void testScenarioCommandsToFile(int peerCount) {
@@ -80,6 +93,5 @@ public class ScenarioTCPStar extends TestComponents {
 				e.printStackTrace();
 			}
 		}
-
 	}
 }

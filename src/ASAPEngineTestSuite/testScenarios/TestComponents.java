@@ -1,9 +1,22 @@
 package ASAPEngineTestSuite.testScenarios;
 
+import ASAPEngineTestSuite.ScenarioIndex;
 import ASAPEngineTestSuite.utils.CommandListToFile;
 import ASAPEngineTestSuite.utils.ScenarioParamAllocation;
 
 public abstract class TestComponents extends ScenarioParamAllocation{
+
+	private final CommandListToFile commandListToFile;
+	ScenarioIndex si = null;
+
+	public TestComponents(CommandListToFile clf) {
+		commandListToFile = clf;
+	}
+
+	public CommandListToFile getCommandListToFile() {
+		return commandListToFile;
+	}
+
 	/**
 	 * Generates a command list for receiving messages in a TCP scenario.
 	 *
@@ -92,5 +105,31 @@ public abstract class TestComponents extends ScenarioParamAllocation{
 		return scenarioScript.toString();
 	}
 
-	abstract String generateTestScenarioCommands(int peerIndex) throws IllegalArgumentException;
+	public abstract void sendMessage(StringBuilder sb, String s);
+	public abstract void waitAndOpenPort(int pc, StringBuilder sb);
+	public abstract void waitAndConnect(int pc, StringBuilder sb);
+	public void waitAndListMessages(StringBuilder stringBuilder){};
+
+	protected String generateTestScenarioCommands(int peerIndex) throws IllegalArgumentException
+	{
+		int peerCount = commandListToFile.getScenarioParamAllocation().getPeerCount();
+		if (peerIndex < 1 || peerIndex > peerCount) {
+			throw new IllegalArgumentException("Invalid peer index: " + peerIndex);
+		}
+		// a waiting period in milliseconds
+		String peerSpecificFileNameToBeSent = peerIndex + "_" + this.commandListToFile.getScenarioParamAllocation().getFileNameToBeSent();
+		//this block consists of the common commands for all peers.
+		StringBuilder scenarioScript = new StringBuilder();
+		if (peerIndex == peerCount) {
+			sendMessage(scenarioScript, peerSpecificFileNameToBeSent);
+		}
+		if (peerIndex < peerCount - 1) {
+			waitAndOpenPort(peerIndex, scenarioScript);
+		}
+		if (peerIndex > 1) {
+			waitAndConnect(peerIndex, scenarioScript);
+		}
+		waitAndListMessages(scenarioScript);
+		return scenarioScript.toString();
+	}
 }

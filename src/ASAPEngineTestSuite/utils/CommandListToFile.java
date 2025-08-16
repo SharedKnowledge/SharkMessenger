@@ -82,7 +82,7 @@ public class CommandListToFile {
 				scenarioParamAllocation.setFileNameToBeSent(args[5]);
 				FileUtils.createSpecifiedFile(size, scenarioParamAllocation.getFileNameToBeSent());
 			} catch (ArrayIndexOutOfBoundsException e) {
-				System.err.println(args.length + " arguments provided. Expected at least 5 arguments.");
+				System.err.println(args.length + " arguments provided.");
 				System.err.println("Using default values for the missing parameters.");
 				System.err.println(USAGE_STRING);
 			} catch (IllegalArgumentException e) {

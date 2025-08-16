@@ -1,5 +1,7 @@
 package ASAPEngineTestSuite.utils;
 
+import ASAPEngineTestSuite.ScenarioIndex;
+import ASAPEngineTestSuite.testScenarios.ScenarioTCPStar;
 import ASAPEngineTestSuite.utils.fileUtils.FileUtils;
 
 import java.io.*;
@@ -18,7 +20,9 @@ public class ScenarioParamAllocation {
 	public static final String DEFAULT_FILE_NAME = "200Kb.txt";
 	public static final String DEFAULT_FILE_SIZE = "" + (1024 * 2); // 200 kB in bytes
 	public static final String DEFAULT_FILE_SIZE_UNIT = "kB";
-	public static final int DEFAULT_SCENARIO_INDEX = 0;
+	public static final ScenarioIndex DEFAULT_SCENARIO_INDEX = ScenarioIndex.TCP_STAR;
+
+	ScenarioIndex[] scenarios = ScenarioIndex.values();
 
 	//public static final String SCENARIO_HOST_NAME = "testHost"; //oder so
 
@@ -26,7 +30,7 @@ public class ScenarioParamAllocation {
 	private String fileNameToBeSent = DEFAULT_FILE_NAME;
 	private long fileSize = parseLong(DEFAULT_FILE_SIZE);
 	private String fileSizeUnit = DEFAULT_FILE_SIZE_UNIT;
-	private int scenarioIndex = DEFAULT_SCENARIO_INDEX;
+	private ScenarioIndex scenarioIndex = DEFAULT_SCENARIO_INDEX;
 	private String hostIPAddress = CommandListToFile.DEFAULT_HOST_ADDRESS;
 
 	/**
@@ -112,11 +116,8 @@ public class ScenarioParamAllocation {
 	 * @param scenarioIndex the index of the scenario
 	 */
 	public void setScenarioIndex(int scenarioIndex) {
-		if (scenarioIndex < 0) {
-			System.err.println("Scenario index invalid. Using default scenario index: " + DEFAULT_SCENARIO_INDEX);
-			return;
-		}
-		this.scenarioIndex = scenarioIndex;
+		this.scenarioIndex = scenarios[scenarioIndex];
+
 	}
 
 	/**
@@ -210,7 +211,7 @@ public class ScenarioParamAllocation {
 	 * @return scenario index
 	 */
 	public int getScenarioIndex() {
-		return scenarioIndex;
+		return scenarioIndex.ordinal();
 	}
 
 	/**
