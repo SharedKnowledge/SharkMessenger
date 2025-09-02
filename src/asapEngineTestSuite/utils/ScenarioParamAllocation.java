@@ -1,8 +1,6 @@
-package ASAPEngineTestSuite.utils;
+package asapEngineTestSuite.utils;
 
-import ASAPEngineTestSuite.ScenarioIndex;
-import ASAPEngineTestSuite.testScenarios.ScenarioTCPStar;
-import ASAPEngineTestSuite.utils.fileUtils.FileUtils;
+import asapEngineTestSuite.utils.fileUtils.FileUtils;
 
 import java.io.*;
 

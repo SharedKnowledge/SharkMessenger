@@ -1,4 +1,4 @@
-package ASAPEngineTestSuite.utils;
+package asapEngineTestSuite.utils;
 
 /**
  * This class is responsible for generating the command list for the host to execute the test scenario.

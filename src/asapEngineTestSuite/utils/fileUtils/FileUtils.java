@@ -1,4 +1,4 @@
-package ASAPEngineTestSuite.utils.fileUtils;
+package asapEngineTestSuite.utils.fileUtils;
 
 import java.io.*;
 
@@ -20,8 +20,11 @@ public class FileUtils {
 	}
 
 	public static void createSpecifiedFile(long filesize, String filename) throws IOException {
-		RandomAccessFile file = new RandomAccessFile(new File(filename), "rw");
-		file.setLength(filesize);
-		System.out.println("File created: " + filename + " with size: " + filesize + " bytes");
+		try(RandomAccessFile file = new RandomAccessFile(new File(filename), "rw")) {
+			file.setLength(filesize);
+			System.out.println("File created: " + filename + " with size: " + filesize + " bytes");
+		} catch (IOException e) {
+			System.err.println("Error creating file: " + e.getMessage());
+		}
 	}
 }

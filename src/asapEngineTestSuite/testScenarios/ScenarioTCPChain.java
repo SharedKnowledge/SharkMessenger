@@ -1,23 +1,35 @@
-package ASAPEngineTestSuite.testScenarios;
+package asapEngineTestSuite.testScenarios;
 
 
-import ASAPEngineTestSuite.ScenarioIndex;
-import ASAPEngineTestSuite.utils.CommandListToFile;
-import ASAPEngineTestSuite.utils.fileUtils.FileUtils;
+import asapEngineTestSuite.utils.ScenarioIndex;
+import asapEngineTestSuite.utils.CommandListToFile;
+import asapEngineTestSuite.utils.fileUtils.FileUtils;
 
 import java.io.FileOutputStream;
 
 
 public class ScenarioTCPChain extends TestComponents {
-	ScenarioIndex si;
-	private static final int SCENARIO_INDEX = 1;
+	/**
+	 * The scenario index for the TCP Chain scenario.
+	 */
+	public static final ScenarioIndex SCENARIO_INDEX = ScenarioIndex.TCP_CHAIN;
+
+	/**
+	 * The starting TCP port number for the scenario.
+	 */
 	private static final int STARTING_TCP_PORT = 4443;
+
+	/**
+	 * The wait time in milliseconds between commands.
+	 */
 	private static final int WAIT_TIME_IN_MILLIS = 8000;
+
+	public String getPrintSuccess() {
+		return "Scenario: TCP Chain commands generated.";
+	}
 
 	public ScenarioTCPChain(CommandListToFile commandListToFile) {
 		super(commandListToFile);
-		si = ScenarioIndex.TCP_CHAIN;
-
 	}
 
 	public void sendMessage(StringBuilder scenarioScript, String peerSpecificFileNameToBeSent) {

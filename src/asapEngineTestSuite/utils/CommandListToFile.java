@@ -1,14 +1,12 @@
-package ASAPEngineTestSuite.utils;
+package asapEngineTestSuite.utils;
 
-import ASAPEngineTestSuite.testScenarios.ScenarioTCPChain;
-import ASAPEngineTestSuite.testScenarios.ScenarioTCPStar;
-import ASAPEngineTestSuite.utils.fileUtils.FileUtils;
+import asapEngineTestSuite.testScenarios.ScenarioTCPChain;
+import asapEngineTestSuite.testScenarios.ScenarioTCPStar;
+import asapEngineTestSuite.utils.fileUtils.FileUtils;
 
 import java.io.*;
-
 import static java.lang.Long.parseLong;
-import static ASAPEngineTestSuite.output.TestScriptOutput.USAGE_STRING;
-import static ASAPEngineTestSuite.testScenarios.TestComponents.generateReceiveScenarioCommands;
+import static asapEngineTestSuite.testScenarios.TestComponents.generateReceiveScenarioCommands;
 
 public class CommandListToFile {
 
@@ -72,19 +70,22 @@ public class CommandListToFile {
 	 */
 	public void argsParser(String[] args) {
 		long size;
+
 		if (args.length < 7) {
 			try {
-				scenarioParamAllocation.setHostIPAddress(args[0]);
-				scenarioParamAllocation.setScenarioIndex(Integer.parseInt(args[1]));
-				scenarioParamAllocation.setPeerCount(Integer.parseInt(args[2]));
-				scenarioParamAllocation.setFileSize(args[3], args[4]);
-				size = scenarioParamAllocation.calculateFileSize(parseLong(args[3]));
-				scenarioParamAllocation.setFileNameToBeSent(args[5]);
-				FileUtils.createSpecifiedFile(size, scenarioParamAllocation.getFileNameToBeSent());
+				if (!args[0].equalsIgnoreCase("default")) {
+					scenarioParamAllocation.setHostIPAddress(args[0]);
+					scenarioParamAllocation.setScenarioIndex(Integer.parseInt(args[1]));
+					scenarioParamAllocation.setPeerCount(Integer.parseInt(args[2]));
+					scenarioParamAllocation.setFileSize(args[3], args[4]);
+					size = scenarioParamAllocation.calculateFileSize(parseLong(args[3]));
+					scenarioParamAllocation.setFileNameToBeSent(args[5]);
+					FileUtils.createSpecifiedFile(size, scenarioParamAllocation.getFileNameToBeSent());
+				}
+				System.out.println("Using default parameters.");
 			} catch (ArrayIndexOutOfBoundsException e) {
-				System.err.println(args.length + " arguments provided.");
+				System.err.println(args.length + " argument(s) provided.");
 				System.err.println("Using default values for the missing parameters.");
-				System.err.println(USAGE_STRING);
 			} catch (IllegalArgumentException e) {
 				System.err.println("Invalid file size or size unit. Using default values.");
 				scenarioParamAllocation.setFileSize(ScenarioParamAllocation.DEFAULT_FILE_SIZE, ScenarioParamAllocation.DEFAULT_FILE_SIZE_UNIT);
@@ -93,7 +94,6 @@ public class CommandListToFile {
 					.println("Error creating file: " + e.getMessage());
 			}
 		}
-		//return scenarioParamAllocation;
 	}
 
 	/**
@@ -144,7 +144,7 @@ public class CommandListToFile {
 		}
 	}
 
-	public void hostCommandListToFile(String filepath, TestHost testHost) throws IOException {
+	public void hostCommandListToFile(TestHost testHost) throws IOException {
 		File file = new File("hostCommandList.txt");
 		FileOutputStream fos = new FileOutputStream(file);
 		String commandList = testHost.hostCommandList(this);

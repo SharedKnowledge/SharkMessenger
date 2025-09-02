@@ -1,13 +1,19 @@
-package ASAPEngineTestSuite.testScenarios;
+package asapEngineTestSuite.testScenarios;
 
-import ASAPEngineTestSuite.ScenarioIndex;
-import ASAPEngineTestSuite.utils.CommandListToFile;
-import ASAPEngineTestSuite.utils.ScenarioParamAllocation;
+import asapEngineTestSuite.utils.ScenarioIndex;
+import asapEngineTestSuite.utils.CommandListToFile;
+import asapEngineTestSuite.utils.ScenarioParamAllocation;
 
 public abstract class TestComponents extends ScenarioParamAllocation{
 
+	protected String printSuccess = "";
+	private ScenarioIndex si = null;
+
+	public String getPrintSuccess() {
+		return printSuccess;
+	}
+
 	private final CommandListToFile commandListToFile;
-	ScenarioIndex si = null;
 
 	public TestComponents(CommandListToFile clf) {
 		commandListToFile = clf;
@@ -17,6 +23,10 @@ public abstract class TestComponents extends ScenarioParamAllocation{
 		return commandListToFile;
 	}
 
+	public int getScenarioIndex() {
+		return si.ordinal();
+	}
+
 	/**
 	 * Generates a command list for receiving messages in a TCP scenario.
 	 *
@@ -24,23 +34,20 @@ public abstract class TestComponents extends ScenarioParamAllocation{
 	 * @return the command list as a string
 	 */
 	public static String generateReceiveScenarioCommands(String hostIPAddress) {
-		StringBuilder receiveCommands = new StringBuilder();
-		receiveCommands.append(sendIPAddressCommandList());
-		receiveCommands
-			.append(CommandListToFile.WAIT + ' ' + 1000)
-			.append(System.lineSeparator())
-			.append(CommandListToFile.CONNECT_TCP + " ")
-			.append(hostIPAddress).append(' ')
-			.append(CommandListToFile.HOST_PORT)
-			.append(System.lineSeparator())
-			.append(CommandListToFile.WAIT + ' ' + 500)
-			.append(System.lineSeparator())
-			.append(CommandListToFile.LIST_MESSAGES)
-			.append(System.lineSeparator())
-			.append(CommandListToFile.WAIT + ' ' + 300000)
-			.append(System.lineSeparator())
-			.append(CommandListToFile.EXIT);
-		return receiveCommands.toString();
+		return sendIPAddressCommandList() +
+			CommandListToFile.WAIT + ' ' + 1000 +
+			System.lineSeparator() +
+			CommandListToFile.CONNECT_TCP + " " +
+			hostIPAddress + ' ' +
+			CommandListToFile.HOST_PORT +
+			System.lineSeparator() +
+			CommandListToFile.WAIT + ' ' + 500 +
+			System.lineSeparator() +
+			CommandListToFile.LIST_MESSAGES +
+			System.lineSeparator() +
+			CommandListToFile.WAIT + ' ' + 300000 +
+			System.lineSeparator() +
+			CommandListToFile.EXIT;
 	}
 
 	/**
@@ -49,17 +56,15 @@ public abstract class TestComponents extends ScenarioParamAllocation{
 	 * @return the command list as a string
 	 */
 	static String sendIPAddressCommandList() {
-		StringBuilder sb = new StringBuilder();
-		sb
-			.append(CommandListToFile.SEND_MESSAGE)
-			.append(' ')
-			.append("ipAddress_")
-			.append("FILLER_PEERNAME")
-			.append(CommandListToFile.TEXT_FILE_EXTENSION)
-			.append(' ')
-			.append(CommandListToFile.FORMAT_DESC_FILE)
-			.append(System.lineSeparator());
-		return sb.toString();
+		String sb = CommandListToFile.SEND_MESSAGE +
+			' ' +
+			"ipAddress_" +
+			"FILLER_PEERNAME" +
+			CommandListToFile.TEXT_FILE_EXTENSION +
+			' ' +
+			CommandListToFile.FORMAT_DESC_FILE +
+			System.lineSeparator();
+		return sb;
 	}
 
 	/**
@@ -108,7 +113,7 @@ public abstract class TestComponents extends ScenarioParamAllocation{
 	public abstract void sendMessage(StringBuilder sb, String s);
 	public abstract void waitAndOpenPort(int pc, StringBuilder sb);
 	public abstract void waitAndConnect(int pc, StringBuilder sb);
-	public void waitAndListMessages(StringBuilder stringBuilder){};
+	public void waitAndListMessages(StringBuilder stringBuilder){}
 
 	protected String generateTestScenarioCommands(int peerIndex) throws IllegalArgumentException
 	{
