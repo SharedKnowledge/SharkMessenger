@@ -15,5 +15,7 @@ jar cmvf META-INF/MANIFEST.MF SharkNetMessengerCLI.jar *
 cd ..
 move tempLibBuildFolder\SharkNetMessengerCLI.jar .
 rmdir /s /q tempLibBuildFolder
+md playground
+md __bugfixing
 copy SharkNetMessengerCLI.jar playground
 copy SharkNetMessengerCLI.jar __bugfixing
